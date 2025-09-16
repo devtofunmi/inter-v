@@ -1,3 +1,54 @@
+/* General custom scrollbar styles for .custom-scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #23272f;
+  border-radius: 8px;
+  border: 2px solid #18181b;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #18181b;
+  border-radius: 8px;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #23272f #18181b;
+}
+/* Quiz custom scrollbar styles */
+.quiz-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+.quiz-scrollbar::-webkit-scrollbar-thumb {
+  background: #2563eb; /* blue-600 */
+  border-radius: 8px;
+  border: 2px solid #18181b;
+}
+.quiz-scrollbar::-webkit-scrollbar-track {
+  background: #18181b;
+  border-radius: 8px;
+}
+.quiz-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #2563eb #18181b;
+}
+/* Sidebar custom scrollbar styles */
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: #23272f;
+  border-radius: 8px;
+  border: 2px solid #18181b;
+}
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: #18181b;
+  border-radius: 8px;
+}
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #23272f #18181b;
+}
 @import "tailwindcss";
 
 :root {
@@ -24,3 +75,4 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+

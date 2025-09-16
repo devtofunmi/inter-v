@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from 'next/router';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Upload, Settings, Plus, UserCircle, MessageSquare, HelpCircle, ArrowLeft, Loader2, ArrowUp } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
@@ -44,6 +44,38 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
   const [employmentHistory, setEmploymentHistory] = useState(user.practiceProfile?.employmentHistory || "");
   const [skills, setSkills] = useState(user.practiceProfile?.skills || "");
   const [additionalDetails, setAdditionalDetails] = useState(user.practiceProfile?.additionalDetails || "");
+
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleUpdateDetails = async () => {
+    setIsUpdating(true);
+    try {
+      const response = await fetch('/api/onboarding', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          name,
+          jobTitle,
+          jobDescription,
+          employmentHistory,
+          skills,
+          additionalDetails,
+        }),
+      });
+      if (response.ok) {
+        toast.success('Details updated successfully!');
+      } else {
+        toast.error('Failed to update details.');
+      }
+    } catch (error) {
+      toast.error('Network error.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   return (
 <div className="bg-gray-900/50 backdrop-blur-md p-6 rounded-2xl flex-shrink-0 w-full lg:w-96 space-y-8 h-full overflow-y-auto border border-gray-800 sidebar-scrollbar">
@@ -131,10 +163,13 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
             />
           </div>
           <button
-            className="w-full mt-2 p-2 rounded-lg bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200"
-            onClick={() => {/* TODO: Implement update details logic */}}
+            className={`w-full mt-2 p-2 rounded-full bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 cursor-pointer flex items-center justify-center`}
+            onClick={handleUpdateDetails}
+            disabled={isUpdating}
           >
-            Update Details
+            {isUpdating ? (
+              <Loader2 className="animate-spin" size={20} />
+            ) : 'Update Details'}
           </button>
         </div>
       </div>
@@ -161,6 +196,16 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
   const [practiceMode, setPracticeMode] = useState('chat'); // 'chat' or 'quiz'
   const [difficulty, setDifficulty] = useState('medium'); // 'easy', 'medium', 'hard'
   const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; parts: string }>>([]);
+  // Clear history when switching modes
+  useEffect(() => {
+    setConversationHistory([]);
+    setScore(0);
+    setChatCompleted(false);
+    setQuizCompleted(false);
+    setCurrentQuestionNumber(0);
+    setQuizData(null);
+    setSelectedOption(null);
+  }, [practiceMode]);
   const [userResponse, setUserResponse] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [score, setScore] = useState(0);
@@ -171,6 +216,7 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const parseQuizResponse = (responseText: string): QuizData | null => {
     const questionMatch = responseText.match(/Question: (.*)/);
@@ -217,34 +263,47 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
     };
   }, [dropdownRef]);
 
+  // Auto-scroll chat to bottom when new message is added in chat mode
+  useEffect(() => {
+    if (practiceMode === 'chat' && chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [conversationHistory, practiceMode]);
+
   const handleLogout = () => {
     signOut();
   };
 
   const savePracticeResult = async (finalScore: number) => {
     try {
+      const payload = {
+        userId: user.id,
+        mode: practiceMode,
+        difficulty: difficulty,
+        score: finalScore,
+        totalQuestions: 10,
+        jobTitle: user.practiceProfile?.jobTitle || '',
+        jobDescription: user.practiceProfile?.jobDescription || '',
+      };
+      console.log('Saving practice result:', payload);
       const response = await fetch('/api/save-practice-result', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          userId: user.id,
-          mode: practiceMode,
-          difficulty: difficulty,
-          score: finalScore,
-          totalQuestions: 10,
-          jobTitle: user.practiceProfile?.jobTitle || '',
-          jobDescription: user.practiceProfile?.jobDescription || '',
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
+        toast.success('Practice result saved!');
         console.log('Practice result saved successfully!');
       } else {
-        console.error('Failed to save practice result:', await response.json());
+        const errorData = await response.json();
+        toast.error('Failed to save practice result.');
+        console.error('Failed to save practice result:', errorData);
       }
     } catch (error) {
+      toast.error('Error saving practice result.');
       console.error('Error saving practice result:', error);
     }
   };
@@ -503,6 +562,7 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
                     <span className="text-white font-normal ml-2">{msg.parts}</span>
                   </div>
                 ))}
+                <div ref={chatEndRef} />
                 {/* End Interview button removed: interview ends automatically after 10 questions */}
               </div>
             )}
@@ -573,7 +633,7 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
         )}
 
         {/* Action Bar */}
-            {(practiceMode === 'chat' && conversationHistory.length > 0 && !quizCompleted) && (
+            {(practiceMode === 'chat' && conversationHistory.length > 0 && !quizCompleted && !chatCompleted) && (
               <div className="mt-6 w-full flex justify-center">
                 <div className="w-full max-w-2xl flex items-end gap-2 bg-transparent p-0" style={{ position: 'relative' }}>
                   <textarea
@@ -614,9 +674,9 @@ export default function Practice() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/auth');
+      router.replace('/auth');
     } else if (status === 'authenticated' && data && !data.user?.practiceProfile) {
-      router.push('/auth');
+      router.replace('/auth');
     }
   }, [status, router, data]);
 
@@ -635,31 +695,33 @@ export default function Practice() {
   const { user } = data;
 
   return (
-    <div className="font-sans bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white p-6 h-screen flex flex-col lg:flex-row gap-6 relative">
-      <div className={`lg:flex ${showSidebar ? 'flex' : 'hidden'} w-full lg:w-auto`}>
-        <Sidebar setShowSidebar={setShowSidebar} user={user} onShowPricingModal={() => setShowPricingModal(true)} />
-      </div>
-      <div className={`lg:flex ${showSidebar ? 'hidden' : 'flex'} flex-1`}>
-        <MainContent setShowSidebar={setShowSidebar} user={user} />
-      </div>
+    <>
       <ToastContainer />
-      {showPricingModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md">
-          <div className="bg-gray-900 rounded-2xl shadow-lg p-8 max-w-md w-full relative mx-auto">
-            <button
-              className="absolute cursor-pointer top-4 right-4 text-gray-400 hover:text-white text-2xl"
-              onClick={() => setShowPricingModal(false)}
-            >
-              &times;
-            </button>
-            <h3 className="text-2xl font-semibold mb-2 text-center">Pro Plan</h3>
-            <p className="text-gray-400 mb-4 text-center">Unlock full platform capabilities and unlimited interviews.</p>
-            <p className="text-3xl font-bold mb-6 text-center">$19/mo</p>
-            <button className="w-full px-6 py-3 bg-blue-600 rounded-full font-semibold text-lg mb-2 opacity-60 cursor-not-allowed" disabled>Upgrade Now</button>
-            <div className="text-gray-400 text-sm text-center mt-2">Cancel anytime. 7-day money-back guarantee.</div>
-          </div>
+      <div className="font-sans bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white p-6 h-screen flex flex-col lg:flex-row gap-6 relative">
+        <div className={`lg:flex ${showSidebar ? 'flex' : 'hidden'} w-full lg:w-auto`}>
+          <Sidebar setShowSidebar={setShowSidebar} user={user} onShowPricingModal={() => setShowPricingModal(true)} />
         </div>
-      )}
-    </div>
+        <div className={`lg:flex ${showSidebar ? 'hidden' : 'flex'} flex-1`}>
+          <MainContent setShowSidebar={setShowSidebar} user={user} />
+        </div>
+        {showPricingModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md">
+            <div className="bg-gray-900 rounded-2xl shadow-lg p-8 max-w-md w-full relative mx-auto">
+              <button
+                className="absolute cursor-pointer top-4 right-4 text-gray-400 hover:text-white text-2xl"
+                onClick={() => setShowPricingModal(false)}
+              >
+                &times;
+              </button>
+              <h3 className="text-2xl font-semibold mb-2 text-center">Pro Plan</h3>
+              <p className="text-gray-400 mb-4 text-center">Unlock full platform capabilities and unlimited interviews.</p>
+              <p className="text-3xl font-bold mb-6 text-center">$19/mo</p>
+              <button className="w-full px-6 py-3 bg-blue-600 rounded-full font-semibold text-lg mb-2 opacity-60 cursor-not-allowed" disabled>Upgrade Now</button>
+              <div className="text-gray-400 text-sm text-center mt-2">Cancel anytime. 7-day money-back guarantee.</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

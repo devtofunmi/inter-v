@@ -437,6 +437,14 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
           if (/\b(correct|good job|well done|excellent|right answer)\b/i.test(data.response)) {
             setScore(prevScore => prevScore + 1);
           }
+          // Detect interview termination and end chat early
+          if (/Next Question:\s*This interview is terminated due to the candidate's consistent lack of engagement and unprofessional responses\./i.test(data.response)
+            || /The interview should be terminated\./i.test(data.response)) {
+            setChatCompleted(true);
+            savePracticeResult(score);
+            setIsGenerating(false);
+            return;
+          }
         } else if (practiceMode === 'quiz') {
           if (currentQuestionNumber + 1 >= 10) { // Quiz is completed after this response
             setQuizCompleted(true);
@@ -559,7 +567,52 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
                     <span>
                       {msg.role === 'AI' ? 'AI' : (user?.name || 'User')}
                     </span>
-                    <span className="text-white font-normal ml-2">{msg.parts}</span>
+                    <span className="text-white font-normal ml-2">
+                      {typeof msg.parts === 'string' ? (
+                        (() => {
+                          const text = msg.parts.replace(/\*/g, '');
+                          // Blockify and color key feedback labels
+                          const feedbackLabels = ['Feedback:', 'Evaluation:', 'Relevance:', 'Correctness:', 'Depth:', 'Next Question:'];
+                          let blocks = [];
+                          let remaining = text;
+                          while (true) {
+                            let minIdx = -1;
+                            let label = '';
+                            for (const l of feedbackLabels) {
+                              const idx = remaining.indexOf(l);
+                              if (idx !== -1 && (minIdx === -1 || idx < minIdx)) {
+                                minIdx = idx;
+                                label = l;
+                              }
+                            }
+                            if (minIdx === -1) {
+                              if (remaining.trim()) blocks.push(remaining);
+                              break;
+                            }
+                            if (minIdx > 0) {
+                              blocks.push(remaining.slice(0, minIdx));
+                            }
+                            // Find end of label block (next label or end)
+                            let nextIdx = remaining.length;
+                            for (const l of feedbackLabels) {
+                              const idx = remaining.indexOf(l, minIdx + label.length);
+                              if (idx !== -1 && idx < nextIdx) nextIdx = idx;
+                            }
+                            // Split label and feedback
+                            const labelBlock = remaining.slice(minIdx, minIdx + label.length);
+                            const feedbackBlock = remaining.slice(minIdx + label.length, nextIdx);
+                            blocks.push(
+                              <p className="my-1">
+                                <span className="text-orange-500 font-semibold">{labelBlock.trim()}</span>
+                                <span className="text-white font-normal">{feedbackBlock}</span>
+                              </p>
+                            );
+                            remaining = remaining.slice(nextIdx);
+                          }
+                          return blocks;
+                        })()
+                      ) : msg.parts}
+                    </span>
                   </div>
                 ))}
                 <div ref={chatEndRef} />
@@ -625,7 +678,9 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
                   disabled={isGenerating}
                   className="mt-4 w-full p-3 rounded-full bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center"
                 >
-                  Start Quiz
+                   {isGenerating ? <Loader2 className="animate-spin" size={22} /> : 
+                  "Start Quiz"
+                    }
                 </button>
               </div>
             )}

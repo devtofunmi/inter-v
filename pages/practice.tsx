@@ -573,7 +573,7 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
                           const text = msg.parts.replace(/\*/g, '');
                           // Blockify and color key feedback labels
                           const feedbackLabels = ['Feedback:', 'Evaluation:', 'Relevance:', 'Correctness:', 'Depth:', 'Next Question:'];
-                          let blocks = [];
+                          const blocks = [];
                           let remaining = text;
                           while (true) {
                             let minIdx = -1;

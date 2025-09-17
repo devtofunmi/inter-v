@@ -43,10 +43,10 @@ export default function Dashboard() {
       </Head>
 
       {/* Navbar for Dashboard */}
-      <header className="flex justify-between items-center px-8 py-4 border-b border-gray-800">
+      <header className="flex fixed top-0 w-full backdrop-blur-md bg-black/50 border-b border-gray-800 justify-between items-center px-8 py-4 border-b border-gray-800">
         <div className="text-xl font-bold">🚀 Inter-V</div>
         <nav className="flex gap-8">
-          <button onClick={() => signOut()} className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-500 font-medium">
+          <button onClick={() => signOut()} className="px-5 py-2 cursor-pointer rounded-full bg-blue-600 hover:bg-blue-500 font-medium">
             Logout
           </button>
         </nav>
@@ -54,7 +54,7 @@ export default function Dashboard() {
 
       {/* Dashboard Content */}
       <main className="container mx-auto px-6 py-12">
-        <h1 className="text-4xl font-extrabold mb-4">Welcome, {user.name || 'User'}!</h1>
+        <h1 className="text-4xl mt-10 font-extrabold mb-4">Welcome, {user.name || 'User'}!</h1>
         <p className="text-gray-300 text-lg mb-8">This is your personalized dashboard. Here you can manage your interviews, review feedback, and track your progress.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

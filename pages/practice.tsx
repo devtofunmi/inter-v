@@ -88,9 +88,9 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Job details</h2>
-          <button className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300">
+          {/* <button className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300">
             <Upload size={16} className="mr-1" /> Import job from website
-          </button>
+          </button> */}
         </div>
         <div className="space-y-4">
           <div>
@@ -117,9 +117,9 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Personal details</h2>
-          <button className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300">
+          {/* <button className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300">
             <Upload size={16} className="mr-1" /> Import my resume
-          </button>
+          </button> */}
         </div>
         <div className="space-y-4">
           <div>
@@ -469,7 +469,7 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
   };
 
   return (
-    <div className="flex-1 bg-gray-950/50 backdrop-blur-md rounded-2xl p-8 flex flex-col h-full border border-gray-800">
+    <div className="flex-1 bg-gray-950/50 backdrop-blur-md rounded-2xl p-8 flex flex-col h-full border border-gray-800 min-h-0">
       {/* Top Bar */}
       <div className="flex justify-between items-center mb-4">
         <div className="lg:hidden">
@@ -517,8 +517,8 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
         </button>
       </div>
 
-      {/* Main Interview Area */}
-      <div className="flex-1 flex flex-col text-center p-4 overflow-y-auto custom-scrollbar">
+  {/* Main Interview Area */}
+  <div className="flex-1 flex flex-col text-center p-4 overflow-y-auto custom-scrollbar min-h-0 max-h-[calc(100vh-180px)] sm:max-h-[calc(100vh-120px)]">
         {practiceMode === 'chat' ? (
           <div className="flex-1 flex flex-col items-center justify-center">
             {conversationHistory.length === 0 ? (

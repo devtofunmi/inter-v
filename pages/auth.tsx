@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { Loader2 } from 'lucide-react';
 
 export default function AuthPage() {
@@ -12,20 +12,20 @@ export default function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  // const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isCredentialsLoading, setIsCredentialsLoading] = useState(false);
   const router = useRouter();
 
-  const handleGoogleLogin = async () => {
-    setIsGoogleLoading(true);
-    const result = await signIn('google', { redirect: false, callbackUrl: '/dashboard' });
-    setIsGoogleLoading(false);
-    if (result?.error) {
-      toast.error(result.error);
-    } else if (result?.url) {
-      router.push(result.url);
-    }
-  };
+  // const handleGoogleLogin = async () => {
+  //   setIsGoogleLoading(true);
+  //   const result = await signIn('google', { redirect: false, callbackUrl: '/dashboard' });
+  //   setIsGoogleLoading(false);
+  //   if (result?.error) {
+  //     toast.error(result.error);
+  //   } else if (result?.url) {
+  //     router.push(result.url);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,19 +93,19 @@ export default function AuthPage() {
           {isLogin ? 'Welcome Back' : 'Join Inter-V'}
         </h2>
 
-        <button
+        {/* <button
           onClick={handleGoogleLogin}
           disabled={isGoogleLoading || isCredentialsLoading}
           className="w-full flex items-center justify-center gap-2 px-4 py-2 mb-4 bg-white text-gray-800 rounded-md shadow-md hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:pointer-events-none"
         >
           {isGoogleLoading ? <Loader2 className="animate-spin" /> : <Image src="/google-icon.svg" alt="Google" width={20} height={20} className="w-5 h-5" />}
           {isLogin ? 'Login with Google' : 'Sign Up with Google'}
-        </button>
+        </button> */}
 
-        <div className="relative flex items-center justify-center my-6">
+        {/* <div className="relative flex items-center justify-center my-6">
           <span className="absolute bg-gray-900 px-3 text-gray-500">Or</span>
           <div className="w-full border-t border-gray-700"></div>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -154,7 +154,7 @@ export default function AuthPage() {
           )}
           <button
             type="submit"
-            disabled={isGoogleLoading || isCredentialsLoading}
+            disabled={ isCredentialsLoading}
             className="w-full px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-500 font-medium disabled:opacity-50 disabled:pointer-events-none"
           >
             {isCredentialsLoading ? <Loader2 className="animate-spin mx-auto" /> : (isLogin ? 'Login' : 'Sign Up')}

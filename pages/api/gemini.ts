@@ -28,7 +28,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let prompt = '';
 
   if (mode === 'chat') {
-    prompt = `You are an AI interviewer. Your goal is to conduct a realistic job interview.\n    The candidate's details are:\n    - Job Title: ${jobTitle}\n    - Job Description: ${jobDescription || 'N/A'}\n    - Skills: ${skills || 'N/A'}\n    - Employment History: ${employmentHistory || 'N/A'}\n    - Additional Details: ${additionalDetails || 'N/A'}\n\n    The interview difficulty is set to: ${difficulty}.\n\n    Current conversation history:\n    ${conversationHistory.map((msg: { role: string; parts: string }) => `${msg.role}: ${msg.parts}`).join('\n')}\n\n    Ask the next interview question. Keep your questions concise and relevant to the candidate's profile and the job.`;
+    const lastUserMsg = conversationHistory && conversationHistory.length > 0
+      ? [...conversationHistory].reverse().find((msg: { role: string; parts: string }) => msg.role === 'User')
+      : null;
+
+      prompt = `You are an AI interviewer. Your goal is to conduct a realistic job interview.\n    The candidate's details are:\n    - Job Title: ${jobTitle}\n    - Job Description: ${jobDescription || 'N/A'}\n    - Skills: ${skills || 'N/A'}\n    - Employment History: ${employmentHistory || 'N/A'}\n    - Additional Details: ${additionalDetails || 'N/A'}\n\n    The interview difficulty is set to: ${difficulty}.\n\n    Current conversation history:\n    ${conversationHistory.map((msg: { role: string; parts: string }) => `${msg.role}: ${msg.parts}`).join('\n')}\n\n    ${lastUserMsg ? `First, evaluate the candidate's last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question.` : 'Ask the first interview question. Keep your questions concise and relevant to the candidate\'s profile and the job.'}`;
   } else if (mode === 'quiz') {
     prompt = `You are an AI quiz master. Generate a multiple-choice quiz question based on the following candidate and job details. Provide 4 options (A, B, C, D) and indicate the correct answer.\n    Candidate's details:\n    - Job Title: ${jobTitle}\n    - Job Description: ${jobDescription || 'N/A'}\n    - Skills: ${skills || 'N/A'}\n    - Employment History: ${employmentHistory || 'N/A'}\n    - Additional Details: ${additionalDetails || 'N/A'}\n\n    The quiz difficulty is set to: ${difficulty}. The quiz will consist of 10 questions.
 
@@ -50,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       prompt += `Generate the first multiple-choice quiz question.`;
     }
 
-    prompt += `\n\nFormat your response as follows:\n    Question: [Your question here]\n    A) [Option A]\n    B) [Option B]\n    C) [Option C]\n    D) [Option D]\n    Answer: [Correct Option Letter (e.g., A)]`;
+  prompt += `\n\nIMPORTANT: Do not use asterisks, bold, or markdown formatting for section headers. Just use plain text.\nFormat your response as follows:\n    Question: [Your question here]\n    A) [Option A]\n    B) [Option B]\n    C) [Option C]\n    D) [Option D]\n    Answer: [Correct Option Letter (e.g., A)]\n    Next Question: [Your next question here]`;
 
   } else {
     return res.status(400).json({ message: 'Invalid mode specified.' });

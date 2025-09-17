@@ -123,6 +123,7 @@ export default function Home() {
         <p className="max-w-2xl text-gray-300 mb-8">
           Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.
         </p>
+        <Link href="/auth">
         <button className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-lg font-semibold">
           Begin Your Session →
         </button>
@@ -186,9 +187,11 @@ export default function Home() {
             <h3 className="text-2xl font-semibold mb-2">Free Plan</h3>
             <p className="text-gray-400 mb-4">Ideal for introductory practice sessions.</p>
             <p className="text-3xl font-bold mb-6">$0</p>
-            <button className="px-6 py-3 bg-blue-600 rounded-full hover:bg-blue-500">
+            <Link href="/auth">
+            <button className="px-6 py-3 bg-blue-600 cursot-pointer rounded-full hover:bg-blue-500">
               Get Started
             </button>
+            </Link>
           </div>
           <div 
             onClick={() => setSelectedPlan(1)}
@@ -197,7 +200,7 @@ export default function Home() {
             <h3 className="text-2xl font-semibold mb-2">Pro Plan</h3>
             <p className="text-gray-400 mb-4">Unlock full platform capabilities and unlimited interviews.</p>
             <p className="text-3xl font-bold mb-6">$19/mo</p>
-            <button className="px-6 py-3 bg-blue-600 rounded-full hover:bg-blue-500">
+            <button className="px-6 py-3 cursor-not-allowed  bg-blue-600 rounded-full hover:bg-blue-500">
               Upgrade Now
             </button>
           </div>

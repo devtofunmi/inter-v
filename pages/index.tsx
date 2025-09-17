@@ -124,9 +124,10 @@ export default function Home() {
           Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.
         </p>
         <Link href="/auth">
-        <button className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-lg font-semibold">
+        <button className="px-8 py-4 cursor-pointer rounded-full bg-blue-600 hover:bg-blue-500 text-lg font-semibold">
           Begin Your Session →
         </button>
+        </Link>
       </section>
 
       {/* Features Section */}
@@ -200,7 +201,7 @@ export default function Home() {
             <h3 className="text-2xl font-semibold mb-2">Pro Plan</h3>
             <p className="text-gray-400 mb-4">Unlock full platform capabilities and unlimited interviews.</p>
             <p className="text-3xl font-bold mb-6">$19/mo</p>
-            <button className="px-6 py-3 cursor-not-allowed  bg-blue-600 rounded-full hover:bg-blue-500">
+            <button className="px-6 py-3 cursor-not-allowed opacity-60  bg-blue-600 rounded-full" disabled>
               Upgrade Now
             </button>
           </div>
@@ -248,9 +249,11 @@ export default function Home() {
           <p className="text-lg text-gray-300 mb-8">
             Join thousands of professionals who have aced their interviews with Inter-V.
           </p>
+          <Link href="/auth">
           <button className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-lg font-semibold">
             Start Your Free Session →
           </button>
+          </Link>
         </div>
       </section>
 

@@ -31,8 +31,8 @@ const features = [
 
 const testimonials = [
   {
-    image: "https://placehold.co/60x60/8B0000/FFF?text=KS",
-    name: "Katya Samson",
+    image: "https://placehold.co/60x60/00008B/FFF?text=A",
+    name: "Anonymous",
     title: "Dentist",
     quote: "Bossed really put me through my paces. It helped me get a job in a practice I love!",
   },
@@ -43,14 +43,14 @@ const testimonials = [
     quote: "I was super nervous for my interview but practicing really helped!",
   },
   {
-    image: "https://placehold.co/60-60/00008B/FFF?text=JP",
-    name: "Jim Paros",
+    image: "https://placehold.co/60x60/00008B/FFF?text=JP",
+    name: "Anonymous",
     title: "Analyst",
     quote: "Using bossed was great. It allowed me to improve my skills!",
   },
   {
     image: "https://placehold.co/60x60/191970/FFF?text=A",
-    name: "Alison",
+    name: "Anonymous",
     title: "Accountant",
     quote: "It was so good, the questions it asked were so clever! It really helped me.",
   },
@@ -71,7 +71,7 @@ const faqs = [
   },
   {
     question: "What kind of roles can I practice for?",
-    answer: "You can practice for a wide range of roles. Choose from our pre-defined list or enter a custom job description for a highly personalized experience."
+    answer: "You can practice for a wide range of roles."
   }
 ];
 
@@ -145,7 +145,7 @@ export default function Home() {
           {features.map((feature, index) => (
             <div key={index} className="p-6 bg-gray-900 rounded-2xl shadow-lg flex flex-col items-center text-center">
               <div className="p-3 mb-4 rounded-full bg-gray-800">
-                <Image src={feature.icon} alt={feature.title} width={40} height={40} className="w-10 h-10 rounded-full" />
+                <Image src={feature.icon} alt={feature.title} width={40} height={40} className="w-10 h-10 rounded-full" unoptimized />
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
               <p className="text-gray-400 mb-4">{feature.description}</p>
@@ -168,7 +168,7 @@ export default function Home() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
             <div key={index} className="p-8 bg-gray-900 rounded-2xl shadow-lg flex flex-col items-center text-center">
-              <Image src={testimonial.image} alt={testimonial.name} width={60} height={60} className="w-16 h-16 rounded-full mb-4 object-cover" />
+              <Image src={testimonial.image} alt={testimonial.name} width={60} height={60} className="w-16 h-16 rounded-full mb-4 object-cover" unoptimized />
               <p className="text-gray-400 italic mb-4">&quot;{testimonial.quote}&quot;</p>
               <h3 className="text-lg font-semibold">{testimonial.name}</h3>
               <p className="text-sm text-gray-500">{testimonial.title}</p>

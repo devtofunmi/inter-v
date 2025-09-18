@@ -73,7 +73,7 @@ export default function Dashboard() {
                 <p className="text-gray-400 mb-2">Mode: {scoresData.user.practiceResults[0].mode}</p>
                 <p className="text-gray-400 mb-2">Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
                 <p className="text-gray-400 mb-4">Date: {new Date(scoresData.user.practiceResults[0].createdAt).toLocaleString()}</p>
-                <Link href="#" className="text-blue-500 hover:underline">Review Feedback →</Link>
+                
               </>
             )}
           </div>

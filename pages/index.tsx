@@ -1,28 +1,29 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Mic, Brain, PenLine, TrendingUp } from "lucide-react";
 
 const features = [
   {
-    icon: "https://placehold.co/40x40/00FF7F/000?text=🎤",
+    icon: Mic,
     title: "Voice chat",
     description: "Our realistic voice chat feels just like a real interview.",
     linkText: "Realistic voice chat",
   },
   {
-    icon: "https://placehold.co/40x40/6633FF/000?text=🧠",
+    icon: Brain,
     title: "Powerful interviewer",
     description: "Our AI interviewer will question you on everything from job-specific technicalities to items on your résumé.",
     linkText: "Find holes in your CV",
   },
   {
-    icon: "https://placehold.co/40x40/FFD700/000?text=✍️",
+    icon: PenLine,
     title: "Constructive feedback",
     description: "Get honest constructive feedback from our intelligent interview model.",
     linkText: "Improve your technique",
   },
   {
-    icon: "https://placehold.co/40x40/FF6347/000?text=📈",
+    icon: TrendingUp,
     title: "Get better",
     description: "Work your way up from easy to hard mode mastering your interview technique.",
     linkText: "Master each difficulty level",
@@ -31,28 +32,28 @@ const features = [
 
 const testimonials = [
   {
-    image: "https://placehold.co/60x60/00008B/FFF?text=A",
-    name: "Anonymous",
-    title: "Dentist",
-    quote: "Bossed really put me through my paces. It helped me get a job in a practice I love!",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    name: "Sarah Lee",
+    title: "Software Engineer",
+    quote: "Inter-V helped me land my dream job! The practice interviews felt real and the feedback was spot on.",
   },
   {
-    image: "https://placehold.co/60x60/4B0082/FFF?text=A",
-    name: "Anonymous",
-    title: "Analyst",
-    quote: "I was super nervous for my interview but practicing really helped!",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    name: "Michael Chen",
+    title: "Marketing Specialist",
+    quote: "I felt so much more confident after using Inter-V. The voice chat feature is a game changer!",
   },
   {
-    image: "https://placehold.co/60x60/00008B/FFF?text=JP",
-    name: "Anonymous",
-    title: "Analyst",
-    quote: "Using bossed was great. It allowed me to improve my skills!",
+    image: "https://randomuser.me/api/portraits/men/65.jpg",
+    name: "James Patel",
+    title: "Data Analyst",
+    quote: "The AI interviewer asked tough questions and gave me honest feedback. Highly recommend Inter-V!",
   },
   {
-    image: "https://placehold.co/60x60/191970/FFF?text=A",
-    name: "Anonymous",
+    image: "https://randomuser.me/api/portraits/women/68.jpg",
+    name: "Emily Carter",
     title: "Accountant",
-    quote: "It was so good, the questions it asked were so clever! It really helped me.",
+    quote: "Inter-V made interview prep easy and effective. I got the job I wanted thanks to their platform.",
   },
 ];
 
@@ -145,7 +146,9 @@ export default function Home() {
           {features.map((feature, index) => (
             <div key={index} className="p-6 bg-gray-900 rounded-2xl shadow-lg flex flex-col items-center text-center">
               <div className="p-3 mb-4 rounded-full bg-gray-800">
-                <Image src={feature.icon} alt={feature.title} width={40} height={40} className="w-10 h-10 rounded-full" unoptimized />
+                {feature.icon && (
+                  <feature.icon size={25} className="w-5 h-5 text-primary" />
+                )}
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
               <p className="text-gray-400 mb-4">{feature.description}</p>

@@ -26,7 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           select: {
             id: true,
             mode: true,
-            difficulty: true,
             score: true,
             totalQuestions: true,
             jobTitle: true,

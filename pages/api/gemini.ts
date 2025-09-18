@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { jobTitle, jobDescription, skills, employmentHistory, additionalDetails, mode, conversationHistory, difficulty } = req.body;
+  const { jobTitle, jobDescription, skills, employmentHistory, additionalDetails, mode, conversationHistory } = req.body;
 
   if (!jobTitle || !mode) {
     return res.status(400).json({ message: 'Job title and mode are required.' });
@@ -29,10 +29,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ? [...conversationHistory].reverse().find((msg: { role: string; parts: string }) => msg.role === 'User')
       : null;
 
-      prompt = `You are an AI interviewer. Your goal is to conduct a realistic job interview.\n    The candidate's details are:\n    - Job Title: ${jobTitle}\n    - Job Description: ${jobDescription || 'N/A'}\n    - Skills: ${skills || 'N/A'}\n    - Employment History: ${employmentHistory || 'N/A'}\n    - Additional Details: ${additionalDetails || 'N/A'}\n\n    The interview difficulty is set to: ${difficulty}.\n\n    Current conversation history:\n    ${conversationHistory.map((msg: { role: string; parts: string }) => `${msg.role}: ${msg.parts}`).join('\n')}\n\n    ${lastUserMsg ? `First, evaluate the candidate's last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question.` : 'Ask the first interview question. Keep your questions concise and relevant to the candidate\'s profile and the job.'}`;
-  } else if (mode === 'quiz') {
-    prompt = `You are an AI quiz master. Generate a multiple-choice quiz question based on the following candidate and job details. Provide 4 options (A, B, C, D) and indicate the correct answer.\n    Candidate's details:\n    - Job Title: ${jobTitle}\n    - Job Description: ${jobDescription || 'N/A'}\n    - Skills: ${skills || 'N/A'}\n    - Employment History: ${employmentHistory || 'N/A'}\n    - Additional Details: ${additionalDetails || 'N/A'}\n\n    The quiz difficulty is set to: ${difficulty}. The quiz will consist of 10 questions.
+      prompt = `You are an AI interviewer. Conduct a realistic job interview for the following role:
+    - Job Title: ${jobTitle}
+    - Job Description: ${jobDescription || 'N/A'}
+    - Skills: ${skills || 'N/A'}
+    - Employment History: ${employmentHistory || 'N/A'}
+    - Additional Details: ${additionalDetails || 'N/A'}
 
+    Current conversation history:
+    ${conversationHistory.map((msg: { role: string; parts: string }) => `${msg.role}: ${msg.parts}`).join('\n')}
+
+    ${lastUserMsg ? `Evaluate the last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.` : 'Ask the first interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.'}`;
+  } else if (mode === 'quiz') {
+    prompt = `You are an AI quiz master. Generate a multiple-choice quiz question for the following job role. Provide 4 options (A, B, C, D) and indicate the correct answer.
+    - Job Title: ${jobTitle}
+    - Job Description: ${jobDescription || 'N/A'}
+    - Skills: ${skills || 'N/A'}
+    - Employment History: ${employmentHistory || 'N/A'}
+    - Additional Details: ${additionalDetails || 'N/A'}
+
+    The quiz will consist of 10 questions.
+    Do not repeat any question that has already been asked in this session.
     `;
 
     if (conversationHistory && conversationHistory.length > 0) {
@@ -42,13 +59,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       if (lastAIMessage && lastUserMessage) {
         prompt += `Previous Question: ${lastAIMessage.parts}\n`;
-        prompt += `Candidate's Answer: ${lastUserMessage.parts}\n\n`;
-        prompt += `Evaluate the candidate's answer to the previous question. Then, generate the next multiple-choice quiz question.`;
+        prompt += `Answer: ${lastUserMessage.parts}\n\n`;
+        prompt += `Evaluate the answer to the previous question. Then, generate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
       } else {
-        prompt += `Generate the first multiple-choice quiz question.`;
+        prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
       }
     } else {
-      prompt += `Generate the first multiple-choice quiz question.`;
+      prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
     }
 
   prompt += `\n\nIMPORTANT: Do not use asterisks, bold, or markdown formatting for section headers. Just use plain text.\nFormat your response as follows:\n    Question: [Your question here]\n    A) [Option A]\n    B) [Option B]\n    C) [Option C]\n    D) [Option D]\n    Answer: [Correct Option Letter (e.g., A)]\n    Next Question: [Your next question here]`;

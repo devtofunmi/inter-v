@@ -43,7 +43,7 @@ model PracticeResult {
   userId          String
   user            User      @relation(fields: [userId], references: [id])
   mode            String
-  difficulty      String
+  // difficulty field removed
   score           Int
   totalQuestions  Int
   jobTitle        String?

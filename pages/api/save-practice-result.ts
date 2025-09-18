@@ -14,9 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const { mode, difficulty, score, totalQuestions, jobTitle, jobDescription } = req.body;
+  const { mode, score, totalQuestions, jobTitle, jobDescription } = req.body;
 
-  if (!mode || !difficulty || score === undefined || totalQuestions === undefined) {
+  if (!mode || score === undefined || totalQuestions === undefined) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
@@ -25,7 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: {
         userId: session.user.id,
         mode,
-        difficulty,
         score,
         totalQuestions,
         jobTitle,

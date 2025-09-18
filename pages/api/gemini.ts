@@ -57,13 +57,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const lastAIMessage = conversationHistory.findLast((msg: { role: string; parts: string }) => msg.role === 'AI');
       const lastUserMessage = conversationHistory.findLast((msg: { role: string; parts: string }) => msg.role === 'User');
 
-      if (lastAIMessage && lastUserMessage) {
-        prompt += `Previous Question: ${lastAIMessage.parts}\n`;
-        prompt += `Answer: ${lastUserMessage.parts}\n\n`;
-        prompt += `Evaluate the answer to the previous question. Then, generate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
-      } else {
-        prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
-      }
+     if (lastAIMessage) {
+  prompt += `Previous Question: ${lastAIMessage.parts}\n`;
+  prompt += `Generate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
+} else {
+  prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
+}
     } else {
       prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
     }

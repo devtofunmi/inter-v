@@ -1,9 +1,25 @@
 // TypeScript definitions for SpeechRecognition API (for browsers that support it)
-type ISpeechRecognition = typeof window.SpeechRecognition | typeof window.webkitSpeechRecognition;
+
+// Minimal SpeechRecognition type for browser compatibility
+interface SpeechRecognition extends EventTarget {
+  start(): void;
+  stop(): void;
+  abort(): void;
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((event: SpeechRecognitionEventType) => void) | null;
+  onerror: ((event: Event) => void) | null;
+  onend: ((event: Event) => void) | null;
+}
 declare global {
   interface Window {
-    SpeechRecognition: ISpeechRecognition;
-    webkitSpeechRecognition: ISpeechRecognition;
+    SpeechRecognition: {
+      new (): SpeechRecognition;
+    };
+    webkitSpeechRecognition: {
+      new (): SpeechRecognition;
+    };
   }
 }
 
@@ -204,9 +220,10 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
     setCurrentQuestionNumber(0);
     setQuizData(null);
     setSelectedOption(null);
+    stopSpeaking(); // Stop TTS when switching mode
   }, [practiceMode]);
   const [userResponse, setUserResponse] = useState('');
-  const recognitionRef = useRef<InstanceType<ISpeechRecognition> | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [score, setScore] = useState(0);
@@ -312,13 +329,14 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
   const startInterview = async () => {
     setIsGenerating(true);
     setConversationHistory([]); // Clear previous conversation
-    
     setQuizData(null); // Clear previous quiz data
     setSelectedOption(null); // Clear previous selection
     setScore(0); // Reset score
     setCurrentQuestionNumber(0); // Reset question number
     setQuizCompleted(false); // Reset quiz completed status
-    
+    if (practiceMode === 'chat') {
+      setChatCompleted(false); // Reset chat completed status
+    }
 
     const payload = {
       jobTitle: user.practiceProfile?.jobTitle || '',
@@ -368,7 +386,14 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
   };
 
   // Text-to-Speech for AI response
+  const stopSpeaking = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  };
+
   const speak = (text: string) => {
+    stopSpeaking();
     if ('speechSynthesis' in window) {
       const utter = new window.SpeechSynthesisUtterance(text);
       window.speechSynthesis.speak(utter);

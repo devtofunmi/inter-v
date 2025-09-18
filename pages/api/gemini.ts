@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     ${lastUserMsg ? `Evaluate the last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.` : 'Ask the first interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.'}`;
   } else if (mode === 'quiz') {
-    prompt = `You are an AI quiz master. Generate a multiple-choice quiz question for the following job role. Provide 4 options (A, B, C, D) and indicate the correct answer.
+    prompt = `You are an AI quiz master. Generate a multiple-choice quiz question for the following job role. Provide 4 options (A, B, C, D)
     - Job Title: ${jobTitle}
     - Job Description: ${jobDescription || 'N/A'}
     - Skills: ${skills || 'N/A'}

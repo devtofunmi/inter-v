@@ -1,3 +1,15 @@
+// TypeScript definitions for SpeechRecognition API (for browsers that support it)
+type ISpeechRecognition = typeof window.SpeechRecognition | typeof window.webkitSpeechRecognition;
+declare global {
+  interface Window {
+    SpeechRecognition: ISpeechRecognition;
+    webkitSpeechRecognition: ISpeechRecognition;
+  }
+}
+
+type SpeechRecognitionEventType = Event & {
+  results: SpeechRecognitionResultList;
+};
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
@@ -78,48 +90,37 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
   };
 
   return (
-<div className="bg-gray-900/50 backdrop-blur-md p-6 rounded-2xl flex-shrink-0 w-full lg:w-96 space-y-8 h-full overflow-y-auto border border-gray-800 sidebar-scrollbar">
-    <div className="lg:hidden flex justify-end mb-4">
+    <div className="bg-gray-900/50 backdrop-blur-md p-6 rounded-2xl flex-shrink-0 w-full lg:w-96 space-y-8 h-full overflow-y-auto border border-gray-800 sidebar-scrollbar">
+      <div className="lg:hidden flex justify-end mb-4">
         <button onClick={() => setShowSidebar(false)} className="p-2 rounded-full hover:bg-gray-800 transition-colors duration-200">
           <ArrowLeft size={24} />
         </button>
       </div>
       {/* Job Details Section */}
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Job details</h2>
-          {/* <button className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300">
-            <Upload size={16} className="mr-1" /> Import job from website
-          </button> */}
+      <div className="space-y-4">
+        <div>
+          <label className="text-gray-400 text-sm mb-1 block">Job title</label>
+          <input
+            type="text"
+            className="w-full py-2 px-3 bg-gray-800 rounded-lg text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+            value={jobTitle}
+            onChange={(e) => setJobTitle(e.target.value)}
+          />
         </div>
-        <div className="space-y-4">
-          <div>
-            <label className="text-gray-400 text-sm mb-1 block">Job title</label>
-            <input
-              type="text"
-              className="w-full py-2 px-3 bg-gray-800 rounded-lg text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-              value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="text-gray-400 text-sm mb-1 block">Job description</label>
-            <textarea
-              className="w-full py-2 px-3 bg-gray-800 rounded-lg text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-24"
-              value={jobDescription}
-              onChange={(e) => setJobDescription(e.target.value)}
-            ></textarea>
-          </div>
+        <div>
+          <label className="text-gray-400 text-sm mb-1 block">Job description</label>
+          <textarea
+            className="w-full py-2 px-3 bg-gray-800 rounded-lg text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-24"
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
+          ></textarea>
         </div>
       </div>
-
       {/* Personal Details Section */}
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Personal details</h2>
-          {/* <button className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300">
-            <Upload size={16} className="mr-1" /> Import my resume
-          </button> */}
+          {/* Resume import button removed as unused */}
         </div>
         <div className="space-y-4">
           <div>
@@ -173,7 +174,6 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
           </button>
         </div>
       </div>
-
       {/* Interview Settings Section */}
       <div className="pt-4">
         <h2 className="text-xl font-semibold mb-4">Interview settings</h2>
@@ -186,7 +186,6 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
           </span>
         </button>
       </div>
-
       {/* Pricing Modal removed from Sidebar, now handled at Practice page level */}
     </div>
   );
@@ -207,6 +206,8 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
     setSelectedOption(null);
   }, [practiceMode]);
   const [userResponse, setUserResponse] = useState('');
+  const recognitionRef = useRef<InstanceType<ISpeechRecognition> | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [score, setScore] = useState(0);
   const [chatCompleted, setChatCompleted] = useState(false);
@@ -285,7 +286,7 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
         jobTitle: user.practiceProfile?.jobTitle || '',
         jobDescription: user.practiceProfile?.jobDescription || '',
       };
-      console.log('Saving practice result:', payload);
+  // Removed unused console.log
       const response = await fetch('/api/save-practice-result', {
         method: 'POST',
         headers: {
@@ -296,7 +297,7 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
 
       if (response.ok) {
         toast.success('Practice result saved!');
-        console.log('Practice result saved successfully!');
+  // Removed unused console.log
       } else {
         const errorData = await response.json();
         toast.error('Failed to save practice result.');
@@ -366,6 +367,42 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
     }
   };
 
+  // Text-to-Speech for AI response
+  const speak = (text: string) => {
+    if ('speechSynthesis' in window) {
+      const utter = new window.SpeechSynthesisUtterance(text);
+      window.speechSynthesis.speak(utter);
+    }
+  };
+
+  // Speech-to-Text
+  const handleMicClick = () => {
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      toast.error('Speech recognition not supported in this browser.');
+      return;
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!recognitionRef.current) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.onresult = (event: SpeechRecognitionEventType) => {
+        const transcript = event.results[0][0].transcript;
+        setUserResponse(transcript);
+        setIsRecording(false);
+      };
+      recognitionRef.current.onerror = () => {
+        setIsRecording(false);
+      };
+      recognitionRef.current.onend = () => {
+        setIsRecording(false);
+      };
+    }
+    setIsRecording(true);
+    recognitionRef.current.start();
+  };
+
   const sendUserResponse = async () => {
     if (!userResponse.trim() && practiceMode === 'chat') return;
     if (!selectedOption && practiceMode === 'quiz') return;
@@ -432,7 +469,11 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
       if (response.ok) {
         const data = await response.json();
         if (practiceMode === 'chat') {
-          setConversationHistory(prev => [...prev, { role: 'AI', parts: data.response }]);
+          setConversationHistory(prev => {
+            // Speak the AI response
+            speak(data.response);
+            return [...prev, { role: 'AI', parts: data.response }];
+          });
           // Simple scoring: increment score if AI feedback is positive
           if (/\b(correct|good job|well done|excellent|right answer)\b/i.test(data.response)) {
             setScore(prevScore => prevScore + 1);
@@ -705,10 +746,23 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
                       }
                     }}
                   ></textarea>
+                  {/* Microphone Button */}
+                  <button
+                    onClick={handleMicClick}
+                    disabled={isRecording || isGenerating}
+                    className="absolute cursor-pointer right-12 bottom-2 px-2 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 font-semibold text-white transition-colors duration-200 flex items-center justify-center"
+                    title={isRecording ? 'Recording...' : 'Record voice'}
+                  >
+                    {/* Record icon SVG, red when recording */}
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill={isRecording ? '#ef4444' : 'currentColor'} xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="10" cy="10" r="7" fill={isRecording ? '#ef4444' : 'currentColor'} />
+                    </svg>
+                  </button>
+                  {/* Send Button */}
                   <button
                     onClick={sendUserResponse}
                     disabled={isGenerating}
-                    className="absolute cursor-pointer right-2 bottom-2 px-3 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center"
+                    className="absolute cursor-pointer right-2 bottom-2 px-2.5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center"
                   >
                     {isGenerating ? <Loader2 className="animate-spin" size={15} /> : <ArrowUp size={15} />}
                   </button>

@@ -43,7 +43,7 @@ export default function Dashboard() {
       </Head>
 
       {/* Navbar for Dashboard */}
-      <header className="flex fixed top-0 w-full backdrop-blur-md bg-black/50 border-b border-gray-800 justify-between items-center px-8 py-4 border-b border-gray-800">
+      <header className="flex fixed top-0 w-full backdrop-blur-md bg-black/50 border-b border-gray-800 justify-between items-center px-8 py-4">
         <div className="text-xl font-bold">🚀 Inter-V</div>
         <nav className="flex gap-8">
           <button onClick={() => signOut()} className="px-5 py-2 cursor-pointer rounded-full bg-blue-600 hover:bg-blue-500 font-medium">

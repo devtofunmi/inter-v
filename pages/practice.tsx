@@ -209,7 +209,7 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
 
 const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>, user: User }) => {
   const [practiceMode, setPracticeMode] = useState('chat'); // 'chat' or 'quiz'
-  const [difficulty] = useState('medium'); // 'easy', 'medium', 'hard'
+  // Difficulty logic removed
   const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; parts: string }>>([]);
   // Clear history when switching modes
   useEffect(() => {
@@ -297,7 +297,6 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
       const payload = {
         userId: user.id,
         mode: practiceMode,
-        difficulty: difficulty,
         score: finalScore,
         totalQuestions: 10,
         jobTitle: user.practiceProfile?.jobTitle || '',
@@ -345,7 +344,6 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
       employmentHistory: user.practiceProfile?.employmentHistory || '',
       additionalDetails: user.practiceProfile?.additionalDetails || '',
       mode: practiceMode,
-      difficulty: difficulty,
       numberOfQuestions: 10,
       conversationHistory: [], // Start with empty history
     };
@@ -476,7 +474,6 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
       employmentHistory: user.practiceProfile?.employmentHistory || '',
       additionalDetails: user.practiceProfile?.additionalDetails || '',
       mode: practiceMode,
-      difficulty: difficulty,
       numberOfQuestions: 10,
       conversationHistory: updatedHistory,
       userResponse: currentResponse, // Send user's current response/selection

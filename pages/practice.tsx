@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Upload, Settings, Plus, UserCircle, MessageSquare, HelpCircle, ArrowLeft, Loader2, ArrowUp } from 'lucide-react';
+import { Settings, Plus, UserCircle, MessageSquare, HelpCircle, ArrowLeft, Loader2, ArrowUp } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import useSWR from 'swr';
 
@@ -70,7 +70,7 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
       } else {
         toast.error('Failed to update details.');
       }
-    } catch (error) {
+    } catch {
       toast.error('Network error.');
     } finally {
       setIsUpdating(false);
@@ -194,7 +194,7 @@ const Sidebar = ({ setShowSidebar, user, onShowPricingModal }: { setShowSidebar:
 
 const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>, user: User }) => {
   const [practiceMode, setPracticeMode] = useState('chat'); // 'chat' or 'quiz'
-  const [difficulty, setDifficulty] = useState('medium'); // 'easy', 'medium', 'hard'
+  const [difficulty] = useState('medium'); // 'easy', 'medium', 'hard'
   const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; parts: string }>>([]);
   // Clear history when switching modes
   useEffect(() => {

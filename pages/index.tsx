@@ -114,7 +114,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center text-center px-6 py-24 sm:py-32">
+  <section className="flex flex-col items-center text-center px-6 py-24 sm:py-32" data-aos="fade-up">
         <span className="px-4 py-1 mb-6 text-sm rounded-full border border-gray-700">
           🎤 AI-Powered Interview Preparation
         </span>
@@ -132,7 +132,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="px-6 py-20 bg-black">
+  <section id="features" className="px-6 py-20 bg-black" data-aos="fade-up">
         <div className="text-center">
           <span className="px-4 py-1 text-sm rounded-full border border-gray-700 inline-block mb-4">
             Get the job you deserve!
@@ -144,7 +144,7 @@ export default function Home() {
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {features.map((feature, index) => (
-            <div key={index} className="p-6 bg-gray-900 rounded-2xl shadow-lg flex flex-col items-center text-center">
+            <div key={index} className="p-6 bg-gray-900 rounded-2xl shadow-lg flex flex-col items-center text-center" data-aos="zoom-in" data-aos-delay={index * 100}>
               <div className="p-3 mb-4 rounded-full bg-gray-800">
                 {feature.icon && (
                   <feature.icon size={25} className="w-5 h-5 text-primary" />
@@ -159,7 +159,7 @@ export default function Home() {
       </section>
       
       {/* Testimonials Section */}
-      <section id="testimonials" className="px-6 py-20 bg-gradient-to-b from-gray-950 to-black">
+  <section id="testimonials" className="px-6 py-20 bg-gradient-to-b from-gray-950 to-black" data-aos="fade-up">
         <div className="text-center">
           <span className="px-4 py-1 text-sm rounded-full border border-gray-700 inline-block mb-4">
             Testimonials
@@ -170,7 +170,7 @@ export default function Home() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="p-8 bg-gray-900 rounded-2xl shadow-lg flex flex-col items-center text-center">
+            <div key={index} className="p-8 bg-gray-900 rounded-2xl shadow-lg flex flex-col items-center text-center" data-aos="flip-left" data-aos-delay={index * 100}>
               <Image src={testimonial.image} alt={testimonial.name} width={60} height={60} className="w-16 h-16 rounded-full mb-4 object-cover" unoptimized />
               <p className="text-gray-400 italic mb-4">&quot;{testimonial.quote}&quot;</p>
               <h3 className="text-lg font-semibold">{testimonial.name}</h3>
@@ -181,7 +181,7 @@ export default function Home() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="px-6 py-20 bg-gradient-to-b from-gray-950 to-black">
+  <section id="pricing" className="px-6 py-20 bg-gradient-to-b from-gray-950 to-black" data-aos="fade-up">
         <h2 className="text-3xl font-bold text-center mb-12">Pricing</h2>
         <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div 
@@ -212,7 +212,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="px-6 py-20 bg-black">
+  <section id="faq" className="px-6 py-20 bg-black" data-aos="fade-up">
         <div className="text-center">
           <h2 className="text-4xl font-extrabold mb-4">Frequently Asked Questions</h2>
           <p className="max-w-2xl mx-auto text-gray-400 mb-12">
@@ -246,7 +246,7 @@ export default function Home() {
       </section>
       
       {/* Call to Action Section */}
-      <section id="cta" className="px-6 py-20 bg-gradient-to-b from-gray-950 to-black text-center">
+  <section id="cta" className="px-6 py-20 bg-gradient-to-b from-gray-950 to-black text-center" data-aos="fade-up">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-extrabold mb-4">Ready to Master Your Next Interview?</h2>
           <p className="text-lg text-gray-300 mb-8">

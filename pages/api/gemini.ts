@@ -1,8 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextApiRequest, NextApiResponse } from 'next';
-import dotenv from 'dotenv';
-
-dotenv.config(); // Load environment variables
 
 const API_KEY = process.env.GEMINI_API_KEY;
 

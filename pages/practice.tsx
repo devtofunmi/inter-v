@@ -361,10 +361,12 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
         const data = await response.json();
         if (practiceMode === 'chat') {
           setConversationHistory([{ role: 'AI', parts: data.response }]);
+          speak(data.response); // TTS for first AI question
         } else if (practiceMode === 'quiz') {
           const parsedQuiz = parseQuizResponse(data.response);
           if (parsedQuiz) {
             setQuizData(parsedQuiz);
+            // No TTS for quiz mode
           } else {
             console.error('Failed to parse quiz response:', data.response);
             // Handle error, maybe display a message to the user
@@ -438,18 +440,19 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
       updatedHistory = [...conversationHistory, { role: 'User', parts: userResponse }];
       currentResponse = userResponse;
       setUserResponse(''); // Clear input
-      if (updatedHistory.filter(msg => msg.role === 'User').length >= 10) {
+      // Save result only after the 10th answer is processed
+      if (updatedHistory.filter(msg => msg.role === 'User').length === 10) {
+        setConversationHistory(updatedHistory);
         setChatCompleted(true);
-        savePracticeResult(score); // Save chat result to DB
         setIsGenerating(false);
+        // Wait for AI response to be processed before saving
+        setTimeout(() => {
+          savePracticeResult(score);
+        }, 500);
         return;
       }
-
     } else if (practiceMode === 'quiz' && quizData && selectedOption) {
-      if (selectedOption === quizData.correctAnswer) {
-        setScore(prevScore => prevScore + 1);
-      }
-
+      // Save result only after the 10th answer is processed
       updatedHistory = [
         ...conversationHistory,
         { role: 'AI', parts: quizData.question },
@@ -457,11 +460,19 @@ const MainContent = ({ setShowSidebar, user }: { setShowSidebar: React.Dispatch<
       ];
       currentResponse = `My answer: ${selectedOption}) ${quizData.options[selectedOption as keyof typeof quizData.options]}`;
       setSelectedOption(null); // Clear selection
-      // Do NOT clear quizData or increment question number here; wait for new data from API
-
-      if (currentQuestionNumber + 1 >= 10) {
+      setConversationHistory(updatedHistory);
+      if (currentQuestionNumber + 1 === 10) {
         setQuizCompleted(true);
-        // Call savePracticeResult here or after the API response
+        setIsGenerating(false);
+        // Wait for score to update before saving
+        setTimeout(() => {
+          savePracticeResult(selectedOption === quizData.correctAnswer ? score + 1 : score);
+        }, 500);
+        return;
+      }
+      // Otherwise, continue as normal
+      if (selectedOption === quizData.correctAnswer) {
+        setScore(prevScore => prevScore + 1);
       }
     }
 

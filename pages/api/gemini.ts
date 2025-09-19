@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     ${lastUserMsg ? `Evaluate the last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.` : 'Ask the first interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.'}`;
   } else if (mode === 'quiz') {
-    prompt = `You are an AI quiz master. Generate a multiple-choice quiz question for the following job role. Provide 4 options (A, B, C, D) and indicate the correct answer.
+    prompt = `You are an AI quiz master. Generate a multiple-choice quiz question for the following job role. Provide 4 options (A, B, C, D)
     - Job Title: ${jobTitle}
     - Job Description: ${jobDescription || 'N/A'}
     - Skills: ${skills || 'N/A'}
@@ -57,13 +57,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const lastAIMessage = conversationHistory.findLast((msg: { role: string; parts: string }) => msg.role === 'AI');
       const lastUserMessage = conversationHistory.findLast((msg: { role: string; parts: string }) => msg.role === 'User');
 
-      if (lastAIMessage && lastUserMessage) {
-        prompt += `Previous Question: ${lastAIMessage.parts}\n`;
-        prompt += `Answer: ${lastUserMessage.parts}\n\n`;
-        prompt += `Evaluate the answer to the previous question. Then, generate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
-      } else {
-        prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
-      }
+     if (lastAIMessage) {
+  prompt += `Previous Question: ${lastAIMessage.parts}\n`;
+  prompt += `Generate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
+} else {
+  prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
+}
     } else {
       prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
     }

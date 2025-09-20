@@ -50,6 +50,19 @@ interface QuizData {
   correctAnswer: string;
 }
 
+interface WrongAnswer {
+  question: string;
+  yourAnswer: string;
+  correctAnswer: string;
+  options: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+  };
+}
+
+
 interface User {
   id: string;
   name: string | null;
@@ -80,6 +93,7 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [wrongAnswers, setWrongAnswers] = useState<WrongAnswer[]>([]);
 
   useEffect(() => {
     setConversationHistory([]);
@@ -89,6 +103,7 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
     setCurrentQuestionNumber(0);
     setQuizData(null);
     setSelectedOption(null);
+    setWrongAnswers([]);
     stopSpeaking(); // Stop TTS when switching mode
   }, [practiceMode]);
 
@@ -151,6 +166,7 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
     setScore(0);
     setCurrentQuestionNumber(0);
     setQuizCompleted(false);
+    setWrongAnswers([]);
     if (practiceMode === 'chat') {
       setChatCompleted(false);
     }
@@ -262,6 +278,14 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
         return;
       }
     } else if (practiceMode === 'quiz' && quizData && selectedOption) {
+      if (selectedOption !== quizData.correctAnswer) {
+        setWrongAnswers(prev => [...prev, {
+          question: quizData.question,
+          yourAnswer: quizData.options[selectedOption as keyof typeof quizData.options],
+          correctAnswer: quizData.options[quizData.correctAnswer as keyof typeof quizData.options],
+          options: quizData.options,
+        }]);
+      }
       updatedHistory = [
         ...conversationHistory,
         { role: 'AI', parts: quizData.question },
@@ -399,6 +423,7 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
                 total={10}
                 onStartNew={startInterview}
                 buttonText="Start New Quiz"
+                wrongAnswers={wrongAnswers}
               />
             ) : quizData ? (
               <QuizView

@@ -145,7 +145,7 @@ export default function Home() {
     <div className="font-sans bg-white text-gray-900">
       
       {/* Sticky Header */}
-      <header className={`z-50 flex justify-between items-center px-8 py-4 ${isSticky ? 'fixed top-0 w-full backdrop-blur-md bg-white/90 border-b border-gray-200 shadow-md' : ''}`}>
+      <header className={`z-40 flex justify-between items-center px-8 py-4 ${isSticky ? `fixed top-0 w-full ${!mobileNavOpen ? 'backdrop-blur-md bg-white/90 border-b border-gray-200 shadow-md' : ''}` : ''}`}>
         <div className="text-xl font-bold text-emerald-600">🚀 Inter-V</div>
         
         <nav className="hidden md:flex gap-8">
@@ -168,7 +168,7 @@ export default function Home() {
         </button>
 
         {/* Mobile Fixed Menu */}
-        <div className={`fixed top-0 left-0 h-full w-full bg-white transition-transform duration-300 ease-in-out z-40 md:hidden ${mobileNavOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`fixed top-0 left-0 h-full w-full bg-white transition-transform duration-300 ease-in-out z-50 md:hidden ${mobileNavOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="pt-20 px-8 flex flex-col space-y-4">
             {navLinks.map((link) => (
               <a 

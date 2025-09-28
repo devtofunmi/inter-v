@@ -63,7 +63,7 @@ const testimonials = [
     quote: "The user interface is so intuitive and the AI is surprisingly smart. It's like having a personal interview coach.",
   },
   {
-    image: "https://randomuser.me/api/portraits/men/78.jpg",
+    image: "https://randomuser.me/api/portraits/men/20.jpg",
     name: "David Rodriguez",
     title: "Product Manager",
     quote: "A must-have for any professional looking to sharpen their interview skills. The progress tracking is a great feature.",
@@ -92,7 +92,7 @@ const faqs = [
 export default function Home() {
   const [isSticky, setSticky] = useState(false);
   // Fixed: Initial state set to null so no FAQ is open by default
-  const [openFaq, setOpenFaq] = useState(null); 
+  const [openFaq, setOpenFaq] = useState<number | null>(null); 
   const [selectedPlan, setSelectedPlan] = useState(0);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   // Fixed: Added state for testimonial carousel
@@ -111,7 +111,7 @@ export default function Home() {
 
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
     setIsLg(mediaQuery.matches);
-    const handler = (e) => setIsLg(e.matches);
+    const handler = (e: MediaQueryListEvent) => setIsLg(e.matches);
     mediaQuery.addEventListener('change', handler);
 
     return () => {
@@ -304,7 +304,7 @@ export default function Home() {
        <section id="testimonials" className="px-6 py-20 bg-white max-w-7xl mx-auto overflow-hidden" data-aos="fade-up">
         <h2 className="text-5xl text-center font-extrabold text-gray-900 mb-4">Testimonials</h2>
         <p className="text-2xl text-center text-gray-500 font-light mb-16">
-          Here's what some users who have hopped on the <span className="text-emerald-600 font-medium">Inter-V</span> train have to say.
+          Here is what some users who have hopped on the <span className="text-emerald-600 font-medium">Inter-V</span> train have to say.
         </p>
 
         <div className="relative flex items-center">

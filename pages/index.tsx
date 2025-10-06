@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// Fixed: Added missing Lucide icons for Testimonials
 import { Mic, Brain, PenLine, TrendingUp, CheckCircle, Menu, X, ChevronLeft, ChevronRight, User } from "lucide-react"; 
 
 const features = [
@@ -132,7 +131,6 @@ export default function Home() {
     const maxIndex = testimonials.length - itemsInView;
     setCurrentTestimonialIndex((prevIndex) => (prevIndex === 0 ? maxIndex : prevIndex - 1));
   };
-  // End Fix
 
   const navLinks = [
     { href: "#features", text: "Features" },
@@ -226,13 +224,11 @@ export default function Home() {
             width={500} 
             height={500} 
             className="rounded-xl shadow-md border border-gray-100"
-            // Next.js Image component requires absolute or relative local path, or optimization domain setup for external URLs
             unoptimized 
           />
         </div>
       </section>
 
-      {/* --- */}
 
       {/* Features Section */}
       <section id="features" className="px-6 py-20 bg-white max-w-7xl mx-auto" data-aos="fade-up">
@@ -298,7 +294,6 @@ export default function Home() {
         </div>
       </section>
       
-      {/* --- */}
 
       {/* Testimonials Section */}
        <section id="testimonials" className="px-6 py-20 bg-white max-w-7xl mx-auto overflow-hidden" data-aos="fade-up">
@@ -369,7 +364,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- */}
 
       {/* Pricing Section */}
       <section id="pricing" className="px-6 py-20 bg-gray-50" data-aos="fade-up">
@@ -402,7 +396,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- */}
 
       {/* FAQ Section */}
       <section id="faq" className="px-6 py-20 bg-white" data-aos="fade-up">
@@ -438,7 +431,6 @@ export default function Home() {
         </div>
       </section>
       
-      {/* --- */}
 
       {/* Call to Action Section */}
       <section id="cta" className="px-6 py-20 bg-gray-100 text-center" data-aos="fade-up">
@@ -455,7 +447,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- */}
 
       {/* Footer */}
       <footer className="px-6 py-10 bg-gray-900 text-center text-gray-400">

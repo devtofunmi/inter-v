@@ -65,86 +65,86 @@ export default function OnboardingPage() {
 
   if (status === 'loading') {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="animate-spin h-10 w-10 text-blue-500" />
+      <div className="flex justify-center items-center min-h-screen font-geist bg-white text-gray-900">
+        <Loader2 className="animate-spin h-10 w-10 text-green-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-950 via-black to-gray-900 text-white p-4">
+    <div className="min-h-screen flex items-center justify-center font-geist bg-white text-gray-900 p-4">
       <Head>
         <title>Onboarding - Inter-V</title>
       </Head>
 
-      <div className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md border border-gray-800">
+      <div className="w-full max-w-[400px] ">
         <h2 className="text-3xl font-bold text-center mb-6">Tell Us About Yourself</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Name</label>
             <input
               type="text"
               id="name"
               name="name"
-              className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              placeholder="Your Name"
               value={onboardingData.name}
               onChange={handleChange}
               required
             />
           </div>
           <div>
-            <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-300 mb-1">Job Title</label>
             <input
               type="text"
               id="jobTitle"
               name="jobTitle"
-              className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              placeholder="Job Title"
               value={onboardingData.jobTitle}
               onChange={handleChange}
               required
             />
           </div>
           <div>
-            <label htmlFor="jobDescription" className="block text-sm font-medium text-gray-300 mb-1">Job Description</label>
             <textarea
               id="jobDescription"
               name="jobDescription"
               rows={3}
-              className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              placeholder="Job Description"
               value={onboardingData.jobDescription}
               onChange={handleChange}
               required
             ></textarea>
           </div>
           <div>
-            <label htmlFor="employmentHistory" className="block text-sm font-medium text-gray-300 mb-1">Employment History</label>
             <input
               type="text"
               id="employmentHistory"
               name="employmentHistory"
-              className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              placeholder="Employment History"
               value={onboardingData.employmentHistory}
               onChange={handleChange}
             />
           </div>
           <div>
-            <label htmlFor="skills" className="block text-sm font-medium text-gray-300 mb-1">Skills</label>
             <input
               type="text"
               id="skills"
               name="skills"
-              className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              placeholder="Skills (comma separated)"
               value={onboardingData.skills}
               onChange={handleChange}
             />
           </div>
           <div>
-            <label htmlFor="additionalDetails" className="block text-sm font-medium text-gray-300 mb-1">Additional Details</label>
             <textarea
               id="additionalDetails"
               name="additionalDetails"
               rows={3}
-              className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              placeholder="Additional Details"
               value={onboardingData.additionalDetails}
               onChange={handleChange}
             ></textarea>
@@ -152,7 +152,7 @@ export default function OnboardingPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-500 font-medium disabled:opacity-50"
+            className="w-full cursor-pointer px-4 py-2 rounded-full bg-green-600 hover:bg-green-500 font-bold text-white shadow-lg transition-colors text-lg disabled:opacity-50 disabled:pointer-events-none"
           >
             {isLoading ? <Loader2 className="animate-spin mx-auto" /> : 'Save and Continue'}
           </button>

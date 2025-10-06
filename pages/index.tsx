@@ -140,19 +140,19 @@ export default function Home() {
   ];
 
   return (
-    <div className="font-sans bg-white text-gray-900">
+    <div className="font-geist bg-white text-gray-900 text-[17px] font-normal">
       
       {/* Sticky Header */}
       <header className={`z-40 flex justify-between items-center px-8 py-4 ${isSticky ? `fixed top-0 w-full ${!mobileNavOpen ? 'backdrop-blur-md bg-white/90 border-b border-gray-200 shadow-md' : ''}` : ''}`}>
-        <div className="text-xl font-bold text-emerald-600">🚀 Inter-V</div>
+        <div className="text-2xl font-extrabold text-emerald-600">🚀 Inter-V</div>
         
         <nav className="hidden md:flex gap-8">
           {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className="hover:text-emerald-600">{link.text}</a>
+            <a key={link.href} href={link.href} className="hover:text-emerald-600 font-medium text-base">{link.text}</a>
           ))}
         </nav>
         
-        <Link href="/auth" className="hidden md:block px-5 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-lg transition-colors">
+        <Link href="/auth" className="hidden md:block px-5 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg transition-colors text-base">
           Log In
         </Link>
         
@@ -172,13 +172,13 @@ export default function Home() {
               <a 
                 key={link.href} 
                 href={link.href} 
-                className="text-2xl font-semibold py-2 border-b border-gray-200 hover:text-emerald-600"
+                className="text-2xl font-bold py-2 border-b border-gray-200 hover:text-emerald-600"
                 onClick={() => setMobileNavOpen(false)}
               >
                 {link.text}
               </a>
             ))}
-            <Link href="/auth" className="mt-6 px-5 py-3 text-center rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-lg transition-colors text-lg">
+            <Link href="/auth" className="mt-6 px-5 py-3 text-center rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg transition-colors text-xl">
               Log In
             </Link>
           </div>
@@ -187,36 +187,32 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between gap-12 px-6 pt-24 pb-10 bg-white max-w-7xl mx-auto" data-aos="fade-up">
-        
         <div className="text-center md:text-left md:w-1/2">
-          <span className="inline-flex items-center px-4 py-1 mb-6 text-sm rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold">
+          <span className="inline-flex items-center px-4 py-1 mb-6 text-base rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold">
             AI-Powered Interview Preparation
           </span>
-          <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 text-gray-900">
+          <h1 className="text-6xl sm:text-7xl font-extrabold mb-6 text-gray-900">
             Elevate Your <span className="text-emerald-600">Interview</span> Performance
           </h1>
-          <p className="max-w-xl text-gray-600 mb-8 text-lg mx-auto md:mx-0">
+          <p className="max-w-xl text-gray-600 mb-8 text-xl mx-auto md:mx-0 font-normal">
             Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10">
             <Link href="/auth">
-              <button className="px-8 py-4 w-full sm:w-auto cursor-pointer rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-semibold shadow-xl transition-all duration-300 transform hover:scale-105">
+              <button className="px-8 py-4 w-full sm:w-auto cursor-pointer rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
                 Begin Your Session →
               </button>
             </Link>
           </div>
-
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-gray-500 text-sm justify-center md:justify-start">
-            <span className="flex items-center justify-center md:justify-start">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-gray-500 text-base justify-center md:justify-start">
+            <span className="flex items-center justify-center md:justify-start font-medium">
               <CheckCircle size={16} className="text-emerald-500 mr-2"/> Trusted by 10,000+ Users
             </span>
-            <span className="flex items-center justify-center md:justify-start">
+            <span className="flex items-center justify-center md:justify-start font-medium">
               <CheckCircle size={16} className="text-emerald-500 mr-2"/> Advanced Model
             </span>
           </div>
         </div>
-        
         <div className="w-full md:w-1/2 mt-12 md:mt-0 flex justify-center">
           <Image 
             src={"/hero.jpg"} 
@@ -298,8 +294,8 @@ export default function Home() {
       {/* Testimonials Section */}
        <section id="testimonials" className="px-6 py-20 bg-white max-w-7xl mx-auto overflow-hidden" data-aos="fade-up">
         <h2 className="text-5xl text-center font-extrabold text-gray-900 mb-4">Testimonials</h2>
-        <p className="text-2xl text-center text-gray-500 font-light mb-16">
-          Here is what some users who have hopped on the <span className="text-emerald-600 font-medium">Inter-V</span> train have to say.
+        <p className="text-2xl text-center text-gray-500 font-normal mb-16">
+          Here is what some users who have hopped on the <span className="text-emerald-600 font-semibold">Inter-V</span> train have to say.
         </p>
 
         <div className="relative flex items-center">
@@ -367,17 +363,17 @@ export default function Home() {
 
       {/* Pricing Section */}
       <section id="pricing" className="px-6 py-20 bg-gray-50" data-aos="fade-up">
-        <h2 className="text-4xl font-extrabold text-center mb-12 text-gray-900">Pricing</h2>
+        <h2 className="text-5xl font-extrabold text-center mb-12 text-gray-900">Pricing</h2>
         <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div 
             onClick={() => setSelectedPlan(0)}
             className={`p-8 bg-white rounded-xl shadow-lg flex flex-col items-center cursor-pointer transition-all duration-300 ${selectedPlan === 0 ? 'border-2 border-emerald-600 shadow-xl' : 'border border-gray-200'}`}
           >
-            <h3 className="text-2xl font-semibold mb-2 text-gray-900">Free Plan</h3>
-            <p className="text-gray-600 mb-4">Ideal for introductory practice sessions.</p>
+            <h3 className="text-2xl font-bold mb-2 text-gray-900">Free Plan</h3>
+            <p className="text-gray-600 mb-4 text-lg font-normal">Ideal for introductory practice sessions.</p>
             <p className="text-5xl font-extrabold mb-6 text-gray-900">$0</p>
             <Link href="/auth">
-            <button className="px-6 py-3 bg-emerald-600 cursor-pointer rounded-full hover:bg-emerald-700 text-white font-medium shadow-md transition-colors">
+            <button className="px-6 py-3 bg-emerald-600 cursor-pointer rounded-full hover:bg-emerald-700 text-white font-semibold shadow-md transition-colors text-lg">
               Get Started
             </button>
             </Link>
@@ -386,10 +382,10 @@ export default function Home() {
             onClick={() => setSelectedPlan(1)}
             className={`p-8 bg-white rounded-xl shadow-lg flex flex-col items-center cursor-pointer transition-all duration-300 ${selectedPlan === 1 ? 'border-2 border-emerald-600 shadow-xl' : 'border border-gray-200'}`}
           >
-            <h3 className="text-2xl font-semibold mb-2 text-gray-900">Pro Plan</h3>
-            <p className="text-gray-600 mb-4">Unlock full platform capabilities and unlimited interviews.</p>
+            <h3 className="text-2xl font-bold mb-2 text-gray-900">Pro Plan</h3>
+            <p className="text-gray-600 mb-4 text-lg font-normal">Unlock full platform capabilities and unlimited interviews.</p>
             <p className="text-5xl font-extrabold mb-6 text-gray-900">$19/mo</p>
-            <button className="px-6 py-3 cursor-not-allowed opacity-60 bg-emerald-600 rounded-full text-white font-medium shadow-md">
+            <button className="px-6 py-3 cursor-not-allowed opacity-60 bg-emerald-600 rounded-full text-white font-semibold shadow-md text-lg">
               Upgrade Now
             </button>
           </div>
@@ -400,8 +396,8 @@ export default function Home() {
       {/* FAQ Section */}
       <section id="faq" className="px-6 py-20 bg-white" data-aos="fade-up">
         <div className="text-center">
-          <h2 className="text-4xl font-extrabold mb-4 text-gray-900">Frequently Asked Questions</h2>
-          <p className="max-w-2xl mx-auto text-gray-600 mb-12">
+          <h2 className="text-5xl font-extrabold mb-4 text-gray-900">Frequently Asked Questions</h2>
+          <p className="max-w-2xl mx-auto text-gray-600 mb-12 text-lg font-normal">
             Find answers to the most common questions about Inter-V.
           </p>
         </div>
@@ -412,18 +408,15 @@ export default function Home() {
                 onClick={() => setOpenFaq(openFaq === index ? null : index)}
                 className="flex justify-between items-center w-full text-left focus:outline-none py-2"
               >
-                <h3 className="text-xl font-semibold text-gray-900">{faq.question}</h3>
-                <span className={`text-2xl transform transition-transform duration-300 ${openFaq === index ? 'rotate-45 text-emerald-600' : 'rotate-0 text-gray-500'}`}>
-                  +
+                <h3 className="text-xl font-bold text-gray-900">{faq.question}</h3>
+                <span className={`text-2xl transform transition-transform duration-300 ${openFaq === index ? 'rotate-45 text-emerald-600' : 'rotate-0 text-gray-500'}`}>+
                 </span>
               </button>
               <div 
-                className={`grid transition-all duration-300 ease-in-out ${
-                  openFaq === index ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                }`}
+                className={`grid transition-all duration-300 ease-in-out ${openFaq === index ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
               >
                 <div className="overflow-hidden">
-                  <p className="text-gray-600 mt-1">{faq.answer}</p>
+                  <p className="text-gray-600 mt-1 text-base font-normal">{faq.answer}</p>
                 </div>
               </div>
             </div>
@@ -435,12 +428,12 @@ export default function Home() {
       {/* Call to Action Section */}
       <section id="cta" className="px-6 py-20 bg-gray-100 text-center" data-aos="fade-up">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-extrabold mb-4 text-gray-900">Ready to Master Your Next Interview?</h2>
-          <p className="text-lg text-gray-600 mb-8">
+          <h2 className="text-5xl font-extrabold mb-4 text-gray-900">Ready to Master Your Next Interview?</h2>
+          <p className="text-xl text-gray-600 mb-8 font-normal">
             Join thousands of professionals who have aced their interviews with Inter-V.
           </p>
           <Link href="/auth">
-            <button className="px-8 py-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-semibold shadow-xl transition-all duration-300 transform hover:scale-105">
+            <button className="px-8 py-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
               Start Your Free Session →
             </button>
           </Link>
@@ -450,8 +443,8 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="px-6 py-10 bg-gray-900 text-center text-gray-400">
-        <p className="text-sm">© {new Date().getFullYear()} Inter-V. All rights reserved.</p>
-        <p className="text-xs mt-2">Practice sessions are confidential and securely stored.</p>
+        <p className="text-base font-normal">© {new Date().getFullYear()} Inter-V. All rights reserved.</p>
+        <p className="text-sm mt-2 font-normal">Practice sessions are confidential and securely stored.</p>
       </footer>
     </div>
   );

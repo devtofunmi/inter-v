@@ -37,80 +37,74 @@ export default function Dashboard() {
   const { user } = data;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-black to-gray-900 text-white">
+    <div className="min-h-screen font-geist bg-white text-gray-900">
       <Head>
         <title>Dashboard - Inter-V</title>
       </Head>
 
       {/* Navbar for Dashboard */}
-      <header className="flex fixed top-0 w-full backdrop-blur-md bg-black/50 border-b border-gray-800 justify-between items-center px-8 py-4">
-        <div className="text-xl font-bold">🚀 Inter-V</div>
+      <header className="flex fixed top-0 w-full backdrop-blur-md bg-white/90 border-b border-gray-200 shadow-md justify-between items-center px-8 py-4 z-50">
+        <div className="text-2xl font-extrabold text-emerald-600">🚀 Inter-V</div>
         <nav className="flex gap-8">
-          <button onClick={() => signOut()} className="px-5 py-2 cursor-pointer rounded-full bg-blue-600 hover:bg-blue-500 font-medium">
+          <button onClick={() => signOut()} className="px-5 py-2 cursor-pointer rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg transition-colors text-base">
             Logout
           </button>
         </nav>
       </header>
 
       {/* Dashboard Content */}
-      <main className="container mx-auto px-6 py-12">
-        <h1 className="text-4xl mt-10 font-extrabold mb-4">Welcome, {user.name || 'User'}!</h1>
-        <p className="text-gray-300 text-lg mb-8">This is your personalized dashboard. Here you can manage your interviews, review feedback, and track your progress.</p>
+      <main className="container mx-auto px-6 py-24">
+        <h1 className="text-4xl font-extrabold mb-4 text-center">Welcome, {user.name || 'User'}!</h1>
+        <p className="text-gray-600 text-lg mb-8 text-center">This is your personalized dashboard. Here you can manage your interviews, review feedback, and track your progress.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Card 2: Recent Feedback */}
-          <div className="bg-gray-900 p-6 rounded-lg shadow-lg border border-gray-800">
-            <h2 className="text-2xl font-semibold mb-3">Recent Feedback</h2>
+          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <h2 className="text-2xl font-bold mb-3 text-gray-900">Recent Feedback</h2>
             {scoresError ? (
-              <p className="text-red-400">Error loading feedback.</p>
+              <p className="text-red-500">Error loading feedback.</p>
             ) : !scoresData ? (
-              <Loader2 className="animate-spin text-blue-500" size={24} />
+              <Loader2 className="animate-spin text-emerald-600" size={24} />
             ) : scoresData.user.practiceResults.length === 0 ? (
               <p className="text-gray-400 mb-2">No feedback yet.</p>
             ) : (
               <>
-                <p className="text-gray-400 mb-2">Last session: {scoresData.user.practiceResults[0].jobTitle || 'N/A'}</p>
-                <p className="text-gray-400 mb-2">Mode: {scoresData.user.practiceResults[0].mode}</p>
-                <p className="text-gray-400 mb-2">Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
+                <p className="text-gray-500 mb-2">Last session: {scoresData.user.practiceResults[0].jobTitle || 'N/A'}</p>
+                <p className="text-gray-500 mb-2">Mode: {scoresData.user.practiceResults[0].mode}</p>
+                <p className="text-gray-500 mb-2">Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
                 <p className="text-gray-400 mb-4">Date: {new Date(scoresData.user.practiceResults[0].createdAt).toLocaleString()}</p>
-                
               </>
             )}
           </div>
 
           {/* Card 3: Practice Sessions */}
-          <div className="bg-gray-900 p-6 rounded-lg shadow-lg border border-gray-800">
-            <h2 className="text-2xl font-semibold mb-3">Practice Sessions</h2>
+          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <h2 className="text-2xl font-bold mb-3 text-gray-900">Practice Sessions</h2>
             {scoresError ? (
-              <p className="text-red-400">Error loading sessions.</p>
+              <p className="text-red-500">Error loading sessions.</p>
             ) : !scoresData ? (
-              <Loader2 className="animate-spin text-blue-500" size={24} />
+              <Loader2 className="animate-spin text-emerald-600" size={24} />
             ) : scoresData.user.practiceResults.length === 0 ? (
               <p className="text-gray-400 mb-2">No sessions yet.</p>
             ) : (
               <>
-                <p className="text-gray-400 mb-2">Completed: {scoresData.user.practiceResults.length}</p>
-                <p className="text-gray-400 mb-4">Last Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
-                <Link href="/practice" className="text-blue-500 hover:underline">Start New Session →</Link>
+                <p className="text-gray-500 mb-2">Completed: {scoresData.user.practiceResults.length}</p>
+                <p className="text-gray-500 mb-4">Last Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
+                <Link href="/practice" className="text-emerald-600 hover:underline font-semibold">Start New Session →</Link>
               </>
             )}
           </div>
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 text-center bg-gray-900 p-8 rounded-lg shadow-lg border border-gray-800">
-          <h2 className="text-3xl font-extrabold mb-4">Ready for your next challenge?</h2>
-          <p className="text-lg text-gray-300 mb-6">Continue practicing to master your interview skills.</p>
-          <Link href="/practice" className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-lg font-semibold">
+        <div className="mt-12 text-center bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+          <h2 className="text-3xl font-extrabold mb-4 text-gray-900">Ready for your next challenge?</h2>
+          <p className="text-lg text-gray-600 mb-6">Continue practicing to master your interview skills.</p>
+          <Link href="/practice" className="px-8 py-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-lg font-bold text-white shadow-lg transition-colors">
             Start Practice Now →
           </Link>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="px-6 py-10 bg-black text-center text-gray-400 border-t border-gray-800 mt-12">
-        <p>© {new Date().getFullYear()} Inter-V. All rights reserved.</p>
-      </footer>
     </div>
   );
 }

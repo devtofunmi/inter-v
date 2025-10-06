@@ -4,6 +4,8 @@ import { SessionProvider } from "next-auth/react";
 import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
@@ -14,8 +16,10 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
   }, []);
 
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <main className={`${GeistSans.className} ${GeistMono.variable}`}>
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+    </main>
   );
 }

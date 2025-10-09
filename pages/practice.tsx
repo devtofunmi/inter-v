@@ -46,7 +46,7 @@ export default function Practice() {
     <>
     <Layout title="interview">
       <ToastContainer />
-      <div className="font-sans bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white p-6 h-screen flex flex-col lg:flex-row gap-6 relative">
+      <div className="font-sans mt-10 md:mt-0 text-white p-6 h-screen flex flex-col lg:flex-row gap-6 relative">
 
         <div className={`lg:flex ${showSidebar ? 'hidden' : 'flex'} flex-1`}>
           <MainContent setShowSidebar={setShowSidebar} user={user} />

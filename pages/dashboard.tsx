@@ -38,7 +38,7 @@ export default function Dashboard() {
 
   return (
     <Layout title="dashboard">
-      <div className="font-sans bg-white text-gray-900 p-6 min-h-screen">
+      <div className="font-sans text-gray-900">
         <main className="container mx-auto px-6">
           <h1 className="text-4xl font-extrabold mb-4 text-start">Welcome, {user.name || 'User'}!</h1>
           <p className="text-gray-600 text-lg mb-8 text-start">This is your personalized dashboard. Here you can manage your interviews, review feedback, and track your progress.</p>

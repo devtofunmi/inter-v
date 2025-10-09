@@ -14,7 +14,7 @@ import Layout from "../components/Layout";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Practice() {
-  const [showSidebar, setShowSidebar] = useState(false);
+  // sidebar state handled by Layout; not needed here
   const [showPricingModal, setShowPricingModal] = useState(false);
   const { status } = useSession();
   const { data, error } = useSWR(status === 'authenticated' ? '/api/user' : null, fetcher);
@@ -49,7 +49,7 @@ export default function Practice() {
       <div className="font-sans text-gray-900 p-6 h-full flex flex-col lg:flex-row gap-6 relative">
 
         <div className={`lg:flex flex-1`}>
-          <MainContent setShowSidebar={setShowSidebar} user={user} />
+          <MainContent user={user} />
         </div>
         {showPricingModal && <PricingModal setShowPricingModal={setShowPricingModal} />}
       </div>

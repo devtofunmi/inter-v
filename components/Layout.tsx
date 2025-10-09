@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showPricingModal, setShowPricingModal] = useState(false);
   const { status } = useSession();
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     status === "authenticated" ? "/api/user" : null,
     fetcher
   );

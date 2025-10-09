@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -11,15 +12,15 @@ import {
 import { signOut } from "next-auth/react";
 
 interface SidebarProps {
-  isMobile?: boolean;
   user: {
     name?: string;
     image?: string;
   };
   onOpenPricing?: () => void;
+  isMobile?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user, onOpenPricing }) => {
+const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
   const router = useRouter();
   
   const navItems = [
@@ -28,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user, onOpenPricing
   ];
 
   return (
-    <aside className={`p-6 h-full flex flex-col font-geist bg-white`}>
+  <aside data-is-mobile={isMobile ? 'true' : 'false'} className={`p-6 h-full flex flex-col font-geist bg-white`}>
       <div className="text-xl font-extrabold text-emerald-600 mb-10">🚀 Inter-V</div>
       <nav className="flex-1">
         <ul className="space-y-2">
@@ -82,9 +83,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user, onOpenPricing
         </div>
 
         <div className="flex items-center space-x-3 text-gray-800 mb-4 p-2">
-          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
             {user?.image ? (
-              <img src={user.image} alt="user" className="w-full h-full rounded-full" />
+              <Image src={user.image} alt="user" width={32} height={32} className="rounded-full" />
             ) : (
               <User size={16} className="text-gray-500" />
             )}

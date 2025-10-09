@@ -75,11 +75,10 @@ interface User {
 }
 
 interface MainContentProps {
-  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   user: User;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
+const MainContent: React.FC<MainContentProps> = ({ user }) => {
   const [practiceMode, setPracticeMode] = useState('chat'); // 'chat' or 'quiz'
   const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; parts: string }>>([]);
   const [userResponse, setUserResponse] = useState('');
@@ -152,7 +151,7 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
       } else {
         toast.error('Failed to save practice result.');
       }
-    } catch (error) {
+    } catch {
       toast.error('Error saving practice result.');
     }
   };
@@ -207,8 +206,8 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
         const errorData = await response.json();
         console.error('Error from Gemini API:', errorData);
       }
-    } catch (error) {
-      console.error('Network error:', error);
+    } catch {
+      console.error('Network error:');
     } finally {
       setIsGenerating(false);
     }

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import {
-  HambergerMenu,
-} from "iconsax-react";
-import { useSession, signOut } from "next-auth/react";
+import { Menu } from "lucide-react";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { Loader2 } from "lucide-react";
 
@@ -24,8 +22,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   if (status === "loading" || (status === "authenticated" && !data)) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="animate-spin h-10 w-10 text-blue-500" />
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <Loader2 className="animate-spin h-10 w-10 text-emerald-600" />
       </div>
     );
   }
@@ -33,9 +31,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user } = data || {};
 
   return (
-    <div className="flex bg-[#0d0d0d] min-h-screen">
+    <div className="flex bg-gray-50 min-h-screen font-geist">
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block fixed left-0 top-0 h-screen w-64">
+      <div className="hidden lg:block fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200">
         <Sidebar user={user} />
       </div>
 
@@ -46,8 +44,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             className="fixed inset-0 bg-black/50"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="fixed left-0 top-0 h-full w-64 bg-[#171717] transform transition-transform flex flex-col">           
-            <div className="flex-1 overflow-hidden">
+          <div className="fixed left-0 top-0 h-full w-64 bg-white transform transition-transform flex flex-col">
+            <div className="flex-1 overflow-y-auto">
               <Sidebar isMobile={true} user={user} />
             </div>
           </div>
@@ -55,25 +53,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 lg:ml-64">
-        <header className="fixed top-0 right-0 left-0 lg:left-64 bg-[#171717] md:hidden  px-4  z-40">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+      <div className="flex-1 lg:ml-64 min-h-screen">
+        <header className="lg:hidden fixed top-0 right-0 left-0 bg-white border-b border-gray-200 px-4 h-16 flex items-center z-40">
+          <div className="flex items-center justify-between w-full">
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden text-white hover:text-gray-300 p-2 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center"
+                className="text-gray-600 hover:text-emerald-600 p-2 rounded-lg"
                 aria-label="Open menu"
               >
-                <HambergerMenu color="#ffffff" size="24" />
+                <Menu size="24" />
               </button>
-            </div>
 
-            
           </div>
         </header>
 
-        <main className="">{children}</main>
+        <main className="pt-16 lg:pt-0 min-h-screen mt-5 md:mt-10">{children}</main>
       </div>
     </div>
   );

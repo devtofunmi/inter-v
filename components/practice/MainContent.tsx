@@ -375,21 +375,22 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full  min-h-0">
+    <div className="flex-1 flex flex-col h-full  min-h-0 relative">
       
 
       <PracticeModeSwitcher practiceMode={practiceMode} setPracticeMode={setPracticeMode} />
 
-      <div className="flex-1 flex flex-col text-center p-4 overflow-y-auto custom-scrollbar min-h-0 max-h-[calc(100vh-180px)] sm:max-h-[calc(100vh-120px)]">
+      <div className="flex-1 flex flex-col items-center text-center p-4 overflow-y-auto custom-scrollbar pb-40 ">
         {practiceMode === 'chat' ? (
-          <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="flex-1 flex flex-col items-center w-full  pt-8">
             {conversationHistory.length === 0 ? (
-              <div className="p-6 bg-gray-800 rounded-xl max-w-sm text-gray-300 border border-gray-700">
-                <p className="mb-2">The interview works best with headphones and a microphone.</p>
+              <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200 shadow-md">
+                <h2 className="text-2xl font-bold mb-2">Chat Mode</h2>
+                <p className="text-gray-600 mb-6">The interview works best with headphones and a microphone.</p>
                 <button
                   onClick={startInterview}
                   disabled={isGenerating}
-                  className="mt-4 w-full p-3 rounded-full bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center"
+                  className="w-full p-3 rounded-full bg-emerald-600 hover:bg-emerald-700 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
                 >
                   {isGenerating ? <Loader2 className="animate-spin mr-2" size={20} /> : 'Begin Interview'}
                 </button>
@@ -403,11 +404,11 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
                 buttonText="Start New Chat"
               />
             ) : (
-              <ChatView conversationHistory={conversationHistory} user={user} />
+              <ChatView conversationHistory={conversationHistory} />
             )}
           </div>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="flex-1 flex flex-col items-center w-full pt-8">
             {quizCompleted ? (
               <ActionResult
                 title="Quiz Completed!"
@@ -427,13 +428,13 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
                 isGenerating={isGenerating}
               />
             ) : (
-              <div className="p-6 bg-gray-800 rounded-xl max-w-sm text-gray-300 border border-gray-700">
-                <p className="mb-2">You are in Quiz Mode.</p>
-                <p className="font-semibold">Prepare for a series of questions.</p>
+              <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200 shadow-md">
+                <h2 className="text-2xl font-bold mb-2">Quiz Mode</h2>
+                <p className="text-gray-600 mb-6">Prepare for a series of multiple-choice questions.</p>
                 <button
                   onClick={startInterview}
                   disabled={isGenerating}
-                  className="mt-4 w-full p-3 rounded-full bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center"
+                  className="w-full p-3 rounded-full bg-emerald-600 hover:bg-emerald-700 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
                 >
                   {isGenerating ? <Loader2 className="animate-spin" size={22} /> : 'Start Quiz'}
                 </button>
@@ -441,18 +442,18 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
             )}
           </div>
         )}
-
-        {(practiceMode === 'chat' && conversationHistory.length > 0 && !quizCompleted && !chatCompleted) && (
-          <ChatInput
-            userResponse={userResponse}
-            setUserResponse={setUserResponse}
-            isGenerating={isGenerating}
-            isRecording={isRecording}
-            handleMicClick={handleMicClick}
-            sendUserResponse={sendUserResponse}
-          />
-        )}
       </div>
+
+      {(practiceMode === 'chat' && conversationHistory.length > 0 && !quizCompleted && !chatCompleted) && (
+        <ChatInput
+          userResponse={userResponse}
+          setUserResponse={setUserResponse}
+          isGenerating={isGenerating}
+          isRecording={isRecording}
+          handleMicClick={handleMicClick}
+          sendUserResponse={sendUserResponse}
+        />
+      )}
     </div>
   );
 };

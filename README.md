@@ -11,7 +11,7 @@ Ace your next interview with AI-driven practice sessions. Inter-V provides reali
 - **Personal Dashboard:** View your past scores, track your performance over time, and review your practice history.
 - **Multiple Practice Modes:** Switch between different practice modes to focus on specific skills.
 
-## How It Works
+<!-- ## How It Works
 
 This application demonstrates how to build a modern web application for personalized learning. It uses a powerful tech stack to deliver a seamless and interactive user experience.
 
@@ -29,21 +29,4 @@ This application demonstrates how to build a modern web application for personal
 - **Database ORM:** [Prisma](https://www.prisma.io/)
 - **Authentication:** [NextAuth.js](https://next-auth.js.org/)
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
-
-## Getting Started
-
-First, set up your environment variables by creating a `.env` file. It should include your database connection string and Google Gemini API key.
-
-```
-DATABASE_URL="..."
-GOOGLE_API_KEY="..."
-```
-
-Then, run the development server:
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ -->

@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import UserDropdown from './UserDropdown';
 import PracticeModeSwitcher from './PracticeModeSwitcher';
 import ChatView from './ChatView';
 import QuizView from './QuizView';
@@ -376,15 +375,8 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
   };
 
   return (
-    <div className="flex-1 bg-gray-950/50 backdrop-blur-md rounded-2xl p-8 flex flex-col h-full border border-gray-800 min-h-0">
-      <div className="flex justify-between items-center mb-4">
-        <div className="lg:hidden">
-          <button onClick={() => setShowSidebar(true)} className="p-2 rounded-full hover:bg-gray-800 transition-colors duration-200">
-            <Settings size={24} />
-          </button>
-        </div>
-        <UserDropdown />
-      </div>
+    <div className="flex-1 flex flex-col h-full  min-h-0">
+      
 
       <PracticeModeSwitcher practiceMode={practiceMode} setPracticeMode={setPracticeMode} />
 

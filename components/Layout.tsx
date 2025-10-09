@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
+import PricingModal from "./practice/PricingModal";
 import { Menu } from "lucide-react";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
@@ -14,6 +15,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showPricingModal, setShowPricingModal] = useState(false);
   const { status } = useSession();
   const { data, error } = useSWR(
     status === "authenticated" ? "/api/user" : null,
@@ -34,7 +36,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="flex bg-gray-50 min-h-screen font-geist">
       {/* Desktop Sidebar */}
       <div className="hidden lg:block fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200">
-        <Sidebar user={user} />
+        <Sidebar user={user} onOpenPricing={() => setShowPricingModal(true)} />
       </div>
 
       {/* Mobile Sidebar Overlay */}
@@ -45,12 +47,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             onClick={() => setIsMobileMenuOpen(false)}
           />
           <div className="fixed left-0 top-0 h-full w-64 bg-white transform transition-transform flex flex-col">
-            <div className="flex-1 overflow-y-auto">
-              <Sidebar isMobile={true} user={user} />
+              <div className="flex-1 overflow-y-auto">
+              <Sidebar isMobile={true} user={user} onOpenPricing={() => setShowPricingModal(true)} />
             </div>
           </div>
         </div>
       )}
+
+      {showPricingModal && <PricingModal setShowPricingModal={setShowPricingModal} />}
 
       {/* Main Content */}
       <div className="flex-1 lg:ml-64 min-h-screen">

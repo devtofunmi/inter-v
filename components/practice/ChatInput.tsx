@@ -13,8 +13,8 @@ interface ChatInputProps {
 
 const ChatInput: React.FC<ChatInputProps> = ({ userResponse, setUserResponse, isGenerating, isRecording, handleMicClick, sendUserResponse }) => {
   return (
-    <div className="absolute bottom-0 left-0 right-0 w-full flex justify-center ">
-      <div className="w-full max-w-2xl flex items-center gap-2 relative bg-white p-4 border border-gray-200 rounded-xl shadow-sm">
+  <div className="fixed bottom-0 left-0 right-0 w-full flex justify-center px-4 lg:left-64 lg:w-[calc(100%-16rem)]">
+    <div className="w-full max-w-2xl mx-auto flex items-center gap-2 relative bg-white p-4 border border-gray-200 rounded-xl shadow-sm">
         <textarea
           className="flex-1 p-2 bg-transparent rounded-lg text-gray-800 focus:outline-none resize-none custom-scrollbar"
           placeholder="Type your answer here... or use the microphone to speak."

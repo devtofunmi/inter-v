@@ -12,10 +12,14 @@ import { signOut } from "next-auth/react";
 
 interface SidebarProps {
   isMobile?: boolean;
-  user: any;
+  user: {
+    name?: string;
+    image?: string;
+  };
+  onOpenPricing?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user, onOpenPricing }) => {
   const router = useRouter();
   
   const navItems = [
@@ -52,6 +56,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user }) => {
         </ul>
       </nav>
       <div className="mt-auto pt-6 border-t border-gray-200">
+        <div className="mb-4">
+          <button
+            onClick={() => onOpenPricing && onOpenPricing()}
+            className="w-full cursor-pointer text-left px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-600 font-semibold mb-3"
+          >
+            Get Unlimited Interviews
+          </button>
+        </div>
         <div className="mb-4">
           <Link
             href="/settings"

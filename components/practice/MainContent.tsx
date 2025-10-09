@@ -417,6 +417,7 @@ const MainContent: React.FC<MainContentProps> = ({ setShowSidebar, user }) => {
                 onStartNew={startInterview}
                 buttonText="Start New Quiz"
                 wrongAnswers={wrongAnswers}
+                isModal={false}
               />
             ) : quizData ? (
               <QuizView

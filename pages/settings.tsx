@@ -38,14 +38,11 @@ const Settings = () => {
 
   return (
     <Layout title="Settings">
-      <div className="font-sans bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white p-6 min-h-screen flex flex-col lg:flex-row gap-6 relative">
+      <div className="font-sans  text-white p-6 min-h-screen flex flex-col lg:flex-row gap-6 relative">
         <div className={`lg:flex ${showSidebar ? 'flex' : 'hidden'} w-full lg:w-auto`}>
           {user && <Sidebar setShowSidebar={setShowSidebar} user={user} onShowPricingModal={() => setShowPricingModal(true)} />}
         </div>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-4">Settings</h1>
-          {/* Add settings content here */}
-        </div>
+       
         {showPricingModal && <PricingModal setShowPricingModal={setShowPricingModal} />}
       </div>
     </Layout>

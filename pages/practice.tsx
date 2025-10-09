@@ -30,8 +30,8 @@ export default function Practice() {
 
   if (status === 'loading' || !data || !data.user) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="animate-spin h-10 w-10 text-blue-500" />
+      <div className="flex justify-center items-center bg-white min-h-screen">
+        <Loader2 className="animate-spin h-10 w-10 text-green-500" />
       </div>
     );
   }
@@ -46,9 +46,9 @@ export default function Practice() {
     <>
     <Layout title="interview">
       <ToastContainer />
-      <div className="font-sans mt-10 md:mt-0 text-white p-6 h-screen flex flex-col lg:flex-row gap-6 relative">
+      <div className="font-sans text-gray-900 p-6 h-full flex flex-col lg:flex-row gap-6 relative">
 
-        <div className={`lg:flex ${showSidebar ? 'hidden' : 'flex'} flex-1`}>
+        <div className={`lg:flex flex-1`}>
           <MainContent setShowSidebar={setShowSidebar} user={user} />
         </div>
         {showPricingModal && <PricingModal setShowPricingModal={setShowPricingModal} />}

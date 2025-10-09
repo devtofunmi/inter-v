@@ -5,7 +5,9 @@ import {
   Home2,
   MusicPlay,
   Setting,
+  Logout,
 } from "iconsax-react";
+import { signOut } from "next-auth/react";
 
 interface SidebarProps {
   isMobile?: boolean;
@@ -22,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user }) => {
 
   return (
     <aside className={`${isMobile ? 'w-full bg-transparent' : 'w-full bg-[#171717] '} p-6 h-full overflow-y-auto flex flex-col`}>
+      <div className="text-2xl font-extrabold text-emerald-600 mb-10">🚀 Inter-V</div>
       <nav className="flex-1">
         <ul className="space-y-2">
           {navItems.map((item) => {
@@ -67,13 +70,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile = false, user }) => {
           </Link>
         </div>
 
-        <div className="flex items-center space-x-3 text-white">
+        <div className="flex items-center space-x-3 text-white mb-4">
           <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center">
             <span className="font-medium">{user?.name?.charAt(0) || 'U'}</span>
           </div>
           <span className="font-medium">{user?.name || 'User'}</span>
         </div>
        
+        <button
+          onClick={() => signOut()}
+          className="flex items-center space-x-3 px-3 py-3 rounded-lg text-gray-400 hover:bg-gray-800/50 w-full"
+        >
+          <Logout size="20" color="#9ca3af" />
+          <span className="font-medium">Logout</span>
+        </button>
       </div>
     </aside>
   );

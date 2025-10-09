@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setShowSidebar, user, onShowPricingMo
   };
 
   return (
-    <div className="bg-gray-900/50 backdrop-blur-md p-6 rounded-2xl flex-shrink-0 w-full lg:w-96 space-y-8 h-full overflow-y-auto border border-gray-800 sidebar-scrollbar">
+    <div className=" w-full lg:w-96 space-y-8 h-full overflow-y-auto sidebar-scrollbar">
       <div className="lg:hidden flex justify-end mb-4">
         <button onClick={() => setShowSidebar(false)} className="p-2 rounded-full hover:bg-gray-800 transition-colors duration-200">
           <ArrowLeft size={24} />

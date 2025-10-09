@@ -24,35 +24,34 @@ interface QuizViewProps {
 
 const QuizView: React.FC<QuizViewProps> = ({ quizData, currentQuestionNumber, selectedOption, setSelectedOption, sendUserResponse, isGenerating }) => {
   return (
-    <div className="relative w-full max-w-lg mx-auto overflow-y-auto custom-scrollbar">
-      <div className="pt-6 pb-6 text-gray-300 text-left overflow-y-auto custom-scrollbar" >
-        <div className="mb-2">
-          <span className="block text-base font-semibold text-blue-400 bg-gray-800 rounded-md px-3 py-1 w-fit mb-2 shadow">Question {currentQuestionNumber + 1}/10:</span>
-          <span className="block text-lg text-white font-medium mb-4">{quizData.question}</span>
+    <div className="relative w-full max-w-2xl mx-auto">
+      <div className="p-6 text-gray-800 text-left">
+        <div className="mb-6">
+          <span className="block text-sm font-semibold text-emerald-700 bg-emerald-100 rounded-md px-3 py-1 w-fit mb-3 shadow-sm">Question {currentQuestionNumber + 1}/10:</span>
+          <span className="block text-xl text-gray-900 font-semibold">{quizData.question}</span>
         </div>
         <div className="space-y-3">
           {Object.entries(quizData.options).map(([key, value]) => (
-            <label key={key} className={`flex items-center space-x-3 cursor-pointer rounded-lg p-3 transition border-2 ${selectedOption === key ? 'border-blue-500 bg-blue-950/60' : 'border-gray-700 bg-gray-800 hover:border-blue-400'}`}>
+            <label key={key} className={`flex items-center space-x-4 cursor-pointer rounded-xl p-4 transition-all border-2 ${selectedOption === key ? 'border-emerald-500 bg-emerald-50 shadow-md' : 'border-gray-200 bg-white hover:border-emerald-400'}`}>
               <input
                 type="radio"
                 name="quizOption"
                 value={key}
                 checked={selectedOption === key}
                 onChange={(e) => setSelectedOption(e.target.value)}
-                className="form-radio h-5 w-5 text-blue-600 bg-gray-700 border-gray-600 focus:ring-blue-500 accent-blue-600 transition"
+                className="form-radio h-5 w-5 accent-emerald-600 transition-transform duration-200 transform scale-110"
               />
-              <span className="text-lg font-medium text-white">{key}) {value}</span>
+              <span className="text-base font-medium text-gray-800">{value}</span>
             </label>
           ))}
         </div>
       </div>
-      {/* Fixed send button for quiz mode */}
-      <div className="fixed bottom-0 left-0 w-full flex justify-center z-30 pointer-events-none">
-        <div className="w-full max-w-2xl flex justify-end p-4 pointer-events-auto">
+      <div className="w-full flex justify-center z-30">
+        <div className="w-full max-w-3xl flex justify-end p-4">
           <button
             onClick={sendUserResponse}
             disabled={isGenerating || !selectedOption}
-            className="absolute right-10 bottom-2 px-3 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg"
+            className="px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-200 flex items-center justify-center shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100"
           >
             {isGenerating ? <Loader2 className="animate-spin" size={22} /> : <ArrowUp size={22} />}
           </button>

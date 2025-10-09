@@ -24,25 +24,25 @@ interface ActionResultProps {
 
 const ActionResult: React.FC<ActionResultProps> = ({ title, score, total, onStartNew, buttonText, wrongAnswers }) => {
   return (
-    <div className="p-6 bg-gray-800 rounded-xl w-full max-w-lg text-gray-300 border border-gray-700 overflow-y-auto custom-scrollbar max-h-[calc(100vh-200px)]">
-      <h3 className="text-xl font-semibold mb-4">{title}</h3>
-      <p className="mb-2">You have completed {total} questions.</p>
-      <p className="mb-2">Your score: {score} / {total}</p>
+    <div className="p-8 bg-white rounded-xl w-full max-w-2xl text-gray-800 border border-gray-200 shadow-md overflow-y-auto custom-scrollbar max-h-[calc(100vh-200px)]">
+      <h3 className="text-2xl font-bold mb-4 text-center text-gray-900">{title}</h3>
+      <p className="text-lg mb-2 text-center">You have completed {total} questions.</p>
+      <p className="text-3xl font-bold mb-6 text-center">Your score: <span className="text-emerald-600">{score}</span> / {total}</p>
       <button
         onClick={onStartNew}
-        className="mt-4 w-full p-3 rounded-full bg-blue-600 hover:bg-blue-500 cursor-pointer text-white transition-colors duration-200 flex items-center justify-center"
+        className="mt-4 w-full p-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100"
       >
         {buttonText}
       </button>
       {wrongAnswers && wrongAnswers.length > 0 && (
-        <div className="mt-6">
-          <h4 className="font-semibold text-lg mb-3 text-white">Review your mistakes:</h4>
+        <div className="mt-8">
+          <h4 className="font-semibold text-xl mb-4 text-gray-900 text-center">Review your mistakes:</h4>
           <ul className="space-y-4">
             {wrongAnswers.map((answer, index) => (
-              <li key={index} className="p-4 bg-gray-700/50 rounded-lg border border-gray-600">
-                <p className="font-medium text-gray-300 mb-2">{index + 1}. {answer.question}</p>
-                <p className="text-red-400 font-medium">Your answer: {answer.yourAnswer}</p>
-                <p className="text-green-400 font-medium">Correct answer: {answer.correctAnswer}</p>
+              <li key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <p className="font-semibold text-gray-800 mb-2">{index + 1}. {answer.question}</p>
+                <p className="text-red-600 font-medium">Your answer: {answer.yourAnswer}</p>
+                <p className="text-green-600 font-medium">Correct answer: {answer.correctAnswer}</p>
               </li>
             ))}
           </ul>

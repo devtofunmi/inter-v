@@ -10,22 +10,24 @@ interface PracticeModeSwitcherProps {
 const PracticeModeSwitcher: React.FC<PracticeModeSwitcherProps> = ({ practiceMode, setPracticeMode }) => {
   return (
     <div className="flex justify-center mb-8">
-      <button
-        className={`px-6 py-2 rounded-l-full md:font-medium font-sm transition-colors duration-200 ${
-          practiceMode === 'chat' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-        }`}
-        onClick={() => setPracticeMode('chat')}
-      >
-        <MessageSquare size={18} className="hidden md:inline-block mr-2" /> Chat Mode
-      </button>
-      <button
-        className={`px-6 py-2 rounded-r-full md:font-medium font-sm transition-colors duration-200 ${
-          practiceMode === 'quiz' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-        }`}
-        onClick={() => setPracticeMode('quiz')}
-      >
-        <HelpCircle size={18} className="hidden md:inline-block mr-2" /> Quiz Mode
-      </button>
+      <div className="flex rounded-full bg-gray-200 p-1">
+        <button
+          className={`px-6 py-2 rounded-full text-sm font-semibold transition-colors duration-200 flex items-center gap-2 ${
+            practiceMode === 'chat' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
+          }`}
+          onClick={() => setPracticeMode('chat')}
+        >
+          <MessageSquare size={16} /> Chat Mode
+        </button>
+        <button
+          className={`px-6 py-2 rounded-full text-sm font-semibold transition-colors duration-200 flex items-center gap-2 ${
+            practiceMode === 'quiz' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
+          }`}
+          onClick={() => setPracticeMode('quiz')}
+        >
+          <HelpCircle size={16} /> Quiz Mode
+        </button>
+      </div>
     </div>
   );
 };

@@ -24,8 +24,8 @@ export default function Dashboard() {
 
   if (status === 'loading' || !data) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="animate-spin h-10 w-10 text-blue-500" />
+      <div className="flex justify-center bg-white items-center min-h-screen">
+        <Loader2 className="animate-spin h-10 w-10 text-green-500" />
       </div>
     );
   }

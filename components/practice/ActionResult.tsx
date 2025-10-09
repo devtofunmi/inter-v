@@ -20,11 +20,16 @@ interface ActionResultProps {
   onStartNew: () => void;
   buttonText: string;
   wrongAnswers?: WrongAnswer[];
+  isModal?: boolean; // when false render inline (no max-h scroll wrapper)
 }
 
-const ActionResult: React.FC<ActionResultProps> = ({ title, score, total, onStartNew, buttonText, wrongAnswers }) => {
+const ActionResult: React.FC<ActionResultProps> = ({ title, score, total, onStartNew, buttonText, wrongAnswers, isModal = true }) => {
+  const containerClass = isModal
+    ? 'p-8 bg-white rounded-xl w-full max-w-2xl text-gray-800 border border-gray-200 shadow-md overflow-y-auto custom-scrollbar max-h-[calc(100vh-200px)]'
+    : 'p-8 bg-white rounded-xl w-full max-w-2xl text-gray-800 border border-gray-200 shadow-md';
+
   return (
-    <div className="p-8 bg-white rounded-xl w-full max-w-2xl text-gray-800 border border-gray-200 shadow-md overflow-y-auto custom-scrollbar max-h-[calc(100vh-200px)]">
+    <div className={containerClass}>
       <h3 className="text-2xl font-bold mb-4 text-center text-gray-900">{title}</h3>
       <p className="text-lg mb-2 text-center">You have completed {total} questions.</p>
       <p className="text-3xl font-bold mb-6 text-center">Your score: <span className="text-emerald-600">{score}</span> / {total}</p>

@@ -76,9 +76,10 @@ interface User {
 
 interface MainContentProps {
   user: User;
+  enableTTS?: boolean;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ user }) => {
+const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => {
   const [practiceMode, setPracticeMode] = useState('chat'); // 'chat' or 'quiz'
   const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; parts: string }>>([]);
   const [userResponse, setUserResponse] = useState('');
@@ -92,6 +93,8 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [wrongAnswers, setWrongAnswers] = useState<WrongAnswer[]>([]);
+  // Local state for toggling AI voice inside the chat modal. Initialized from prop.
+  const [enableTTSState, setEnableTTSState] = useState<boolean>(enableTTS);
 
 
   useEffect(() => {
@@ -103,8 +106,8 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
     setQuizData(null);
     setSelectedOption(null);
     setWrongAnswers([]);
-    stopSpeaking(); // Stop TTS when switching mode
-  }, [practiceMode]);
+    if (enableTTSState) stopSpeaking(); // Stop TTS when switching mode (only if TTS enabled)
+  }, [practiceMode, enableTTSState]);
 
   const parseQuizResponse = (responseText: string): QuizData | null => {
     const questionMatch = responseText.match(/Question: (.*)/);
@@ -194,7 +197,7 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
         const data = await response.json();
         if (practiceMode === 'chat') {
           setConversationHistory([{ role: 'AI', parts: data.response }]);
-          speak(data.response);
+          if (enableTTSState) speak(data.response);
         } else if (practiceMode === 'quiz') {
           const parsedQuiz = parseQuizResponse(data.response);
           if (parsedQuiz) {
@@ -224,7 +227,7 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
     stopSpeaking();
     if ('speechSynthesis' in window) {
       const utter = new window.SpeechSynthesisUtterance(text);
-      window.speechSynthesis.speak(utter);
+      if (enableTTSState) window.speechSynthesis.speak(utter);
     }
   };
 
@@ -333,7 +336,7 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
         const data = await response.json();
         if (practiceMode === 'chat') {
           setConversationHistory(prev => {
-            speak(data.response);
+            if (enableTTSState) speak(data.response);
             return [...prev, { role: 'AI', parts: data.response }];
           });
           if (/\b(correct|good job|well done|excellent|right answer)\b/i.test(data.response)) {
@@ -386,7 +389,25 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
             {conversationHistory.length === 0 ? (
               <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200 shadow-md">
                 <h2 className="text-2xl font-bold mb-2">Chat Mode</h2>
-                <p className="text-gray-600 mb-6">The interview works best with headphones and a microphone.</p>
+                  <p className="text-gray-600 mb-6">The interview works best with headphones and a microphone.</p>
+                  <div className="flex items-center justify-center mb-4">
+                    <label className="flex items-center cursor-pointer select-none">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          className="sr-only"
+                          checked={enableTTSState}
+                          onChange={(e) => setEnableTTSState(e.target.checked)}
+                          aria-label="Enable AI Voice"
+                        />
+                        <div className={`w-11 h-6 rounded-full shadow-inner transition-colors ${enableTTSState ? 'bg-emerald-600' : 'bg-gray-300'}`} />
+                        <div
+                          className={`dot absolute left-0 top-0 bg-white w-6 h-6 rounded-full shadow transform transition-transform ${enableTTSState ? 'translate-x-5' : 'translate-x-0'}`}
+                        />
+                      </div>
+                      <span className="ml-3 text-sm font-medium text-gray-700">Enable AI Voice</span>
+                    </label>
+                  </div>
                 <button
                   onClick={startInterview}
                   disabled={isGenerating}

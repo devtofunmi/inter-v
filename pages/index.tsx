@@ -384,7 +384,7 @@ export default function Home() {
           >
             <h3 className="text-2xl font-bold mb-2 text-gray-900">Pro Plan</h3>
             <p className="text-gray-600 mb-4 text-lg font-normal">Unlock full platform capabilities and unlimited interviews.</p>
-            <p className="text-5xl font-extrabold mb-6 text-gray-900">$19/mo</p>
+            <p className="text-5xl font-extrabold mb-6 text-gray-900">$8/mo</p>
             <button className="px-6 py-3 cursor-not-allowed opacity-60 bg-emerald-600 rounded-full text-white font-semibold shadow-md text-lg">
               Upgrade Now
             </button>

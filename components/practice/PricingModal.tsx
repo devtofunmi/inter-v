@@ -17,7 +17,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ setShowPricingModal }) => {
         </button>
         <h3 className="text-2xl font-bold mb-2 text-center text-gray-900">Pro Plan</h3>
         <p className="text-gray-600 mb-4 text-center">Unlock full platform capabilities and unlimited interviews.</p>
-        <p className="text-4xl font-extrabold mb-6 text-center text-gray-900">$19/mo</p>
+        <p className="text-4xl font-extrabold mb-6 text-center text-gray-900">$8/mo</p>
         <button className="w-full px-6 py-3 bg-emerald-600 rounded-full font-semibold text-lg text-white mb-2 opacity-60 cursor-not-allowed" disabled>Upgrade Now</button>
         <div className="text-gray-500 text-sm text-center mt-2">Cancel anytime. 7-day money-back guarantee.</div>
       </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -8,7 +7,6 @@ import QuizView from './QuizView';
 import ChatInput from './ChatInput';
 import ActionResult from './ActionResult';
 
-// TypeScript definitions for SpeechRecognition API (for browsers that support it)
 
 // Minimal SpeechRecognition type for browser compatibility
 interface SpeechRecognition extends EventTarget {

@@ -93,6 +93,7 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [wrongAnswers, setWrongAnswers] = useState<WrongAnswer[]>([]);
 
+
   useEffect(() => {
     setConversationHistory([]);
     setScore(0);
@@ -206,8 +207,8 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
         const errorData = await response.json();
         console.error('Error from Gemini API:', errorData);
       }
-    } catch {
-      console.error('Network error:');
+    } catch (err) {
+      console.error('Network error:', err);
     } finally {
       setIsGenerating(false);
     }

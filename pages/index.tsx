@@ -191,10 +191,10 @@ export default function Home() {
           <span className="inline-flex items-center px-4 py-1 mb-6 text-base rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold">
             AI-Powered Interview Preparation
           </span>
-          <h1 className="text-6xl sm:text-7xl font-extrabold mb-6 text-gray-900">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-gray-900">
             Elevate Your <span className="text-emerald-600">Interview</span> Performance
           </h1>
-          <p className="max-w-xl text-gray-600 mb-8 text-xl mx-auto md:mx-0 font-normal">
+          <p className="max-w-xl text-gray-600 mb-8 md:text-xl text-lg mx-auto md:mx-0 font-normal">
             Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10">

@@ -5,7 +5,6 @@ const API_KEY = process.env.GEMINI_API_KEY;
 
 if (!API_KEY) {
   console.error('GEMINI_API_KEY is not set in the environment variables.');
-  // In a real application, you might want to return a 500 error here
 }
 
 const genAI = new GoogleGenerativeAI(API_KEY as string);
@@ -49,20 +48,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     - Additional Details: ${additionalDetails || 'N/A'}
 
     The quiz will consist of 10 questions.
-    Do not repeat any question that has already been asked in this session.
+    Do not repeat any question that has already been asked in this session. The user will provide the full conversation history; use the AI (role: AI) messages in that history as the list of previously asked questions and avoid repeating them.
     `;
 
     if (conversationHistory && conversationHistory.length > 0) {
-      // If there's a conversation history, it means a question was asked and an answer was given
-      const lastAIMessage = conversationHistory.findLast((msg: { role: string; parts: string }) => msg.role === 'AI');
-      const lastUserMessage = conversationHistory.findLast((msg: { role: string; parts: string }) => msg.role === 'User');
+      // If there's a conversation history, send the previous AI lines explicitly so the model can compare
+      const previousAIQuestions = conversationHistory
+        .filter((msg: { role: string; parts: string }) => msg.role === 'AI')
+        .map((msg: { role: string; parts: string }) => `- ${msg.parts.trim()}`)
+        .join('\n');
 
-     if (lastAIMessage) {
-  prompt += `Previous Question: ${lastAIMessage.parts}\n`;
-  prompt += `Generate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
-} else {
-  prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
-}
+      if (previousAIQuestions) {
+        prompt += `\nPreviously asked questions in this session:\n${previousAIQuestions}\n`;
+      }
+
+      prompt += `\nGenerate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
     } else {
       prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
     }

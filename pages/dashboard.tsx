@@ -45,7 +45,7 @@ export default function Dashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Card 2: Recent Feedback */}
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <div className="bg-white p-6 rounded-xl  border border-gray-200">
               <h2 className="text-2xl font-bold mb-3 text-gray-900">Recent Feedback</h2>
               {scoresError ? (
                 <p className="text-red-500">Error loading feedback.</p>
@@ -64,7 +64,7 @@ export default function Dashboard() {
             </div>
 
             {/* Card 3: Practice Sessions */}
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <div className="bg-white p-6 rounded-xl  border border-gray-200">
               <h2 className="text-2xl font-bold mb-3 text-gray-900">Practice Sessions</h2>
               {scoresError ? (
                 <p className="text-red-500">Error loading sessions.</p>

@@ -385,7 +385,7 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
         {practiceMode === 'chat' ? (
           <div className="flex-1 flex flex-col items-center w-full  pt-8">
             {conversationHistory.length === 0 ? (
-              <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200 shadow-md">
+              <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200">
                 <h2 className="text-2xl font-bold mb-2">Chat Mode</h2>
                   <p className="text-gray-600 mb-6">The interview works best with headphones and a microphone.</p>
                   <div className="flex items-center justify-center mb-4">
@@ -448,7 +448,7 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
                 isGenerating={isGenerating}
               />
             ) : (
-              <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200 shadow-md">
+              <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200">
                 <h2 className="text-2xl font-bold mb-2">Quiz Mode</h2>
                 <p className="text-gray-600 mb-6">Prepare for a series of multiple-choice questions.</p>
                 <button

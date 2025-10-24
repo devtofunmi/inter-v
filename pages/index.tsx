@@ -219,7 +219,7 @@ export default function Home() {
             alt="AI Interview Practice App Interface" 
             width={500} 
             height={500} 
-            className="rounded-xl shadow-md border border-gray-100"
+            className="rounded-xl  border border-gray-100"
             unoptimized 
           />
         </div>
@@ -303,7 +303,7 @@ export default function Home() {
           <button 
             onClick={prevTestimonial}
             aria-label="Previous testimonial"
-            className="z-10 p-2 text-gray-700 bg-white rounded-full shadow-lg hover:bg-gray-100 absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 sm:translate-x-0 sm:static sm:mr-4"
+            className="z-10 p-2 text-gray-700 bg-white rounded-full shadow-md hover:bg-gray-100 absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 sm:translate-x-0 sm:static sm:mr-4"
           >
             <ChevronLeft size={24} />
           </button>
@@ -319,7 +319,7 @@ export default function Home() {
                   key={index}
                   className="w-full lg:w-1/3 shrink-0 p-2"
                 >
-                  <div className="p-6 h-full bg-white rounded-xl border border-gray-200 shadow-md">
+                  <div className="p-6 h-full bg-white rounded-xl border border-gray-200">
                     <div className="flex items-center mb-4">
                       <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mr-3 overflow-hidden">
                         {testimonial.image ? (
@@ -353,7 +353,7 @@ export default function Home() {
           <button 
             onClick={nextTestimonial}
             aria-label="Next testimonial"
-            className="z-10 p-2 text-gray-700 bg-white rounded-full shadow-lg hover:bg-gray-100 absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 sm:translate-x-0 sm:static sm:ml-4"
+            className="z-10 p-2 text-gray-700 bg-white rounded-full shadow-md hover:bg-gray-100 absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 sm:translate-x-0 sm:static sm:ml-4"
           >
             <ChevronRight size={24} />
           </button>
@@ -367,7 +367,7 @@ export default function Home() {
         <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div 
             onClick={() => setSelectedPlan(0)}
-            className={`p-8 bg-white rounded-xl shadow-lg flex flex-col items-center cursor-pointer transition-all duration-300 ${selectedPlan === 0 ? 'border-2 border-emerald-600 shadow-xl' : 'border border-gray-200'}`}
+            className={`p-8 bg-white rounded-xl  flex flex-col items-center cursor-pointer transition-all duration-300 ${selectedPlan === 0 ? 'border-2 border-emerald-600 shadow-xl' : 'border border-gray-200'}`}
           >
             <h3 className="text-2xl font-bold mb-2 text-gray-900">Free Plan</h3>
             <p className="text-gray-600 mb-4 text-lg font-normal">Ideal for introductory practice sessions.</p>
@@ -380,7 +380,7 @@ export default function Home() {
           </div>
           <div 
             onClick={() => setSelectedPlan(1)}
-            className={`p-8 bg-white rounded-xl shadow-lg flex flex-col items-center cursor-pointer transition-all duration-300 ${selectedPlan === 1 ? 'border-2 border-emerald-600 shadow-xl' : 'border border-gray-200'}`}
+            className={`p-8 bg-white rounded-xl flex flex-col items-center cursor-pointer transition-all duration-300 ${selectedPlan === 1 ? 'border-2 border-emerald-600 shadow-xl' : 'border border-gray-200'}`}
           >
             <h3 className="text-2xl font-bold mb-2 text-gray-900">Pro Plan</h3>
             <p className="text-gray-600 mb-4 text-lg font-normal">Unlock full platform capabilities and unlimited interviews.</p>

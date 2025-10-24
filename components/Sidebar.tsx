@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
 
   return (
   <aside data-is-mobile={isMobile ? 'true' : 'false'} className={`p-6 h-full flex flex-col font-geist bg-white`}>
-      <div className="text-xl font-extrabold text-emerald-600 mb-10">🚀 Inter-V</div>
+      <div className="text-xl font-extrabold text-emerald-600 mb-10">Prepkitty</div>
       <nav className="flex-1">
         <ul className="space-y-2">
           {navItems.map((item) => {

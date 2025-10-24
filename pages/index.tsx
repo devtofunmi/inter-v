@@ -35,25 +35,25 @@ const testimonials = [
     image: "https://randomuser.me/api/portraits/women/44.jpg",
     name: "Sarah Lee",
     title: "Software Engineer",
-    quote: "Inter-V helped me land my dream job! The practice interviews felt real and the feedback was spot on.",
+    quote: "Prepkitty helped me land my dream job! The practice interviews felt real and the feedback was spot on.",
   },
   {
     image: "https://randomuser.me/api/portraits/men/32.jpg",
     name: "Michael Chen",
     title: "Marketing Specialist",
-    quote: "I felt so much more confident after using Inter-V. The voice chat feature is a game changer!",
+    quote: "I felt so much more confident after using Prepkitty. The voice chat feature is a game changer!",
   },
   {
     image: "https://randomuser.me/api/portraits/men/65.jpg",
     name: "James Patel",
     title: "Data Analyst",
-    quote: "The AI interviewer asked tough questions and gave me honest feedback. Highly recommend Inter-V!",
+    quote: "The AI interviewer asked tough questions and gave me honest feedback. Highly recommend Prepkitty!",
   },
   {
     image: "https://randomuser.me/api/portraits/women/68.jpg",
     name: "Emily Carter",
     title: "Accountant",
-    quote: "Inter-V made interview prep easy and effective. I got the job I wanted thanks to their platform.",
+    quote: "Prepkitty made interview prep easy and effective. I got the job I wanted thanks to their platform.",
   },
   {
     image: "https://randomuser.me/api/portraits/women/55.jpg",
@@ -144,7 +144,7 @@ export default function Home() {
       
       {/* Sticky Header */}
       <header className={`z-40 flex justify-between items-center px-8 py-4 ${isSticky ? `fixed top-0 w-full ${!mobileNavOpen ? 'backdrop-blur-md bg-white/90 border-b border-gray-200 shadow-md' : ''}` : ''}`}>
-        <div className="text-2xl font-extrabold text-emerald-600">🚀 Inter-V</div>
+        <div className="text-2xl font-extrabold text-emerald-600">Prepkitty</div>
         
         <nav className="hidden md:flex gap-8">
           {navLinks.map((link) => (
@@ -234,7 +234,7 @@ export default function Home() {
             </span>
             <h2 className="text-4xl font-extrabold  text-gray-900">Practice makes perfect</h2>
             <p className="max-w-2xl mx-auto text-gray-600 ">
-              Inter-V is designed to be as simple and effective as possible. Here’s how it works:
+              Prepkitty is designed to be as simple and effective as possible. Here’s how it works:
             </p>
           </div>
 
@@ -295,7 +295,7 @@ export default function Home() {
        <section id="testimonials" className="px-6 py-20 bg-white max-w-7xl mx-auto overflow-hidden" data-aos="fade-up">
         <h2 className="text-5xl text-center font-extrabold text-gray-900 mb-4">Testimonials</h2>
         <p className="text-2xl text-center text-gray-500 font-normal mb-16">
-          Here is what some users who have hopped on the <span className="text-emerald-600 font-semibold">Inter-V</span> train have to say.
+          Here is what some users who have hopped on the <span className="text-emerald-600 font-semibold">Prepkitty</span> train have to say.
         </p>
 
         <div className="relative flex items-center">
@@ -430,7 +430,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-5xl font-extrabold mb-4 text-gray-900">Ready to Master Your Next Interview?</h2>
           <p className="text-xl text-gray-600 mb-8 font-normal">
-            Join thousands of professionals who have aced their interviews with Inter-V.
+            Join thousands of professionals who have aced their interviews with Prepkitty.
           </p>
           <Link href="/auth">
             <button className="px-8 py-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
@@ -443,7 +443,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="px-6 py-10 bg-gray-900 text-center text-gray-400">
-        <p className="text-base font-normal">© {new Date().getFullYear()} Inter-V. All rights reserved.</p>
+        <p className="text-base font-normal">© {new Date().getFullYear()} Prepkitty. All rights reserved.</p>
         <p className="text-sm mt-2 font-normal">Practice sessions are confidential and securely stored.</p>
       </footer>
     </div>

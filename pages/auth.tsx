@@ -71,7 +71,7 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen flex items-center justify-center font-sans bg-white text-gray-900 p-4">
       <Head>
-        <title>{isLogin ? 'Login' : 'Sign Up'} - Inter-V</title>
+        <title>{isLogin ? 'Login' : 'Sign Up'} - Prepkitty</title>
       </Head>
 
       <div className="w-full max-w-[400px] ">

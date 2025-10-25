@@ -31,7 +31,7 @@ export default function Practice() {
   if (status === 'loading' || !data || !data.user) {
     return (
       <div className="flex justify-center items-center bg-white min-h-screen">
-        <Loader2 className="animate-spin h-10 w-10 text-green-500" />
+        <Loader2 className="animate-spin h-10 w-10 text-blue-400" />
       </div>
     );
   }

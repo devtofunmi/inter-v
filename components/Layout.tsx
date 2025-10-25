@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   if (status === "loading" || (status === "authenticated" && !data)) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <Loader2 className="animate-spin h-10 w-10 text-emerald-600" />
+        <Loader2 className="animate-spin h-10 w-10 text-blue-400" />
       </div>
     );
   }
@@ -63,7 +63,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="text-gray-600 hover:text-emerald-600 p-2 rounded-lg"
+                className="text-gray-600 hover:text-blue-400 p-2 rounded-lg"
                 aria-label="Open menu"
               >
                 <Menu size="24" />

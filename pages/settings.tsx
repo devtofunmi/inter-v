@@ -71,7 +71,7 @@ const SettingsPage = () => {
     return (
       <Layout title="Settings">
         <div className="flex justify-center items-center min-h-screen">
-          <Loader2 className="animate-spin h-10 w-10 text-emerald-600" />
+          <Loader2 className="animate-spin h-10 w-10 text-blue-400" />
         </div>
       </Layout>
     );
@@ -95,7 +95,7 @@ const SettingsPage = () => {
                   <label className="text-gray-600 text-sm font-medium mb-1 block">Name</label>
                   <input
                     type="text"
-                    className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-gray-800"
+                    className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center text-gray-800"
                     placeholder="Your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -111,7 +111,7 @@ const SettingsPage = () => {
                   <label className="text-gray-600 text-sm font-medium mb-1 block">Target Job Title</label>
                   <input
                     type="text"
-                    className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-gray-800"
+                    className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center text-gray-800"
                     placeholder="e.g., Software Engineer"
                     value={jobTitle}
                     onChange={(e) => setJobTitle(e.target.value)}
@@ -121,7 +121,7 @@ const SettingsPage = () => {
                   <label className="text-gray-600 text-sm font-medium mb-1 block">Key Skills</label>
                   <input
                     type="text"
-                    className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-gray-800"
+                    className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center text-gray-800"
                     placeholder="e.g., React, Node.js, Python"
                     value={skills}
                     onChange={(e) => setSkills(e.target.value)}
@@ -130,7 +130,7 @@ const SettingsPage = () => {
                 <div className="md:col-span-2">
                   <label className="text-gray-600 text-sm font-medium mb-1 block">Target Job Description</label>
                   <textarea
-                    className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-gray-800 h-24"
+                    className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center text-gray-800 h-24"
                     placeholder="Paste the job description here..."
                     value={jobDescription}
                     onChange={(e) => setJobDescription(e.target.value)}
@@ -139,7 +139,7 @@ const SettingsPage = () => {
                 <div className="md:col-span-2">
                   <label className="text-gray-600 text-sm font-medium mb-1 block">Your Employment History / CV</label>
                   <textarea
-                    className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-gray-800 h-24"
+                    className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center text-gray-800 h-24"
                     placeholder="Summarize your relevant experience..."
                     value={employmentHistory}
                     onChange={(e) => setEmploymentHistory(e.target.value)}
@@ -148,7 +148,7 @@ const SettingsPage = () => {
                 <div className="md:col-span-2">
                   <label className="text-gray-600 text-sm font-medium mb-1 block">Additional Details for the Interviewer</label>
                   <textarea
-                    className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-gray-800 h-24"
+                    className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center text-gray-800 h-24"
                     placeholder="Anything else the AI should know? e.g., focus on behavioral questions."
                     value={additionalDetails}
                     onChange={(e) => setAdditionalDetails(e.target.value)}
@@ -159,7 +159,7 @@ const SettingsPage = () => {
 
             <div className="flex justify-end pt-4">
               <button
-                className={`px-6 py-2.5 rounded-full bg-green-600 hover:bg-green-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center disabled:opacity-50`}
+                className={`px-6 py-2.5 rounded-full bg-blue-400 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center disabled:opacity-50`}
                 onClick={handleUpdateDetails}
                 disabled={isUpdating}
               >

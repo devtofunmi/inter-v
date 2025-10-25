@@ -85,7 +85,7 @@ const SettingsPage = () => {
     <Layout title="Settings">
       <ToastContainer />
       <div className="p-6">
-        <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md border border-gray-200">
+        <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl  border border-gray-200">
           
           <div className="space-y-6">
             <div>

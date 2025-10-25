@@ -66,7 +66,7 @@ export default function OnboardingPage() {
   if (status === 'loading') {
     return (
       <div className="flex justify-center items-center min-h-screen font-geist bg-white text-gray-900">
-        <Loader2 className="animate-spin h-10 w-10 text-green-500" />
+        <Loader2 className="animate-spin h-10 w-10 text-blue-400" />
       </div>
     );
   }
@@ -85,7 +85,7 @@ export default function OnboardingPage() {
               type="text"
               id="name"
               name="name"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="Your Name"
               value={onboardingData.name}
               onChange={handleChange}
@@ -97,7 +97,7 @@ export default function OnboardingPage() {
               type="text"
               id="jobTitle"
               name="jobTitle"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="Job Title"
               value={onboardingData.jobTitle}
               onChange={handleChange}
@@ -109,7 +109,7 @@ export default function OnboardingPage() {
               id="jobDescription"
               name="jobDescription"
               rows={3}
-              className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="Job Description"
               value={onboardingData.jobDescription}
               onChange={handleChange}
@@ -121,7 +121,7 @@ export default function OnboardingPage() {
               type="text"
               id="employmentHistory"
               name="employmentHistory"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="Employment History"
               value={onboardingData.employmentHistory}
               onChange={handleChange}
@@ -132,7 +132,7 @@ export default function OnboardingPage() {
               type="text"
               id="skills"
               name="skills"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="Skills (comma separated)"
               value={onboardingData.skills}
               onChange={handleChange}
@@ -143,7 +143,7 @@ export default function OnboardingPage() {
               id="additionalDetails"
               name="additionalDetails"
               rows={3}
-              className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="Additional Details"
               value={onboardingData.additionalDetails}
               onChange={handleChange}
@@ -152,7 +152,7 @@ export default function OnboardingPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full cursor-pointer px-4 py-2 rounded-full bg-green-600 hover:bg-green-500 font-bold text-white shadow-lg transition-colors text-lg disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full cursor-pointer px-4 py-2 rounded-full bg-blue-400 hover:bg-blue-500 font-bold text-white shadow-lg transition-colors text-lg disabled:opacity-50 disabled:pointer-events-none"
           >
             {isLoading ? <Loader2 className="animate-spin mx-auto" /> : 'Save and Continue'}
           </button>

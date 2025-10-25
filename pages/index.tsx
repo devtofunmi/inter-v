@@ -135,7 +135,7 @@ export default function Home() {
   const navLinks = [
     { href: "#features", text: "Features" },
     { href: "#testimonials", text: "Testimonials" },
-    { href: "#pricing", text: "Pricing" },
+    // { href: "#pricing", text: "Pricing" },
     { href: "#faq", text: "FAQ" },
   ];
 
@@ -143,7 +143,7 @@ export default function Home() {
     <div className="font-geist bg-white text-gray-900 text-[17px] font-normal">
       
       {/* Sticky Header */}
-      <header className={`z-40 flex justify-between items-center px-8 py-4 ${isSticky ? `fixed top-0 w-full ${!mobileNavOpen ? 'backdrop-blur-md bg-white/90 border-b border-gray-200 shadow-md' : ''}` : ''}`}>
+      <header className={`z-40 flex justify-between items-center px-8 py-4 ${isSticky ? `fixed top-0 w-full backdrop-blur-md bg-white/90 border-b border-gray-200 ' : ''}` : ''}`}>
         <div className="text-2xl font-extrabold text-emerald-600">Prepkitty</div>
         
         <nav className="hidden md:flex gap-8">
@@ -362,7 +362,7 @@ export default function Home() {
 
 
       {/* Pricing Section */}
-      <section id="pricing" className="px-6 py-20 bg-gray-50" data-aos="fade-up">
+      {/* <section id="pricing" className="px-6 py-20 bg-gray-50" data-aos="fade-up">
         <h2 className="text-5xl font-extrabold text-center mb-12 text-gray-900">Pricing</h2>
         <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div 
@@ -390,7 +390,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
 
 
       {/* FAQ Section */}

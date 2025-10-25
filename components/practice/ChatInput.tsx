@@ -42,7 +42,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ userResponse, setUserResponse, is
         <button
           onClick={sendUserResponse}
           disabled={isGenerating || !userResponse.trim()}
-          className="p-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-200 flex items-center justify-center shadow-md disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100"
+          className="p-3 rounded-full bg-blue-400 hover:bg-blue-500 text-white transition-colors duration-200 flex items-center justify-center shadow-md disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100"
         >
           {isGenerating ? <Loader2 className="animate-spin" size={20} /> : <ArrowUp size={20} />}
         </button>

@@ -42,7 +42,7 @@ export const Features = () => {
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 mt-12">
-        <div className="p-8 rounded-xl bg-emerald-600 text-white flex flex-col justify-between min-h-[450px]">
+        <div className="p-8 rounded-xl bg-blue-400 text-white flex flex-col justify-between min-h-[450px]">
           <p className="text-xl font-semibold mb-6">For your realistic practice and in-depth analysis of your performance, anytime.</p>
           
           <div className="flex flex-col gap-6">
@@ -71,19 +71,19 @@ export const Features = () => {
           </div>
           <div className="space-y-6">
             <div className="flex items-start">
-              <PenLine size={24} className="text-emerald-600 mr-4 mt-1 shrink-0" />
+              <PenLine size={24} className="text-blue-400 mr-4 mt-1 shrink-0" />
               <div>
                 <h3 className="text-xl font-semibold mb-1">{features[2].title}</h3>
                 <p className="text-gray-600 text-base">{features[2].description}</p>
-                <a href="#features" className="text-emerald-600 hover:text-emerald-700 font-medium text-sm">{features[2].linkText}</a>
+                <a href="#features" className="text-blue-400 hover:text-blue-500 font-medium text-sm">{features[2].linkText}</a>
               </div>
             </div>
             <div className="flex items-start">
-              <TrendingUp size={24} className="text-emerald-600 mr-4 mt-1 shrink-0" />
+              <TrendingUp size={24} className="text-blue-400 mr-4 mt-1 shrink-0" />
               <div>
                 <h3 className="text-xl font-semibold mb-1">{features[3].title}</h3>
                 <p className="text-gray-600 text-base">{features[3].description}</p>
-                <a href="#features" className="text-emerald-600 hover:text-emerald-700 font-medium text-sm">{features[3].linkText}</a>
+                <a href="#features" className="text-blue-400 hover:text-blue-500 font-medium text-sm">{features[3].linkText}</a>
               </div>
             </div>
           </div>

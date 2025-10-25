@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
 
   return (
   <aside data-is-mobile={isMobile ? 'true' : 'false'} className={`p-6 h-full flex flex-col font-geist bg-white`}>
-      <div className="text-xl font-extrabold text-emerald-600 mb-10">Prepkitty</div>
+      <div className="text-xl font-extrabold text-blue-400 mb-10">Prepkitty</div>
       <nav className="flex-1">
         <ul className="space-y-2">
           {navItems.map((item) => {
@@ -41,7 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
                   href={item.href}
                   className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors duration-200 ${
                     isActive 
-                      ? 'bg-emerald-50 text-emerald-600 font-semibold' 
+                      ? 'bg-blue-50 text-blue-400 font-semibold' 
                       : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
@@ -60,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
         <div className="mb-4">
           <button
             onClick={() => onOpenPricing && onOpenPricing()}
-            className="w-full cursor-pointer text-left px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-600 font-semibold mb-3"
+            className="w-full cursor-pointer text-left px-3 py-2.5 rounded-lg bg-blue-50 text-blue-400 font-semibold mb-3"
           >
             Get Unlimited Interviews
           </button>
@@ -70,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
             href="/settings"
             className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors duration-200 ${
               router.pathname === '/settings' 
-                ? 'bg-emerald-50 text-emerald-600 font-semibold' 
+                ? 'bg-blue-50 text-blue-400 font-semibold' 
                 : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
             }`}
           >

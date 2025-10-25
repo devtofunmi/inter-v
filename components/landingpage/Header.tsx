@@ -38,20 +38,20 @@ export const Header = () => {
 
   return (
     <header className={`flex justify-between items-center px-8 py-4 w-full ${headerClasses}`}>
-      <div className="text-2xl font-extrabold text-emerald-600">Prepkitty</div>
+      <div className="text-2xl font-extrabold text-blue-400">Prepkitty</div>
       
       <nav className="hidden md:flex gap-8">
         {navLinks.map((link) => (
-          <a key={link.href} href={link.href} className="hover:text-emerald-600 font-medium text-base">{link.text}</a>
+          <a key={link.href} href={link.href} className="hover:text-blue-500 font-medium text-base">{link.text}</a>
         ))}
       </nav>
       
-      <Link href="/auth" className="hidden md:block px-5 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg transition-colors text-base">
+      <Link href="/auth" className="hidden md:block px-5 py-2 rounded-full bg-blue-400 hover:bg-blue-500 text-white font-semibold shadow-lg transition-colors text-base">
         Log In
       </Link>
       
       <button 
-        className="md:hidden p-2 text-gray-600 hover:text-emerald-600 z-[60]"
+        className="md:hidden p-2 text-gray-600 hover:text-blue-500 z-[60]"
         onClick={() => setMobileNavOpen(!mobileNavOpen)}
         aria-label="Toggle navigation"
       >
@@ -64,13 +64,13 @@ export const Header = () => {
             <a 
               key={link.href} 
               href={link.href} 
-              className="text-2xl font-bold py-2 border-b border-gray-200 hover:text-emerald-600"
+              className="text-2xl font-bold py-2 border-b border-gray-200 hover:text-blue-500"
               onClick={() => setMobileNavOpen(false)}
             >
               {link.text}
             </a>
           ))}
-          <Link href="/auth" className="mt-6 px-5 py-3 text-center rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg transition-colors text-xl">
+          <Link href="/auth" className="mt-6 px-5 py-3 text-center rounded-full bg-blue-400 hover:bg-blue-500 text-white font-semibold shadow-lg transition-colors text-xl">
             Log In
           </Link>
         </div>

@@ -73,7 +73,7 @@ export const Testimonials = () => {
     <section id="testimonials" className="px-6 py-20 bg-white max-w-7xl mx-auto overflow-hidden" data-aos="fade-up">
       <h2 className="text-5xl text-center font-extrabold text-gray-900 mb-4">Testimonials</h2>
       <p className="text-2xl text-center text-gray-500 font-normal mb-16">
-        Here is what some users who have hopped on the <span className="text-emerald-600 font-semibold">Prepkitty</span> train have to say.
+        Here is what some users who have hopped on the <span className="text-blue-400 font-semibold">Prepkitty</span> train have to say.
       </p>
 
       <div className="relative flex items-center">

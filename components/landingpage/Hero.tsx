@@ -7,28 +7,28 @@ export const Hero = () => {
   return (
     <section className="flex flex-col md:flex-row items-center justify-between gap-12 px-6 pt-24 pb-10 bg-white max-w-7xl mx-auto" data-aos="fade-up">
       <div className="text-center md:text-left md:w-1/2">
-        <span className="inline-flex items-center px-4 py-1 mb-6 text-base rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold">
+        <span className="inline-flex items-center px-4 py-1 mb-6 text-base rounded-full border border-blue-200 bg-blue-50 text-blue-800 font-semibold">
           AI-Powered Interview Preparation
         </span>
         <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-gray-900">
-          Elevate Your <span className="text-emerald-600">Interview</span> Performance
+          Elevate Your <span className="text-blue-400">Interview</span> Performance
         </h1>
         <p className="max-w-xl text-gray-600 mb-8 md:text-xl text-lg mx-auto md:mx-0 font-normal">
           Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10">
           <Link href="/auth">
-            <button className="px-8 py-4 w-full sm:w-auto cursor-pointer rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
+            <button className="px-8 py-4 w-full sm:w-auto cursor-pointer rounded-full bg-blue-400 hover:bg-blue-500 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
               Begin Your Session →
             </button>
           </Link>
         </div>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-gray-500 text-base justify-center md:justify-start">
           <span className="flex items-center justify-center md:justify-start font-medium">
-            <CheckCircle size={16} className="text-emerald-500 mr-2"/> Trusted by 10,000+ Users
+            <CheckCircle size={16} className="text-blue-400 mr-2"/> Trusted by 10,000+ Users
           </span>
           <span className="flex items-center justify-center md:justify-start font-medium">
-            <CheckCircle size={16} className="text-emerald-500 mr-2"/> Advanced Model
+            <CheckCircle size={16} className="text-blue-400 mr-2"/> Advanced Model
           </span>
         </div>
       </div>

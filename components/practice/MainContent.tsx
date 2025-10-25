@@ -398,7 +398,7 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
                           onChange={(e) => setEnableTTSState(e.target.checked)}
                           aria-label="Enable AI Voice"
                         />
-                        <div className={`w-11 h-6 rounded-full shadow-inner transition-colors ${enableTTSState ? 'bg-emerald-600' : 'bg-gray-300'}`} />
+                        <div className={`w-11 h-6 rounded-full shadow-inner transition-colors ${enableTTSState ? 'bg-blue-400' : 'bg-gray-300'}`} />
                         <div
                           className={`dot absolute left-0 top-0 bg-white w-6 h-6 rounded-full shadow transform transition-transform ${enableTTSState ? 'translate-x-5' : 'translate-x-0'}`}
                         />
@@ -406,13 +406,15 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
                       <span className="ml-3 text-sm font-medium text-gray-700">Enable AI Voice</span>
                     </label>
                   </div>
+                <div className="flex justify-center items-center">
                 <button
                   onClick={startInterview}
                   disabled={isGenerating}
-                  className="w-full p-3 rounded-full bg-emerald-600 hover:bg-emerald-700 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
+                  className="w-full max-w-[200px] p-3 rounded-full bg-blue-400 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
                 >
                   {isGenerating ? <Loader2 className="animate-spin mr-2" size={20} /> : 'Begin Interview'}
                 </button>
+                </div>
               </div>
             ) : chatCompleted ? (
               <ActionResult
@@ -451,13 +453,15 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
               <div className="p-8 bg-white rounded-xl max-w-md text-gray-800 border border-gray-200">
                 <h2 className="text-2xl font-bold mb-2">Quiz Mode</h2>
                 <p className="text-gray-600 mb-6">Prepare for a series of multiple-choice questions.</p>
+                <div className="flex justify-center items-center">
                 <button
                   onClick={startInterview}
                   disabled={isGenerating}
-                  className="w-full p-3 rounded-full bg-emerald-600 hover:bg-emerald-700 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
+                  className="w-full max-w-[200px] p-3 rounded-full bg-blue-400 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
                 >
                   {isGenerating ? <Loader2 className="animate-spin" size={22} /> : 'Start Quiz'}
                 </button>
+                </div>
               </div>
             )}
           </div>

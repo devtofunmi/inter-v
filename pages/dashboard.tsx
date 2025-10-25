@@ -25,7 +25,7 @@ export default function Dashboard() {
   if (status === 'loading' || !data) {
     return (
       <div className="flex justify-center bg-white items-center min-h-screen">
-        <Loader2 className="animate-spin h-10 w-10 text-green-500" />
+        <Loader2 className="animate-spin h-10 w-10 text-blue-400" />
       </div>
     );
   }
@@ -50,7 +50,7 @@ export default function Dashboard() {
               {scoresError ? (
                 <p className="text-red-500">Error loading feedback.</p>
               ) : !scoresData ? (
-                <Loader2 className="animate-spin text-emerald-600" size={24} />
+                <Loader2 className="animate-spin text-blue-400" size={24} />
               ) : scoresData.user.practiceResults.length === 0 ? (
                 <p className="text-gray-500 mb-2">No feedback yet.</p>
               ) : (
@@ -69,14 +69,14 @@ export default function Dashboard() {
               {scoresError ? (
                 <p className="text-red-500">Error loading sessions.</p>
               ) : !scoresData ? (
-                <Loader2 className="animate-spin text-emerald-600" size={24} />
+                <Loader2 className="animate-spin text-blue-400" size={24} />
               ) : scoresData.user.practiceResults.length === 0 ? (
                 <p className="text-gray-500 mb-2">No sessions yet.</p>
               ) : (
                 <>
                   <p className="text-gray-600 mb-2">Completed: {scoresData.user.practiceResults.length}</p>
                   <p className="text-gray-500 mb-4">Last Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
-                  <Link href="/practice" className="text-emerald-600 hover:underline font-semibold">Start New Session →</Link>
+                  <Link href="/practice" className="text-blue-400 hover:text-blue-500 font-semibold">Start New Session →</Link>
                 </>
               )}
             </div>

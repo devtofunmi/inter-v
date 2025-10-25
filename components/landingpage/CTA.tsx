@@ -10,7 +10,7 @@ export const CTA = () => {
           Join thousands of professionals who have aced their interviews with Prepkitty.
         </p>
         <Link href="/auth">
-          <button className="px-8 py-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
+          <button className="px-8 py-4 rounded-full bg-blue-400 hover:bg-blue-500 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
             Start Your Free Session →
           </button>
         </Link>

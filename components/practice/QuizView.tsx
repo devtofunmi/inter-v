@@ -26,19 +26,19 @@ const QuizView: React.FC<QuizViewProps> = ({ quizData, currentQuestionNumber, se
     <div className="relative w-full max-w-2xl mx-auto">
       <div className="p-6 text-gray-800 text-left">
         <div className="mb-6">
-          <span className="block text-sm font-semibold text-emerald-700 bg-emerald-100 rounded-md px-3 py-1 w-fit mb-3 shadow-sm">Question {currentQuestionNumber + 1}/10:</span>
+          <span className="block text-sm font-semibold text-white bg-blue-400 rounded-md px-3 py-1 w-fit mb-3 shadow-sm">Question {currentQuestionNumber + 1}/10:</span>
           <span className="block text-xl text-gray-900 font-semibold">{quizData.question}</span>
         </div>
         <div className="space-y-3">
           {Object.entries(quizData.options).map(([key, value]) => (
-            <label key={key} className={`flex items-center space-x-4 cursor-pointer rounded-xl p-4 transition-all border-2 ${selectedOption === key ? 'border-emerald-500 bg-emerald-50 shadow-md' : 'border-gray-200 bg-white hover:border-emerald-400'}`}>
+            <label key={key} className={`flex items-center space-x-4 cursor-pointer rounded-xl p-4 transition-all border-2 ${selectedOption === key ? 'border-blue-400 bg-blue-5' : 'border-gray-200 bg-white hover:border-blue-500'}`}>
               <input
                 type="radio"
                 name="quizOption"
                 value={key}
                 checked={selectedOption === key}
                 onChange={(e) => setSelectedOption(e.target.value)}
-                className="form-radio h-5 w-5 accent-emerald-600 transition-transform duration-200 transform scale-110"
+                className="form-radio h-5 w-5  transition-transform duration-200 transform scale-110"
               />
               <span className="text-base font-medium text-gray-800">{value}</span>
             </label>
@@ -50,7 +50,7 @@ const QuizView: React.FC<QuizViewProps> = ({ quizData, currentQuestionNumber, se
           <button
             onClick={sendUserResponse}
             disabled={isGenerating || !selectedOption}
-            className="px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-200 flex items-center justify-center shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100"
+            className="px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-500 text-white transition-colors duration-200 flex items-center justify-center shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100"
           >
             {isGenerating ? <Loader2 className="animate-spin" size={22} /> : <ArrowUp size={22} />}
           </button>

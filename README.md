@@ -1,6 +1,6 @@
-# Inter-V: AI-Powered Interview Practice Platform
+# Prepkitty: AI-Powered Interview Practice Platform
 
-Ace your next interview with AI-driven practice sessions. Inter-V provides realistic mock interviews, Quiz and personalized feedback to help you land your dream job.
+Ace your next interview with AI-driven practice sessions. Prepkitty provides realistic mock interviews, Quiz and personalized feedback to help you land your dream job.
 
 ## Features
 

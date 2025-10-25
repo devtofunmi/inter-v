@@ -76,7 +76,7 @@ export default function AuthPage() {
 
       <div className="w-full max-w-[400px] ">
         <h2 className="text-3xl font-bold text-center mb-6">
-          {isLogin ? 'Welcome Back' : 'Join Inter-V'}
+          {isLogin ? 'Welcome Back' : 'Join Prepkitty'}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

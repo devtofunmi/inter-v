@@ -39,7 +39,7 @@ export const Faq = () => {
               onClick={() => setOpenFaq(openFaq === index ? null : index)}
               className="flex justify-between items-center w-full text-left p-6 focus:outline-none"
             >
-              <h3 className="text-xl font-bold text-gray-900">{faq.question}</h3>
+              <h3 className="text-lg md:text-xl font-bold text-gray-900">{faq.question}</h3>
               <ChevronDown 
                 className={`transform transition-transform duration-300 ${openFaq === index ? 'rotate-180 text-emerald-600' : 'text-gray-500'}`}
                 size={24}

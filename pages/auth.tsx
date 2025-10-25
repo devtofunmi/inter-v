@@ -83,7 +83,7 @@ export default function AuthPage() {
             <input
               type="email"
               id="email"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -94,7 +94,7 @@ export default function AuthPage() {
             <input
               type="password"
               id="password"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -106,7 +106,7 @@ export default function AuthPage() {
               <input
                 type="password"
                 id="confirmPassword"
-                className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-center"
+                className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -117,9 +117,9 @@ export default function AuthPage() {
           <button
             type="submit"
             disabled={ isCredentialsLoading}
-            className="w-full px-4 py-2 rounded-full bg-green-600 hover:bg-green-500 font-medium disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full px-4 py-2 rounded-full bg-blue-400 hover:bg-blue-500 text-white font-medium disabled:opacity-50 disabled:pointer-events-none"
           >
-            {isCredentialsLoading ? <Loader2 className="animate-spin mx-auto" /> : (isLogin ? 'Login' : 'Sign Up')}
+            {isCredentialsLoading ? <Loader2 className="animate-spin mx-auto text-blue-400" /> : (isLogin ? 'Login' : 'Sign Up')}
           </button>
         </form>
 
@@ -127,7 +127,7 @@ export default function AuthPage() {
           {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-green-500 hover:underline focus:outline-none"
+            className="text-blue-400 hover:underline focus:outline-none"
           >
             {isLogin ? 'Sign Up' : 'Login'}
           </button>

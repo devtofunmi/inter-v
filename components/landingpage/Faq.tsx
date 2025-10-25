@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -41,7 +40,7 @@ export const Faq = () => {
             >
               <h3 className="text-lg md:text-xl font-bold text-gray-900">{faq.question}</h3>
               <ChevronDown 
-                className={`transform transition-transform duration-300 ${openFaq === index ? 'rotate-180 text-emerald-600' : 'text-gray-500'}`}
+                className={`transform transition-transform duration-300 ${openFaq === index ? 'rotate-180 text-blue-400' : 'text-gray-500'}`}
                 size={24}
               />
             </button>

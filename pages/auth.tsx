@@ -119,7 +119,7 @@ export default function AuthPage() {
             disabled={ isCredentialsLoading}
             className="w-full px-4 py-2 rounded-full bg-blue-400 hover:bg-blue-500 text-white font-medium disabled:opacity-50 disabled:pointer-events-none"
           >
-            {isCredentialsLoading ? <Loader2 className="animate-spin mx-auto text-blue-400" /> : (isLogin ? 'Login' : 'Sign Up')}
+            {isCredentialsLoading ? <Loader2 className="animate-spin mx-auto text-white" /> : (isLogin ? 'Login' : 'Sign Up')}
           </button>
         </form>
 

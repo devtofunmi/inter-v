@@ -295,13 +295,16 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
       setSelectedOption(null);
       setConversationHistory(updatedHistory);
       if (currentQuestionNumber + 1 === 10) {
+        const isCorrect = selectedOption === quizData.correctAnswer;
+        const finalScore = isCorrect ? score + 1 : score;
+
+        setScore(finalScore);
         setQuizCompleted(true);
         setIsGenerating(false);
-        setTimeout(() => {
-          savePracticeResult(selectedOption === quizData.correctAnswer ? score + 1 : score);
-        }, 500);
+        savePracticeResult(finalScore);
         return;
       }
+
       if (selectedOption === quizData.correctAnswer) {
         setScore(prevScore => prevScore + 1);
       }

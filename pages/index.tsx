@@ -3,7 +3,7 @@ import {
   Header,
   Hero,
   Features,
-  Testimonials,
+  // Testimonials,
   // Pricing,
   Faq,
   CTA,
@@ -16,7 +16,7 @@ export default function Home() {
       <Header />
       <Hero />
       <Features />
-      <Testimonials />
+      {/* <Testimonials /> */}
       {/* <Pricing /> */}
       <Faq />
       <CTA />

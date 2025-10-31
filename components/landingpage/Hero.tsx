@@ -24,9 +24,9 @@ export const Hero = () => {
           </Link>
         </div>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-gray-500 text-base justify-center md:justify-start">
-          <span className="flex items-center justify-center md:justify-start font-medium">
+          {/* <span className="flex items-center justify-center md:justify-start font-medium">
             <CheckCircle size={16} className="text-blue-400 mr-2"/> Trusted by 10,000+ Users
-          </span>
+          </span> */}
           <span className="flex items-center justify-center md:justify-start font-medium">
             <CheckCircle size={16} className="text-blue-400 mr-2"/> Advanced Model
           </span>

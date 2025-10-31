@@ -376,7 +376,7 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
     } finally {
       setIsGenerating(false);
     }
-  };
+  };  
 
   return (
     <div className="flex-1 flex flex-col h-full  min-h-0 relative">

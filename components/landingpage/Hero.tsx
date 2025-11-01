@@ -17,7 +17,7 @@ export const Hero = () => {
           Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10">
-          <Link href="/auth">
+          <Link href="/signup">
             <button className="px-8 py-4 w-full sm:w-auto cursor-pointer rounded-full bg-blue-400 hover:bg-blue-500 text-white text-xl font-bold shadow-xl transition-all duration-300 transform hover:scale-105">
               Begin Your Session →
             </button>

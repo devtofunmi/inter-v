@@ -28,27 +28,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ? [...conversationHistory].reverse().find((msg: { role: string; parts: string }) => msg.role === 'User')
       : null;
 
-      prompt = `You are an AI interviewer. Conduct a realistic job interview for the following role:
+      prompt = `You are an AI interviewer. Your task is to conduct a highly personalized job interview based on the candidate's specific background and the job they are applying for.
+
+    **Candidate Profile:**
+    - Tell me about yourself: ${additionalDetails || 'N/A'}
+    - Employment History: ${employmentHistory || 'N/A'}
+    - Skills: ${skills || 'N/A'}
+
+    **Job Details:**
     - Job Title: ${jobTitle}
     - Job Description: ${jobDescription || 'N/A'}
-    - Skills: ${skills || 'N/A'}
-    - Employment History: ${employmentHistory || 'N/A'}
-    - Additional Details: ${additionalDetails || 'N/A'}
+
+    **Instructions:**
+    - Use the candidate's profile to ask relevant and specific questions.
+    - Do not ask generic questions. Every question should be tailored to the candidate's experience and the job requirements.
+    - Refer to specific experiences from their employment history.
+    - Ask about the skills they've listed.
 
     Current conversation history:
     ${conversationHistory.map((msg: { role: string; parts: string }) => `${msg.role}: ${msg.parts}`).join('\n')}
 
     ${lastUserMsg ? `Evaluate the last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.` : 'Ask the first interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.'}`;
   } else if (mode === 'quiz') {
-    prompt = `You are an AI quiz master. Generate a multiple-choice quiz question for the following job role. Provide 4 options (A, B, C, D)
+    prompt = `You are an AI quiz master. Your task is to generate a multiple-choice quiz question that is highly relevant to the candidate's background and the job they are applying for.
+
+    **Candidate Profile:**
+    - Tell me about yourself: ${additionalDetails || 'N/A'}
+    - Employment History: ${employmentHistory || 'N/A'}
+    - Skills: ${skills || 'N/A'}
+
+    **Job Details:**
     - Job Title: ${jobTitle}
     - Job Description: ${jobDescription || 'N/A'}
-    - Skills: ${skills || 'N/A'}
-    - Employment History: ${employmentHistory || 'N/A'}
-    - Additional Details: ${additionalDetails || 'N/A'}
 
-    The quiz will consist of 10 questions.
-    Do not repeat any question that has already been asked in this session. The user will provide the full conversation history; use the AI (role: AI) messages in that history as the list of previously asked questions and avoid repeating them.
+    **Instructions:**
+    - Use the candidate's profile to create a quiz question that tests their knowledge and skills in the context of the job.
+    - The quiz will consist of 10 questions.
+    - Do not repeat any question that has already been asked in this session. The user will provide the full conversation history; use the AI (role: AI) messages in that history as the list of previously asked questions and avoid repeating them.
     `;
 
     if (conversationHistory && conversationHistory.length > 0) {

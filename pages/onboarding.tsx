@@ -3,12 +3,14 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 interface OnboardingData {
   jobTitle: string;
   jobDescription: string;
   name: string;
-  employmentHistory: string;
+  employmentHistory: string[];
   skills: string;
   additionalDetails: string;
 }
@@ -21,7 +23,7 @@ export default function OnboardingPage() {
     jobTitle: '',
     jobDescription: '',
     name: '',
-    employmentHistory: '',
+    employmentHistory: [''],
     skills: '',
     additionalDetails: '',
   });
@@ -39,6 +41,24 @@ export default function OnboardingPage() {
     setOnboardingData(prevData => ({ ...prevData, [name]: value }));
   };
 
+  const handleEmploymentHistoryChange = (index: number, value: string) => {
+    const newEmploymentHistory = [...onboardingData.employmentHistory];
+    newEmploymentHistory[index] = value;
+    setOnboardingData(prevData => ({ ...prevData, employmentHistory: newEmploymentHistory }));
+  };
+
+  const addEmploymentField = () => {
+    if (onboardingData.employmentHistory.length < 3) {
+      setOnboardingData(prevData => ({ ...prevData, employmentHistory: [...prevData.employmentHistory, ''] }));
+    }
+  };
+
+  const removeEmploymentField = (index: number) => {
+    const newEmploymentHistory = [...onboardingData.employmentHistory];
+    newEmploymentHistory.splice(index, 1);
+    setOnboardingData(prevData => ({ ...prevData, employmentHistory: newEmploymentHistory }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -54,11 +74,13 @@ export default function OnboardingPage() {
       if (response.ok) {
         router.push('/dashboard');
       } else {
-        // Handle error
+        const errorData = await response.json();
+        toast.error(errorData.message || 'Something went wrong. Please try again.');
+        console.error('Onboarding error:', errorData);
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
-      // Handle error
+      console.error('Onboarding error:', e);
+      toast.error('An unexpected error occurred. Please try again later.');
     }
     setIsLoading(false);
   };
@@ -117,15 +139,27 @@ export default function OnboardingPage() {
             ></textarea>
           </div>
           <div>
-            <input
-              type="text"
-              id="employmentHistory"
-              name="employmentHistory"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
-              placeholder="Employment History"
-              value={onboardingData.employmentHistory}
-              onChange={handleChange}
-            />
+            {onboardingData.employmentHistory.map((history, index) => (
+              <div key={index} className="flex flex-col  items-center  space-x-2 mb-2">
+                <input
+                  type="text"
+                  id={`employmentHistory-${index}`}
+                  name={`employmentHistory-${index}`}
+                  className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+                  placeholder="Employment History"
+                  value={history}
+                  onChange={(e) => handleEmploymentHistoryChange(index, e.target.value)}
+                />
+                {onboardingData.employmentHistory.length > 1 && (
+                  <button type="button" onClick={() => removeEmploymentField(index)} className="text-red-500 mt-1">Remove</button>
+                )}
+              </div>
+            ))}
+            <div className='flex justify-center'>
+            {onboardingData.employmentHistory.length < 3 && (
+              <button type="button" onClick={addEmploymentField} className="text-blue-500 cursor-pointer">+ Add Role</button>
+            )}
+           </div>
           </div>
           <div>
             <input
@@ -142,11 +176,12 @@ export default function OnboardingPage() {
             <textarea
               id="additionalDetails"
               name="additionalDetails"
-              rows={3}
+              rows={5}
               className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
-              placeholder="Additional Details"
+              placeholder="Tell me about yourself"
               value={onboardingData.additionalDetails}
               onChange={handleChange}
+              required
             ></textarea>
           </div>
           <button
@@ -158,6 +193,7 @@ export default function OnboardingPage() {
           </button>
         </form>
       </div>
+          <ToastContainer />
     </div>
   );
 }

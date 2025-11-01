@@ -16,7 +16,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace('/auth');
+      router.replace('/login');
     } else if (status === 'authenticated' && data && !data.user?.practiceProfile) {
       router.replace('/onboarding');
     }

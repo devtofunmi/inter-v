@@ -24,7 +24,7 @@ const SettingsPage = () => {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace('/auth');
+      router.replace('/login');
     }
     if (data && data.user) {
       setName(data.user.name || "");

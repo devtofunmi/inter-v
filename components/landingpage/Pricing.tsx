@@ -15,7 +15,7 @@ export const Pricing = () => {
           <h3 className="text-2xl font-bold mb-2 text-gray-900">Free Plan</h3>
           <p className="text-gray-600 mb-4 text-lg font-normal">Ideal for introductory practice sessions.</p>
           <p className="text-5xl font-extrabold mb-6 text-gray-900">$0</p>
-          <Link href="/auth">
+          <Link href="/signup">
             <button className="px-6 py-3 bg-blue-400 cursor-pointer rounded-full hover:bg-blue-500 text-white font-semibold shadow-md transition-colors text-lg">
               Get Started
             </button>

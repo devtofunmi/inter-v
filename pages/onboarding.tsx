@@ -28,7 +28,7 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/auth');
+      router.push('/login');
     } else if (status === 'authenticated' && !onboardingData.name) {
       setOnboardingData(prevData => ({ ...prevData, name: session.user?.name || '' }));
     }

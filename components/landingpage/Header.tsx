@@ -46,7 +46,7 @@ export const Header = () => {
         ))}
       </nav>
       
-      <Link href="/auth" className="hidden md:block px-5 py-2 rounded-full bg-blue-400 hover:bg-blue-500 text-white font-semibold shadow-lg transition-colors text-base">
+      <Link href="/login" className="hidden md:block px-5 py-2 rounded-full bg-blue-400 hover:bg-blue-500 text-white font-semibold shadow-lg transition-colors text-base">
         Log In
       </Link>
       
@@ -70,7 +70,7 @@ export const Header = () => {
               {link.text}
             </a>
           ))}
-          <Link href="/auth" className="mt-6 px-5 py-3 text-center rounded-full bg-blue-400 hover:bg-blue-500 text-white font-semibold shadow-lg transition-colors text-xl">
+          <Link href="/login" className="mt-6 px-5 py-3 text-center rounded-full bg-blue-400 hover:bg-blue-500 text-white font-semibold shadow-lg transition-colors text-xl">
             Log In
           </Link>
         </div>

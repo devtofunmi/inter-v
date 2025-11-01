@@ -22,9 +22,9 @@ export default function Practice() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace('/auth');
+      router.replace('/login');
     } else if (status === 'authenticated' && data && !data.user?.practiceProfile) {
-      router.replace('/auth');
+      router.replace('/login');
     }
   }, [status, router, data]);
 

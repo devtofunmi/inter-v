@@ -7,9 +7,9 @@ import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 
-import MainContent from '../components/practice/MainContent';
-import PricingModal from '../components/practice/PricingModal';
-import Layout from "../components/Layout";
+import MainContent from '../components/dashboard/practice/MainContent';
+import PricingModal from '../components/dashboard/practice/PricingModal';
+import Layout from "../components/dashboard/Layout";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

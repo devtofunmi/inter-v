@@ -87,7 +87,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center flex justify-center gap-2 text-gray-500 mt-6">
+        <p className="text-center flex justify-center gap-1 text-gray-500 mt-6">
           <p>Don&apos;t have an account?</p>
           <Link href="/signup" className="text-blue-400 hover:underline focus:outline-none">
             Sign Up

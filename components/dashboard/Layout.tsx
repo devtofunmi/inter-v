@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import PricingModal from "./practice/PricingModal";
+import PricingModal from "../dashboard/practice/PricingModal";
 import { Menu } from "lucide-react";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
-import Layout from '../components/Layout';
+import Layout from '../components/dashboard/Layout';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

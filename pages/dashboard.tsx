@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
-import Layout from "../components/Layout";
+import Layout from "../components/dashboard/Layout";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

@@ -17,6 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { jobTitle, jobDescription, name, employmentHistory, skills, additionalDetails } = req.body;
 
+  const processedEmploymentHistory = employmentHistory.filter((role: string) => role.trim() !== '').join('\n');
+
   try {
     const user = await prisma.user.findUnique({
       where: { email: session.user?.email as string },
@@ -31,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       update: {
         jobTitle,
         jobDescription,
-        employmentHistory,
+        employmentHistory: processedEmploymentHistory,
         skills,
         additionalDetails,
       },
@@ -39,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         userId: user.id,
         jobTitle,
         jobDescription,
-        employmentHistory,
+        employmentHistory: processedEmploymentHistory,
         skills,
         additionalDetails,
       },

@@ -1,18 +1,50 @@
-import Link from 'next/link';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
-import Layout from "../components/dashboard/Layout";
+import Layout from '../components/dashboard/Layout';
+import Link from 'next/link';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+interface User {
+  name?: string;
+  practiceProfile?: boolean;
+}
+
+interface PracticeResult {
+  id: string;
+  score: number;
+  totalQuestions: number;
+  createdAt: string;
+  jobTitle?: string;
+  mode: string;
+}
+
+interface UserData {
+  user: User;
+}
+
+interface ScoresData {
+  user: {
+    practiceResults: PracticeResult[];
+  };
+}
 
 export default function Dashboard() {
   const router = useRouter();
   const { status } = useSession();
-  const { data, error } = useSWR(status === 'authenticated' ? '/api/user' : null, fetcher);
-  const { data: scoresData, error: scoresError } = useSWR(status === 'authenticated' ? '/api/user-scores' : null, fetcher);
+
+  const { data, error } = useSWR<UserData>(
+    status === 'authenticated' ? '/api/user' : null,
+    fetcher
+  );
+
+  const { data: scoresData, error: scoresError } = useSWR<ScoresData>(
+    status === 'authenticated' ? '/api/user-scores' : null,
+    fetcher
+  );
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -35,54 +67,103 @@ export default function Dashboard() {
   }
 
   const { user } = data;
+  const interviewsCompleted = scoresData?.user?.practiceResults?.length || 0;
+
+  const averageScore =
+    interviewsCompleted > 0
+      ? scoresData!.user.practiceResults.reduce(
+          (acc, result) => acc + result.score,
+          0
+        ) / interviewsCompleted
+      : 0;
 
   return (
     <Layout title="dashboard">
       <div className="font-sans text-gray-900">
         <main className="container mx-auto px-6">
-          <h1 className="text-4xl font-extrabold mb-4 text-start">Welcome, {user.name || 'User'}!</h1>
-          <p className="text-gray-600 text-lg mb-8 text-start">This is your personalized dashboard. Here you can manage your interviews, review feedback, and track your progress.</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Card 2: Recent Feedback */}
-            <div className="bg-white p-6 rounded-xl  border border-gray-200">
-              <h2 className="text-2xl font-bold mb-3 text-gray-900">Recent Feedback</h2>
-              {scoresError ? (
-                <p className="text-red-500">Error loading feedback.</p>
-              ) : !scoresData ? (
-                <Loader2 className="animate-spin text-blue-400" size={24} />
-              ) : scoresData.user.practiceResults.length === 0 ? (
-                <p className="text-gray-500 mb-2">No feedback yet.</p>
-              ) : (
-                <>
-                  <p className="text-gray-600 mb-2">Last session: {scoresData.user.practiceResults[0].jobTitle || 'N/A'}</p>
-                  <p className="text-gray-600 mb-2">Mode: {scoresData.user.practiceResults[0].mode}</p>
-                  <p className="text-gray-600 mb-2">Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
-                  <p className="text-gray-500 mb-4">Date: {new Date(scoresData.user.practiceResults[0].createdAt).toLocaleString()}</p>
-                </>
-              )}
+          {/* Header Section */}
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="md:text-3xl text-xl font-extrabold text-start">
+                Welcome, {user.name || 'User'}!
+              </h1>
+              <p className="text-gray-600 text-lg text-start">
+                {`Let's get started.`}
+              </p>
             </div>
+            <Link
+              href="/practice"
+              className="w-full max-w-[150px] p-3 rounded-full bg-blue-400 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
+            >
+              Start Practice
+            </Link>
+          </div>
 
-            {/* Card 3: Practice Sessions */}
-            <div className="bg-white p-6 rounded-xl  border border-gray-200">
-              <h2 className="text-2xl font-bold mb-3 text-gray-900">Practice Sessions</h2>
-              {scoresError ? (
-                <p className="text-red-500">Error loading sessions.</p>
-              ) : !scoresData ? (
-                <Loader2 className="animate-spin text-blue-400" size={24} />
-              ) : scoresData.user.practiceResults.length === 0 ? (
-                <p className="text-gray-500 mb-2">No sessions yet.</p>
-              ) : (
-                <>
-                  <p className="text-gray-600 mb-2">Completed: {scoresData.user.practiceResults.length}</p>
-                  <p className="text-gray-500 mb-4">Last Score: {scoresData.user.practiceResults[0].score} / {scoresData.user.practiceResults[0].totalQuestions}</p>
-                  <Link href="/practice" className="text-blue-400 hover:text-blue-500 font-semibold">Start New Session →</Link>
-                </>
-              )}
+          {/* Performance Stats */}
+          <div className="bg-white p-6 rounded-xl border border-gray-200 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">
+              Performance Stats
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Interviews Completed
+                </h3>
+                <p className="text-3xl font-bold text-blue-500">
+                  {interviewsCompleted}
+                </p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Average Score
+                </h3>
+                <p className="text-3xl font-bold text-blue-500">
+                  {averageScore.toFixed(1)} / 10
+                </p>
+              </div>
+             
             </div>
           </div>
 
-          
+          {/* Recent Sessions */}
+          <div>
+            <h2 className="md:text-2xl text-xl font-bold mb-4 text-gray-900">
+              Recent Sessions
+            </h2>
+            {scoresError ? (
+              <p className="text-red-500">Error loading sessions.</p>
+            ) : !scoresData ? (
+              <Loader2 className="animate-spin text-blue-400" size={24} />
+            ) : interviewsCompleted === 0 ? (
+              <p className="text-gray-500">
+                No recent sessions. Start practicing to see your results!
+              </p>
+            ) : (
+              <div className="space-y-4 mb-3">
+                {scoresData.user.practiceResults.slice(0, 5).map((result) => (
+                  <div
+                    key={result.id}
+                    className="bg-white p-4 rounded-xl border border-gray-200 flex justify-between items-center"
+                  >
+                    <div>
+                      <p className="font-semibold">
+                        {result.jobTitle || 'General Practice'}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(result.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-lg text-blue-500">
+                        {result.score} / {result.totalQuestions}
+                      </p>
+                      <p className="text-sm text-gray-600">{result.mode}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </main>
       </div>
     </Layout>

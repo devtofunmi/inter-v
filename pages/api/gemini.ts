@@ -24,13 +24,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let prompt = '';
 
   if (mode === 'chat') {
+    const aiQuestionsCount = conversationHistory ? conversationHistory.filter((msg: { role: string; parts: string }) => msg.role === 'AI').length : 0;
+
+    if (aiQuestionsCount >= 10) {
+      return res.status(200).json({ response: "The interview has now concluded. Thank you for your time." });
+    }
+
     const lastUserMsg = conversationHistory && conversationHistory.length > 0
       ? [...conversationHistory].reverse().find((msg: { role: string; parts: string }) => msg.role === 'User')
       : null;
 
-      prompt = `You are an AI interviewer. Your task is to conduct a highly personalized job interview based on the candidate's specific background and the job they are applying for.
+      prompt = `You are an AI interviewer. Your task is to conduct a highly personalized and realistic job interview. Address the person you are interviewing directly and conversationally (e.g., "you," "your"). Never refer to them as "the candidate" or "the user."
 
-    **Candidate Profile:**
+    **Your Profile:**
     - Tell me about yourself: ${additionalDetails || 'N/A'}
     - Employment History: ${employmentHistory || 'N/A'}
     - Skills: ${skills || 'N/A'}
@@ -40,15 +46,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     - Job Description: ${jobDescription || 'N/A'}
 
     **Instructions:**
-    - Use the candidate's profile to ask relevant and specific questions.
-    - Do not ask generic questions. Every question should be tailored to the candidate's experience and the job requirements.
+    - The interview will consist of 10 questions.
+    - Ask questions that are relevant to the provided profile and the job description.
+    - Do not ask generic questions. Every question should be tailored to the person's experience and the job requirements.
     - Refer to specific experiences from their employment history.
     - Ask about the skills they've listed.
+    - If the user's response is not serious, unprofessional, or indicates they want to end the interview, you must end the interview by stating the reason clearly. For example: "It seems you are not interested in continuing, so I will end the interview here."
 
     Current conversation history:
     ${conversationHistory.map((msg: { role: string; parts: string }) => `${msg.role}: ${msg.parts}`).join('\n')}
 
-    ${lastUserMsg ? `Evaluate the last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.` : 'Ask the first interview question directly, as a human interviewer would. Do not refer to the candidate in your questions.'}`;
+    ${lastUserMsg ? `Evaluate the last answer for relevance, correctness, and depth. Give feedback (e.g., was it detailed, did it address the question, was it correct?). If the answer is empty, irrelevant, or not meaningful, explain why and suggest how to improve. Avoid using 'N/A' and always provide constructive feedback. Then, ask the next interview question directly, as a human interviewer would.` : 'Ask the first interview question directly, as a human interviewer would.'}`;
   } else if (mode === 'quiz') {
     prompt = `You are an AI quiz master. Your task is to generate a multiple-choice quiz question that is highly relevant to the candidate's background and the job they are applying for.
 
@@ -85,6 +93,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   prompt += `\n\nIMPORTANT: Do not use asterisks, bold, or markdown formatting for section headers. Just use plain text.\nFormat your response as follows:\n    Question: [Your question here]\n    A) [Option A]\n    B) [Option B]\n    C) [Option C]\n    D) [Option D]\n    Answer: [Correct Option Letter (e.g., A)]\n    Next Question: [Your next question here]`;
 
+  } else if (mode === 'summarize_chat') {
+    prompt = `You are an expert career coach. Based on the following interview conversation, provide a detailed and personalized performance review.\n\nYour response must not contain any markdown formatting, such as asterisks for bolding.\n\nThe review should be structured with the following sections. Use the exact titles provided below, and make them stand
+     out by using all capital letters.\n\n1.  OVERALL FEEDBACK ON YOUR PERFORMANCE\n2.  STRENGTHS DEMONSTRATED DURING THE INTERVIEW\n3.  AREAS FOR IMPROVEMENT\n4.  SUGGESTIONS FOR HOW TO IMPROVE\n\nAddress the person being reviewed directly as "you".\n\nIf the interview was cut short due to unprofessional or non-serious responses, the review should state this clearly and provide feedback on the importance of professionalism in an interview. Even if the interview is short, provide as much feedback as possible based on the available conversation.\n\nInterview conversation:\n${conversationHistory.map((msg: { role: string; parts: string }) => `${msg.role}: ${msg.parts}`).join('\n')}\n`;
   } else {
     return res.status(400).json({ message: 'Invalid mode specified.' });
   }

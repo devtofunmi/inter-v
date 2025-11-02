@@ -6,6 +6,7 @@ import ChatView from './ChatView';
 import QuizView from './QuizView';
 import ChatInput from './ChatInput';
 import ActionResult from './ActionResult';
+import ChatActionResult from './ChatActionResult';
 
 
 // Minimal SpeechRecognition type for browser compatibility
@@ -91,6 +92,8 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [wrongAnswers, setWrongAnswers] = useState<WrongAnswer[]>([]);
+  const [chatSummary, setChatSummary] = useState('');
+  const [isSummarizing, setIsSummarizing] = useState(false);
   // Local state for toggling AI voice inside the chat modal. Initialized from prop.
   const [enableTTSState, setEnableTTSState] = useState<boolean>(enableTTS);
 
@@ -104,6 +107,7 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
     setQuizData(null);
     setSelectedOption(null);
     setWrongAnswers([]);
+    setChatSummary('');
     if (enableTTSState) stopSpeaking(); // Stop TTS when switching mode (only if TTS enabled)
   }, [practiceMode, enableTTSState]);
 
@@ -158,6 +162,42 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
     }
   };
 
+  const getChatSummary = async (history: Array<{ role: string; parts: string }>) => {
+    setIsSummarizing(true);
+    try {
+      const payload = {
+        jobTitle: user.practiceProfile?.jobTitle || '',
+        jobDescription: user.practiceProfile?.jobDescription || '',
+        skills: user.practiceProfile?.skills || '',
+        employmentHistory: user.practiceProfile?.employmentHistory || '',
+        additionalDetails: user.practiceProfile?.additionalDetails || '',
+        mode: 'summarize_chat',
+        conversationHistory: history,
+      };
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setChatSummary(data.response);
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to get chat summary:', errorData);
+        toast.error('Failed to get chat summary.');
+      }
+    } catch {
+      toast.error('Error getting chat summary.');
+    } finally {
+      setIsSummarizing(false);
+      setChatCompleted(true);
+    }
+  };
+
   const startInterview = async () => {
     setIsGenerating(true);
     setConversationHistory([]);
@@ -167,6 +207,7 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
     setCurrentQuestionNumber(0);
     setQuizCompleted(false);
     setWrongAnswers([]);
+    setChatSummary('');
     if (practiceMode === 'chat') {
       setChatCompleted(false);
     }
@@ -221,12 +262,18 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
     }
   };
 
-  const speak = (text: string) => {
-    stopSpeaking();
-    if ('speechSynthesis' in window) {
-      const utter = new window.SpeechSynthesisUtterance(text);
-      if (enableTTSState) window.speechSynthesis.speak(utter);
-    }
+  const speak = (text: string): Promise<void> => {
+    return new Promise((resolve) => {
+      stopSpeaking();
+      if ('speechSynthesis' in window && enableTTSState) {
+        const utter = new window.SpeechSynthesisUtterance(text);
+        utter.onend = () => resolve();
+        utter.onerror = () => resolve(); // Resolve even on error
+        window.speechSynthesis.speak(utter);
+      } else {
+        resolve(); // Resolve immediately if TTS is disabled or not available
+      }
+    });
   };
 
   const handleMicClick = () => {
@@ -268,13 +315,13 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
       updatedHistory = [...conversationHistory, { role: 'User', parts: userResponse }];
       currentResponse = userResponse;
       setUserResponse('');
-      if (updatedHistory.filter(msg => msg.role === 'User').length === 10) {
-        setConversationHistory(updatedHistory);
-        setChatCompleted(true);
+      if (updatedHistory.filter(msg => msg.role === 'User').length >= 10) {
+        const finalHistory = [...updatedHistory, { role: 'AI', parts: "The interview has now concluded. Thank you for your time." }];
+        setConversationHistory(finalHistory);
+        await speak("The interview has now concluded. Thank you for your time.");
+        getChatSummary(finalHistory);
         setIsGenerating(false);
-        setTimeout(() => {
-          savePracticeResult(score);
-        }, 500);
+        savePracticeResult(score);
         return;
       }
     } else if (practiceMode === 'quiz' && quizData && selectedOption) {
@@ -336,20 +383,29 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
       if (response.ok) {
         const data = await response.json();
         if (practiceMode === 'chat') {
-          setConversationHistory(prev => {
-            if (enableTTSState) speak(data.response);
-            return [...prev, { role: 'AI', parts: data.response }];
-          });
-          if (/\b(correct|good job|well done|excellent|right answer)\b/i.test(data.response)) {
-            setScore(prevScore => prevScore + 1);
-          }
-          if (/Next Question:\s*This interview is terminated due to the candidate's consistent lack of engagement and unprofessional responses\./i.test(data.response)
-            || /The interview should be terminated\./i.test(data.response)) {
-            setChatCompleted(true);
+          const finalHistory = [...updatedHistory, { role: 'AI', parts: data.response }];
+          setConversationHistory(finalHistory);
+          
+          const endInterviewPhrases = [
+            "interview has now concluded",
+            "not interested in continuing",
+            "end the interview"
+          ];
+
+          if (endInterviewPhrases.some(phrase => data.response.toLowerCase().includes(phrase))) {
+            await speak(data.response);
+            getChatSummary(finalHistory);
             savePracticeResult(score);
             setIsGenerating(false);
             return;
+          } else {
+            speak(data.response);
           }
+
+          if (/\b(correct|good job|well done|excellent|right answer)\b/i.test(data.response)) {
+            setScore(prevScore => prevScore + 1);
+          }
+
         } else if (practiceMode === 'quiz') {
           if (currentQuestionNumber + 1 >= 10) {
             setQuizCompleted(true);
@@ -420,13 +476,20 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
                 </div>
               </div>
             ) : chatCompleted ? (
-              <ActionResult
-                title="Chat Completed!"
-                score={score}
-                total={10}
-                onStartNew={startInterview}
-                buttonText="Start New Chat"
-              />
+              isSummarizing ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <Loader2 className="animate-spin h-12 w-12 text-blue-400" />
+                  <p className="mt-4 text-lg text-gray-600">Generating your performance review...</p>
+                </div>
+              ) : (
+                <ChatActionResult
+                  title="Interview Performance Review"
+                  summary={chatSummary}
+                  onStartNew={startInterview}
+                  buttonText="Start New Chat"
+                  isModal={false}
+                />
+              )
             ) : (
               <ChatView conversationHistory={conversationHistory} />
             )}

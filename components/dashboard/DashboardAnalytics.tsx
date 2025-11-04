@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   RadialBarChart,
   RadialBar,
+  PolarAngleAxis,
 } from 'recharts';
 
 interface PracticeResult {
@@ -86,6 +87,7 @@ export default function DashboardAnalytics({
               startAngle={90}
               endAngle={450}
             >
+              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
               <defs>
                 <linearGradient id="blueGradient" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stopColor="#60A5FA" />
@@ -100,8 +102,6 @@ export default function DashboardAnalytics({
                 cornerRadius={50}
                 clockWise
                 fill="url(#blueGradient)"
-                minAngle={15}
-                endAngle={90 + (progressPercent / 100) * 360}
               />
             </RadialBarChart>
           </ResponsiveContainer>

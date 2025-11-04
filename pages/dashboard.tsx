@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
 import Layout from '../components/dashboard/Layout';
 import Link from 'next/link';
+import DashboardAnalytics from '@/components/dashboard/DashboardAnalytics';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -84,7 +85,7 @@ export default function Dashboard() {
           {/* Header Section */}
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="md:text-3xl text-xl font-extrabold text-start">
+              <h1 className="md:text-2xl text-xl font-extrabold text-start">
                 Welcome, {user.name || 'User'}!
               </h1>
               <p className="text-gray-600 text-lg text-start">
@@ -100,34 +101,16 @@ export default function Dashboard() {
           </div>
 
           {/* Performance Stats */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200 mb-8">
-            <h2 className="text-xl font-bold mb-4 text-gray-900">
-              Performance Stats
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Interviews Completed
-                </h3>
-                <p className="text-3xl font-bold text-blue-500">
-                  {interviewsCompleted}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Average Score
-                </h3>
-                <p className="text-3xl font-bold text-blue-500">
-                  {averageScore.toFixed(1)} / 10
-                </p>
-              </div>
-             
-            </div>
-          </div>
+          <DashboardAnalytics
+            results={scoresData?.user?.practiceResults || []}
+            averageScore={averageScore}
+            interviewsCompleted={interviewsCompleted}
+          />
+
 
           {/* Recent Sessions */}
           <div>
-            <h2 className="md:text-2xl text-xl font-bold mb-4 text-gray-900">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">
               Recent Sessions
             </h2>
             {scoresError ? (

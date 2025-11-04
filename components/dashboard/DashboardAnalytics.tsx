@@ -100,7 +100,6 @@ export default function DashboardAnalytics({
                 background={{ fill: '#E5E7EB' }}
                 dataKey="value"
                 cornerRadius={50}
-                clockWise
                 fill="url(#blueGradient)"
               />
             </RadialBarChart>

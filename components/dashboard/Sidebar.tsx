@@ -39,7 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors duration-200 ${
+                  className={`flex items-center space-x-3 px-3 py-2.5 rounded-full transition-colors duration-200 ${
                     isActive 
                       ? 'bg-blue-50 text-blue-400 font-semibold' 
                       : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
@@ -60,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
         <div className="mb-4">
           <button
             onClick={() => onOpenPricing && onOpenPricing()}
-            className="w-full cursor-pointer text-left px-3 py-2.5 rounded-lg bg-blue-50 text-blue-400 font-semibold mb-3"
+            className="w-full cursor-pointer text-left px-3 py-2.5 rounded-3xl bg-blue-50 text-blue-400 font-semibold mb-3"
           >
             Get Unlimited Interviews
           </button>
@@ -68,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
         <div className="mb-4">
           <Link
             href="/settings"
-            className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors duration-200 ${
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-full transition-colors duration-200 ${
               router.pathname === '/settings' 
                 ? 'bg-blue-50 text-blue-400 font-semibold' 
                 : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
        
         <button
           onClick={() => signOut()}
-          className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900 w-full transition-colors duration-200"
+          className="flex items-center space-x-3 px-3 py-2.5 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-900 w-full transition-colors duration-200"
         >
           <LogOut size="20" />
           <span className="font-medium text-base">Logout</span>

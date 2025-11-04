@@ -4,7 +4,29 @@ import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
+import CustomSelect from '../components/dashboard/practice/CustomSelect';
 
+interface SubField {
+  value: string;
+  label: string;
+}
+
+const jobFields: { value: string; label: string; subfields?: SubField[] }[] = [
+  { value: 'engineering', label: 'Engineering', subfields: [
+    { value: 'software', label: 'Software' },
+    { value: 'mechanical', label: 'Mechanical' },
+    { value: 'electrical', label: 'Electrical' },
+    { value: 'civil', label: 'Civil' },
+    { value: 'chemical', label: 'Chemical' },
+  ] },
+  { value: 'marketing', label: 'Marketing' },
+  { value: 'sales', label: 'Sales' },
+  { value: 'product', label: 'Product' },
+  { value: 'design', label: 'Design' },
+  { value: 'finance', label: 'Finance' },
+  { value: 'hr', label: 'Human Resources' },
+  { value: 'other', label: 'Other' },
+];
 
 interface OnboardingData {
   jobTitle: string;
@@ -13,6 +35,8 @@ interface OnboardingData {
   employmentHistory: string[];
   skills: string;
   additionalDetails: string;
+  jobField: string;
+  subField: string;
 }
 
 export default function OnboardingPage() {
@@ -26,6 +50,8 @@ export default function OnboardingPage() {
     employmentHistory: [''],
     skills: '',
     additionalDetails: '',
+    jobField: '',
+    subField: '',
   });
 
   useEffect(() => {
@@ -39,6 +65,28 @@ export default function OnboardingPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setOnboardingData(prevData => ({ ...prevData, [name]: value }));
+  };
+
+  const handleJobFieldChange = (value: string) => {
+    const selectedField = jobFields.find(field => field.value === value);
+    const jobTitle = selectedField && !selectedField.subfields ? selectedField.label : '';
+    setOnboardingData(prevData => ({
+      ...prevData,
+      jobField: value,
+      subField: '',
+      jobTitle: value === 'other' ? '' : jobTitle,
+    }));
+  };
+
+  const handleSubFieldChange = (value: string) => {
+    const selectedField = jobFields.find(field => field.value === onboardingData.jobField);
+    const selectedSubField = selectedField?.subfields?.find(sf => sf.value === value);
+    const jobTitle = selectedField && selectedSubField ? `${selectedSubField.label} ${selectedField.label}` : '';
+    setOnboardingData(prevData => ({
+      ...prevData,
+      subField: value,
+      jobTitle,
+    }));
   };
 
   const handleEmploymentHistoryChange = (index: number, value: string) => {
@@ -115,17 +163,37 @@ export default function OnboardingPage() {
             />
           </div>
           <div>
-            <input
-              type="text"
-              id="jobTitle"
-              name="jobTitle"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
-              placeholder="Job Title"
-              value={onboardingData.jobTitle}
-              onChange={handleChange}
-              required
+            <CustomSelect
+              options={jobFields.map(field => ({ value: field.value, label: field.label }))}
+              value={onboardingData.jobField}
+              onChange={handleJobFieldChange}
+              placeholder="Select a Job category"
             />
           </div>
+          {onboardingData.jobField === 'engineering' && (
+            <div>
+              <CustomSelect
+                options={jobFields.find(field => field.value === 'engineering')?.subfields || []}
+                value={onboardingData.subField}
+                onChange={handleSubFieldChange}
+                placeholder="Select a Job title"
+              />
+            </div>
+          )}
+          {onboardingData.jobField === 'other' && (
+            <div>
+              <input
+                type="text"
+                id="jobTitle"
+                name="jobTitle"
+                className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+                placeholder="Job Title"
+                value={onboardingData.jobTitle}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          )}
           <div>
             <textarea
               id="jobDescription"

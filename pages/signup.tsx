@@ -176,7 +176,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isCredentialsLoading || passwordStrength < 3}
-            className="w-full px-4 py-2 rounded-full bg-blue-400 hover:bg-blue-500 text-white font-medium disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-500 text-white font-medium disabled:opacity-50 disabled:pointer-events-none"
           >
             {isCredentialsLoading ? (
               <Loader2 className="animate-spin mx-auto text-white" />

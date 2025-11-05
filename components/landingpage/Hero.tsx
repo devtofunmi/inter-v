@@ -14,7 +14,7 @@ export const Hero = () => {
           Elevate Your <span className="text-blue-400">Interview</span> Performance
         </h1>
         <p className="max-w-xl text-gray-600 mb-8 md:text-xl text-lg mx-auto md:mx-0 font-normal">
-          Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.
+          Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery. Perfect for job seekers and graduates.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10">
           <Link href="/signup">

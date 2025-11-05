@@ -325,7 +325,13 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
         return;
       }
     } else if (practiceMode === 'quiz' && quizData && selectedOption) {
-      if (selectedOption !== quizData.correctAnswer) {
+      const isCorrect = selectedOption === quizData.correctAnswer;
+      let finalScore = score;
+
+      if (isCorrect) {
+        finalScore = score + 1;
+        setScore(finalScore);
+      } else {
         setWrongAnswers(prev => [...prev, {
           question: quizData.question,
           yourAnswer: quizData.options[selectedOption as keyof typeof quizData.options],
@@ -333,27 +339,12 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
           options: quizData.options,
         }]);
       }
-      updatedHistory = [
-        ...conversationHistory,
-        { role: 'AI', parts: quizData.question },
-        { role: 'User', parts: `My answer: ${selectedOption}) ${quizData.options[selectedOption as keyof typeof quizData.options]}` },
-      ];
-      currentResponse = `My answer: ${selectedOption}) ${quizData.options[selectedOption as keyof typeof quizData.options]}`;
-      setSelectedOption(null);
-      setConversationHistory(updatedHistory);
-      if (currentQuestionNumber + 1 === 10) {
-        const isCorrect = selectedOption === quizData.correctAnswer;
-        const finalScore = isCorrect ? score + 1 : score;
 
-        setScore(finalScore);
+      if (currentQuestionNumber + 1 === 10) {
         setQuizCompleted(true);
         setIsGenerating(false);
         savePracticeResult(finalScore);
         return;
-      }
-
-      if (selectedOption === quizData.correctAnswer) {
-        setScore(prevScore => prevScore + 1);
       }
     }
 
@@ -414,6 +405,7 @@ const MainContent: React.FC<MainContentProps> = ({ user, enableTTS = true }) => 
             const parsedQuiz = parseQuizResponse(data.response);
             if (parsedQuiz) {
               setQuizData(null);
+              setSelectedOption(null);
               setTimeout(() => {
                 setQuizData(parsedQuiz);
                 setCurrentQuestionNumber(prev => prev + 1);

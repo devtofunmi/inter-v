@@ -86,6 +86,27 @@ export const Features = () => {
                 <a href="#features" className="text-blue-400 hover:text-blue-500 font-medium text-sm">{features[3].linkText}</a>
               </div>
             </div>
+            {/* Sample interview prompts for common industries */}
+            <div className="mt-6 bg-white p-4 rounded-lg border">
+              <h4 className="text-lg font-semibold mb-3">Sample interview prompts</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>
+                  <strong>Banks:</strong> &quot;Explain how KYC processes work and how you&apos;d handle a difficult client dispute.&quot;
+                </li>
+                <li>
+                  <strong>Telecoms:</strong> &quot;Describe a GSM network handover and steps to troubleshoot frequent dropped calls.&quot;
+                </li>
+                <li>
+                  <strong>Fintech/Payments:</strong> &quot;How would you design a secure payment flow for mobile money?&quot;
+                </li>
+                <li>
+                  <strong>Oil &amp; Gas / Energy:</strong> &quot;Explain basic HSE (Health, Safety & Environment) considerations on site.&quot;
+                </li>
+                <li>
+                  <strong>Product / PM roles:</strong> &quot;How would you prioritize features for a payment app used across multiple regions?&quot;
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

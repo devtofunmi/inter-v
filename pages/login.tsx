@@ -46,7 +46,7 @@ export default function LoginPage() {
             <input
               type="email"
               id="email"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+              className="w-full px-3 py-3 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -58,7 +58,7 @@ export default function LoginPage() {
             <input
               type={showPassword ? 'text' : 'password'}
               id="password"
-              className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center pr-10"
+              className="w-full px-3 py-3 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center pr-10"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -67,7 +67,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-2.5 text-gray-500 hover:text-gray-700"
+              className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700"
               aria-label="Toggle password visibility"
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}

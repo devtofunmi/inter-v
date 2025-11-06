@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Loader2 } from 'lucide-react';
@@ -83,6 +84,9 @@ const SettingsPage = () => {
 
   return (
     <Layout title="Settings">
+      <Head>
+        <title>Settings - Prepkitty</title>
+      </Head>
       <ToastContainer />
       <div className="p-6">
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl  border border-gray-200">

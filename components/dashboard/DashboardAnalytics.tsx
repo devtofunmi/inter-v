@@ -33,12 +33,13 @@ export default function DashboardAnalytics({
 }: DashboardAnalyticsProps) {
   // Prepare line chart data
   const chartData =
-    results?.slice(-7).map((result) => ({
+    results?.slice(-5).map((result, index) => ({
       date: new Date(result.createdAt).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
       }),
       score: result.score,
+      session: index,
     })) || [];
 
   // Convert averageScore (out of 10) to percentage
@@ -127,11 +128,12 @@ export default function DashboardAnalytics({
 
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis
-                dataKey="date"
+                dataKey="session"
                 stroke="#9ca3af"
                 fontSize={12}
                 axisLine={false}
                 tickLine={false}
+                tickFormatter={(value) => chartData[value].date}
               />
               <YAxis
                 domain={[0, 10]}
@@ -140,7 +142,9 @@ export default function DashboardAnalytics({
                 axisLine={false}
                 tickLine={false}
               />
-              <Tooltip
+                            <Tooltip
+                formatter={(value) => [value, 'Score']}
+                labelFormatter={() => ''}
                 contentStyle={{
                   backgroundColor: '#fff',
                   borderRadius: '10px',

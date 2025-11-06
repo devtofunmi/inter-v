@@ -144,7 +144,7 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen flex items-center justify-center font-geist bg-white text-gray-900 p-4">
       <Head>
-        <title>Onboarding - Inter-V</title>
+        <title>Onboarding - Prepkitty</title>
       </Head>
 
       <div className="w-full max-w-[400px] ">

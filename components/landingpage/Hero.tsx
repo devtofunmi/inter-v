@@ -7,7 +7,7 @@ export const Hero = () => {
   return (
     <section className="flex flex-col md:flex-row items-center justify-between gap-12 px-6 pt-24 pb-10 bg-white max-w-7xl mx-auto" data-aos="fade-up">
       <div className="text-center md:text-left md:w-1/2">
-        <span className="inline-flex items-center px-4 py-1 mb-6 text-base rounded-full border border-blue-200 bg-blue-50 text-blue-800 font-semibold">
+        <span className="inline-flex items-center px-4 py-1 mb-6 text-base rounded-full border border-blue-200 bg-blue-50 text-blue-400 font-semibold">
           AI-Powered Interview Preparation
         </span>
         <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-gray-900">

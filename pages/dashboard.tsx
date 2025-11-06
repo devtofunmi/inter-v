@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -80,6 +81,9 @@ export default function Dashboard() {
 
   return (
     <Layout title="dashboard">
+      <Head>
+        <title>Dashboard - Prepkitty</title>
+      </Head>
       <div className="font-sans text-gray-900">
         <main className="container mx-auto px-6">
           {/* Header Section */}

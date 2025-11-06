@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useLayoutEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
@@ -38,7 +39,9 @@ export const Header = () => {
 
   return (
     <header className={`flex justify-between items-center px-8 py-4 w-full ${headerClasses}`}>
-      <div className="text-2xl font-extrabold text-blue-400">Prepkitty</div>
+      <div>
+        <Image src="/prepkitty_logo.png" alt="Prepkitty Logo" width={120} height={40} />
+      </div>
       
       <nav className="hidden md:flex gap-8">
         {navLinks.map((link) => (

@@ -1,4 +1,5 @@
 
+import Head from "next/head";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ToastContainer } from 'react-toastify';
@@ -45,6 +46,9 @@ export default function Practice() {
   return (
     <>
     <Layout title="interview">
+      <Head>
+        <title>Practice - Prepkitty</title>
+      </Head>
       <ToastContainer />
       <div className="font-sans text-gray-900 p-6 h-full flex flex-col lg:flex-row gap-6 relative">
 

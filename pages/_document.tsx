@@ -10,7 +10,7 @@ export default function Document() {
         <meta property="og:description" content="Prepkitty is an AI-powered platform that helps you practice for your job interviews. Get instant feedback and improve your skills." />
         <meta property="og:image" content="/prepkitty_logo.png" />
         <meta property="og:url" content="https://prepkitty.co" />
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="/prepkitty_logo.png" />
         <link rel="icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
       </Head>

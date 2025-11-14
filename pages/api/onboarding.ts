@@ -49,7 +49,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { name },
+      data: {
+        name,
+        onboardingCompleted: true,
+      },
     });
 
     res.status(200).json({ message: 'Onboarding complete' });

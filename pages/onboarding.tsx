@@ -30,9 +30,9 @@ const jobFields: { value: string; label: string; subfields?: SubField[] }[] = [
 
 interface OnboardingData {
   jobTitle: string;
-  jobDescription: string;
+  professionalSummary: string;
   name: string;
-  employmentHistory: string[];
+  employmentHistory: { role: string; startDate: string; endDate: string }[];
   skills: string;
   additionalDetails: string;
   jobField: string;
@@ -45,9 +45,9 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [onboardingData, setOnboardingData] = useState<OnboardingData>({
     jobTitle: '',
-    jobDescription: '',
+    professionalSummary: '',
     name: '',
-    employmentHistory: [''],
+    employmentHistory: [{ role: '', startDate: '', endDate: '' }],
     skills: '',
     additionalDetails: '',
     jobField: '',
@@ -89,15 +89,15 @@ export default function OnboardingPage() {
     }));
   };
 
-  const handleEmploymentHistoryChange = (index: number, value: string) => {
+  const handleEmploymentHistoryChange = (index: number, field: string, value: string) => {
     const newEmploymentHistory = [...onboardingData.employmentHistory];
-    newEmploymentHistory[index] = value;
+    newEmploymentHistory[index] = { ...newEmploymentHistory[index], [field]: value };
     setOnboardingData(prevData => ({ ...prevData, employmentHistory: newEmploymentHistory }));
   };
 
   const addEmploymentField = () => {
     if (onboardingData.employmentHistory.length < 3) {
-      setOnboardingData(prevData => ({ ...prevData, employmentHistory: [...prevData.employmentHistory, ''] }));
+      setOnboardingData(prevData => ({ ...prevData, employmentHistory: [...prevData.employmentHistory, { role: '', startDate: '', endDate: '' }] }));
     }
   };
 
@@ -196,28 +196,46 @@ export default function OnboardingPage() {
           )}
           <div>
             <textarea
-              id="jobDescription"
-              name="jobDescription"
+              id="professionalSummary"
+              name="professionalSummary"
               rows={3}
               className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
-              placeholder="Job Description"
-              value={onboardingData.jobDescription}
+              placeholder="Professional Summary (e.g., 'Results-driven software engineer with 5+ years of experience...')"
+              value={onboardingData.professionalSummary}
               onChange={handleChange}
               required
             ></textarea>
           </div>
           <div>
             {onboardingData.employmentHistory.map((history, index) => (
-              <div key={index} className="flex flex-col  items-center  space-x-2 mb-2">
+              <div key={index} className="flex flex-col items-center space-y-2 mb-2 p-4 rounded-2xl bg-gray-50 border border-gray-200">
                 <input
                   type="text"
-                  id={`employmentHistory-${index}`}
-                  name={`employmentHistory-${index}`}
                   className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
-                  placeholder="Employment History"
-                  value={history}
-                  onChange={(e) => handleEmploymentHistoryChange(index, e.target.value)}
+                  placeholder="Job Title"
+                  value={history.role}
+                  onChange={(e) => handleEmploymentHistoryChange(index, 'role', e.target.value)}
                 />
+                <div className="flex w-full space-x-2">
+                  <input
+                    type="text"
+                    onFocus={(e) => (e.target.type = 'date')}
+                    onBlur={(e) => (e.target.type = 'text')}
+                    className="w-1/2 px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+                    placeholder="Start Date"
+                    value={history.startDate}
+                    onChange={(e) => handleEmploymentHistoryChange(index, 'startDate', e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    onFocus={(e) => (e.target.type = 'date')}
+                    onBlur={(e) => (e.target.type = 'text')}
+                    className="w-1/2 px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+                    placeholder="End Date"
+                    value={history.endDate}
+                    onChange={(e) => handleEmploymentHistoryChange(index, 'endDate', e.target.value)}
+                  />
+                </div>
                 {onboardingData.employmentHistory.length > 1 && (
                   <button type="button" onClick={() => removeEmploymentField(index)} className="text-red-500 mt-1">Remove</button>
                 )}
@@ -246,12 +264,15 @@ export default function OnboardingPage() {
               name="additionalDetails"
               rows={5}
               className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
-              placeholder="Tell me about yourself"
+              placeholder="Briefly introduce yourself, your career goals, and what you're looking for in your next role."
               value={onboardingData.additionalDetails}
               onChange={handleChange}
               required
             ></textarea>
           </div>
+          <p className="text-xs text-gray-500 text-center mt-2">
+            Your data is securely encrypted and will only be used to personalize your interview experience.
+          </p>
           <button
             type="submit"
             disabled={isLoading}

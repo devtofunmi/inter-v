@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
@@ -14,6 +14,24 @@ export default function LoginPage() {
   const [isCredentialsLoading, setIsCredentialsLoading] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    const { email: emailFromQuery, verified, error: queryError } = router.query;
+    if (verified === 'true' && typeof emailFromQuery === 'string') {
+      toast.success('Email verified! You can now log in.');
+      setEmail(emailFromQuery);
+    }
+    if (queryError) {
+      toast.error(queryError);
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    const { message } = router.query;
+    if (message) {
+      toast.info(message as string);
+    }
+  }, [router.query]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsCredentialsLoading(true);
@@ -22,10 +40,24 @@ export default function LoginPage() {
       redirect: false,
       email,
       password,
-      callbackUrl: '/dashboard',
     });
-    if (result?.error) toast.error('Invalid credentials');
-    else if (result?.url) router.push(result.url);
+
+    if (result?.error) {
+      if (result.error === 'CredentialsSignin') {
+        toast.error('Invalid credentials');
+      } else if (result.error === 'EmailNotVerified') {
+        toast.error('Your email is not verified. Please check your inbox for the verification link.');
+      } else {
+        toast.error(result.error);
+      }
+    } else if (result?.ok) {
+      const session = await getSession();
+      if (session?.user?.onboardingCompleted === false) {
+        router.push('/onboarding');
+      } else {
+        router.push('/dashboard');
+      }
+    }
 
     setIsCredentialsLoading(false);
   };

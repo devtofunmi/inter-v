@@ -32,10 +32,16 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
+        // Check if email is verified
+        if (!user.emailVerified) {
+          throw new Error('EmailNotVerified');
+        }
+
         return {
           id: user.id,
           name: user.name,
           email: user.email,
+          onboardingCompleted: user.onboardingCompleted,
         }
       }
     })
@@ -47,12 +53,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.onboardingCompleted = user.onboardingCompleted
       }
       return token
     },
     async session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id as string
+        session.user.onboardingCompleted = token.onboardingCompleted as boolean
       }
       return session
     },

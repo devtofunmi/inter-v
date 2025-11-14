@@ -32,10 +32,16 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Check if email is verified
+        // Allow old users who don't have emailVerified field set
+      if (user.emailVerified === null) {
+        // This is an old user → allow login
+      } else {
+        // New user → must be verified
         if (!user.emailVerified) {
           throw new Error('EmailNotVerified');
         }
+      }
+
 
         return {
           id: user.id,

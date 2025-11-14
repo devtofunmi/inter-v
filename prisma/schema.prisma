@@ -21,6 +21,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  onboardingCompleted Boolean @default(false)
   accounts      Account[]
   sessions      Session[]
   practiceProfile PracticeProfile?

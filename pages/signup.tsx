@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { signIn } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
@@ -19,50 +18,53 @@ export default function SignupPage() {
   const passwordStrength = password ? zxcvbn(password).score : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsCredentialsLoading(true);
+  e.preventDefault();
+  setIsCredentialsLoading(true);
 
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-      setIsCredentialsLoading(false);
-      return;
-    }
+  if (password !== confirmPassword) {
+    toast.error('Passwords do not match');
+    setIsCredentialsLoading(false);
+    return;
+  }
 
-    //  Check password strength before signup
-    if (passwordStrength < 3) {
-      toast.error('Password is too weak. Please use a stronger one.');
-      setIsCredentialsLoading(false);
-      return;
-    }
+  if (passwordStrength < 3) {
+    toast.error('Password is too weak. Please use a stronger one.');
+    setIsCredentialsLoading(false);
+    return;
+  }
 
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+  try {
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+
+      // Log the full server response for debugging
+      console.error('Signup failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        responseBody: data,
       });
 
-      if (response.ok) {
-        toast.success('Signup successful! Logging in...');
-        const signInResult = await signIn('credentials', {
-          email,
-          password,
-          redirect: true,
-          callbackUrl: '/onboarding',
-        });
-
-        if (signInResult?.error) toast.error('Failed to log in after signup.');
-        else if (signInResult?.url) router.push(signInResult.url);
-      } else {
-        const data = await response.json();
-        toast.error(data.message || 'Something went wrong');
-      }
-    } catch {
-      toast.error('Something went wrong');
+      toast.error(data?.message || 'Something went wrong during signup.');
+      return;
     }
 
+    // Success
+    router.push('/check-email');
+  } catch (error: unknown) {
+    // Log exact client-side error
+    console.error('Signup request error:', error);
+    toast.error('An unexpected error occurred. Check console for details.');
+  } finally {
     setIsCredentialsLoading(false);
-  };
+  }
+};
+
 
   const getStrengthColor = (score: number) => {
     switch (score) {

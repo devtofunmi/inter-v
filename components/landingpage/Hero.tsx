@@ -8,13 +8,13 @@ export const Hero = () => {
     <section className="flex flex-col md:flex-row items-center justify-between gap-12 px-6 pt-24 pb-10 bg-white max-w-7xl mx-auto" data-aos="fade-up">
       <div className="text-center md:text-left md:w-1/2">
         <span className="inline-flex items-center px-4 py-1 mb-6 text-base rounded-full border border-blue-200 bg-blue-50 text-blue-400 font-semibold">
-          AI-Powered Interview Preparation
+          Career management & job readiness
         </span>
         <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-gray-900">
-          Elevate Your <span className="text-blue-400">Interview</span> Performance
+          Get job-ready with realistic <span className="text-blue-400">AI mock interviews.</span>
         </h1>
         <p className="max-w-xl text-gray-600 mb-8 md:text-xl text-lg mx-auto md:mx-0 font-normal">
-          Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery. Perfect for job seekers and graduates.
+          PrepKitty helps you practice for your next job interview with an AI-powered mock interview platform. Get instant feedback and improve your skills.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10">
           <Link href="/signup">

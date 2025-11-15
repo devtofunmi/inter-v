@@ -96,12 +96,21 @@ export default function Dashboard() {
                 {`Let's get started.`}
               </p>
             </div>
-            <Link
-              href="/practice"
-              className="w-full max-w-[150px] p-3 rounded-full bg-blue-400 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
-            >
-              Start Practice
-            </Link>
+            <div className="flex gap-4">
+              <Link
+                href="/practice"
+                className="w-full max-w-[150px] p-3 rounded-full bg-blue-400 hover:bg-blue-500 font-semibold text-white transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100 disabled:opacity-50"
+              >
+                Start Practice
+              </Link>
+              <a
+                href="/api/generate-cv"
+                download="cv.pdf"
+                className="w-full max-w-[150px] p-3 rounded-full bg-gray-200 hover:bg-gray-300 font-semibold text-gray-800 transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100"
+              >
+                Download CV
+              </a>
+            </div>
           </div>
 
           {/* Performance Stats */}

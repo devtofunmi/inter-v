@@ -43,6 +43,8 @@ export default function OnboardingPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [onboardingData, setOnboardingData] = useState<OnboardingData>({
     jobTitle: '',
     professionalSummary: '',
@@ -61,6 +63,40 @@ export default function OnboardingPage() {
       setOnboardingData(prevData => ({ ...prevData, name: session.user?.name || '' }));
     }
   }, [status, router, session, onboardingData.name]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      setCvFile(file);
+      handleCvUpload(file);
+    }
+  };
+
+  const handleCvUpload = async (file: File) => {
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('cv', file);
+
+    try {
+      const response = await fetch('/api/cv-upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Assuming the API returns data in the same format as OnboardingData
+        setOnboardingData(prevData => ({ ...prevData, ...data }));
+        toast.success('CV data extracted successfully!');
+      } else {
+        toast.error('Failed to extract data from CV.');
+      }
+    } catch (error) {
+      console.error('CV upload error:', error);
+      toast.error('An error occurred while uploading the CV.');
+    }
+    setIsUploading(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -149,6 +185,30 @@ export default function OnboardingPage() {
 
       <div className="w-full max-w-[400px] ">
         <h2 className="text-3xl font-bold text-center mb-6">Tell Us About Yourself</h2>
+        <div className="text-center mb-4">
+          <p className="text-gray-600">First, upload your CV to get started faster.</p>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="cv-upload" className="w-full cursor-pointer border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center hover:border-blue-400 transition-colors">
+            <input id="cv-upload" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.docx" />
+            {isUploading ? (
+              <Loader2 className="animate-spin h-8 w-8 text-blue-400" />
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <span className="text-gray-600">{cvFile ? cvFile.name : 'Upload your CV (.pdf, .docx)'}</span>
+              </>
+            )}
+          </label>
+          <p className="text-xs text-gray-500 text-center mt-2">Your data is securely encrypted and will only be used to pre-fill this form.</p>
+        </div>
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="flex-shrink mx-4 text-gray-500">Or fill it manually</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input

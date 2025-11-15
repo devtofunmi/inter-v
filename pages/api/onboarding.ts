@@ -15,9 +15,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ message: 'You must be logged in.' });
   }
 
-  const { jobTitle, jobDescription, name, employmentHistory, skills, additionalDetails } = req.body;
+  const { jobTitle, professionalSummary, name, employmentHistory, skills, additionalDetails } = req.body;
 
-  const processedEmploymentHistory = employmentHistory.filter((role: string) => role.trim() !== '').join('\n');
+  const processedEmploymentHistory = JSON.stringify(employmentHistory.filter((item: {role: string}) => item.role.trim() !== ''));
 
   try {
     const user = await prisma.user.findUnique({
@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       where: { userId: user.id },
       update: {
         jobTitle,
-        jobDescription,
+        professionalSummary,
         employmentHistory: processedEmploymentHistory,
         skills,
         additionalDetails,
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       create: {
         userId: user.id,
         jobTitle,
-        jobDescription,
+        professionalSummary,
         employmentHistory: processedEmploymentHistory,
         skills,
         additionalDetails,

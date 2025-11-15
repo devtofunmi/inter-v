@@ -33,7 +33,7 @@ model PracticeProfile {
   userId            String  @unique
   user              User    @relation(fields: [userId], references: [id])
   jobTitle          String?
-  jobDescription    String?
+  professionalSummary String?
   employmentHistory String?
   skills            String?
   additionalDetails String?

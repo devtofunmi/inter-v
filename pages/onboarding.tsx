@@ -85,8 +85,53 @@ export default function OnboardingPage() {
 
       if (response.ok) {
         const data = await response.json();
-        // Assuming the API returns data in the same format as OnboardingData
-        setOnboardingData(prevData => ({ ...prevData, ...data }));
+        
+        const employmentHistory = data.experiences?.map((exp: { jobTitle: string; startDate: string; endDate: string; }) => ({
+            role: exp.jobTitle,
+            startDate: exp.startDate,
+            endDate: exp.endDate,
+        }));
+
+        let jobField = '';
+        let subField = '';
+        let jobTitle = '';
+
+        if (data.experiences && data.experiences.length > 0) {
+            const mostRecentExperience = data.experiences[0];
+            jobTitle = mostRecentExperience.jobTitle;
+            const category = mostRecentExperience.jobCategory;
+
+            const mainFieldMatch = jobFields.find(f => f.label.toLowerCase() === category.toLowerCase());
+            if (mainFieldMatch) {
+                jobField = mainFieldMatch.value;
+            } else {
+                for (const mainField of jobFields) {
+                    if (mainField.subfields) {
+                        const subFieldMatch = mainField.subfields.find(sf => sf.label.toLowerCase() === category.toLowerCase());
+                        if (subFieldMatch) {
+                            jobField = mainField.value;
+                            subField = subFieldMatch.value;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!jobField && jobTitle) {
+                jobField = 'other';
+            }
+        }
+
+        setOnboardingData(prevData => ({
+            ...prevData,
+            name: data.name || prevData.name,
+            professionalSummary: data.professionalSummary || prevData.professionalSummary,
+            skills: data.skills || prevData.skills,
+            employmentHistory: employmentHistory && employmentHistory.length > 0 ? employmentHistory : prevData.employmentHistory,
+            jobField: jobField || prevData.jobField,
+            subField: subField || prevData.subField,
+            jobTitle: jobTitle || prevData.jobTitle,
+        }));
+
         toast.success('CV data extracted successfully!');
       } else {
         toast.error('Failed to extract data from CV.');

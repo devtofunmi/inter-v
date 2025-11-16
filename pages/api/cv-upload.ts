@@ -68,6 +68,58 @@ const getSectionText = (text: string, sectionTitles: string[]): string => {
   return text.slice(startIndex, endIndex).trim();
 };
 
+const extractJobCategory = (jobTitle: string): string => {
+  const categories = [
+    "Software", "Data", "Cloud", "DevOps", "Security", "Networking",
+    "Support", "Sales", "Marketing", "Product", "Design", "HR", 
+    "Finance", "Legal", "Other"
+  ];
+  const lowerCaseJobTitle = jobTitle.toLowerCase();
+  for (const category of categories) {
+    if (lowerCaseJobTitle.includes(category.toLowerCase())) {
+      return category;
+    }
+  }
+  return "Other";
+};
+
+const parseExperiences = (text: string) => {
+  if (!text) return [];
+
+  const entries = text.split(/\n\s*\n/).filter(p => p.trim() !== '');
+  const experienceList: { jobTitle: string; startDate: string; endDate: string; jobCategory: string }[] = [];
+  const dateRegex = /(\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})\s*[-–—to]\s*(\bPresent\b|\bCurrent\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})/i;
+
+  for (const entry of entries) {
+    const lines = entry.trim().split('\n').map(line => line.trim());
+    if (lines.length === 0) continue;
+
+    let jobTitle = lines[0];
+    let startDate = '';
+    let endDate = '';
+
+    const dateMatch = entry.match(dateRegex);
+    if (dateMatch) {
+      startDate = dateMatch[1].trim();
+      endDate = dateMatch[2].trim();
+      if (lines[0].includes(dateMatch[0])) {
+        jobTitle = lines[0].replace(dateMatch[0], '').trim();
+      }
+    }
+    
+    if (jobTitle) {
+        const jobCategory = extractJobCategory(jobTitle);
+        experienceList.push({
+            jobTitle,
+            startDate,
+            endDate,
+            jobCategory,
+        });
+    }
+  }
+  return experienceList;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -124,12 +176,15 @@ export default async function handler(
       "Objective",
     ]);
     const skills = getSectionText(text, ["Skills", "Technical Skills"]);
+    const experienceText = getSectionText(text, ["Experience", "Work Experience"]);
+    const experiences = parseExperiences(experienceText);
 
     const extractedData = {
       name: nameMatch ? nameMatch[0].trim() : "",
       email: emailMatch ? emailMatch[0].trim() : "",
       skills,
       professionalSummary,
+      experiences,
     };
 
     return res.status(200).json(extractedData);

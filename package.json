@@ -30,6 +30,7 @@
     "nodemailer": "^6.10.1",
     "npm": "^11.6.2",
     "pdf-parse": "^2.4.5",
+    "pdfjs-dist": "^5.4.394",
     "prisma": "^6.16.1",
     "puppeteer": "^24.30.0",
     "react": "19.1.0",

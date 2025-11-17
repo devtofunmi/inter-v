@@ -17,7 +17,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { jobTitle, professionalSummary, name, employmentHistory, skills, additionalDetails } = req.body;
 
-  const processedEmploymentHistory = JSON.stringify(employmentHistory.filter((item: {role: string}) => item.role.trim() !== ''));
+  let historyArray = [];
+  if (typeof employmentHistory === 'string') {
+    try {
+      historyArray = JSON.parse(employmentHistory);
+    } catch (error) {
+      console.error("Failed to parse employmentHistory JSON string:", error);
+    }
+  } else if (Array.isArray(employmentHistory)) {
+    historyArray = employmentHistory;
+  }
+
+  const processedEmploymentHistory = JSON.stringify(historyArray.filter((item: {role: string}) => item && item.role && item.role.trim() !== ''));
 
   try {
     const user = await prisma.user.findUnique({
@@ -58,6 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json({ message: 'Onboarding complete' });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
-    res.status(500).json({ message: 'Something went wrong' });
+    console.error('Onboarding API error:', e);
+    res.status(500).json({ message: 'Something went wrong', error: e.message });
   }
 }

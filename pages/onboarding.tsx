@@ -231,7 +231,7 @@ export default function OnboardingPage() {
 
       <div className="w-full max-w-[400px] ">
         <h2 className="text-3xl font-bold text-center mb-6">Tell Us About Yourself</h2>
-        <div className="text-center mb-4">
+        {/* <div className="text-center mb-4">
           <p className="text-gray-600">First, upload your CV to get started faster.</p>
         </div>
         <div className="mb-4">
@@ -254,7 +254,7 @@ export default function OnboardingPage() {
           <div className="flex-grow border-t border-gray-300"></div>
           <span className="flex-shrink mx-4 text-gray-500">Or fill it manually</span>
           <div className="flex-grow border-t border-gray-300"></div>
-        </div>
+        </div> */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input

@@ -192,6 +192,7 @@ export default function OnboardingPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
+      // console.log('Submitting onboarding data:', onboardingData);
       const response = await fetch('/api/onboarding', {
         method: 'POST',
         headers: {
@@ -348,7 +349,7 @@ export default function OnboardingPage() {
             ))}
             <div className='flex justify-center'>
             {onboardingData.employmentHistory.length < 3 && (
-              <button type="button" onClick={addEmploymentField} className="text-blue-500 cursor-pointer">+ Add Role</button>
+              <button type="button" onClick={addEmploymentField} className="text-blue-500 cursor-pointer">+ Add Employment</button>
             )}
            </div>
           </div>

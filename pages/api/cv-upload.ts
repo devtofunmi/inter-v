@@ -70,7 +70,7 @@ const getSectionText = (text: string, sectionTitles: string[]): string => {
 
 const extractJobCategory = (jobTitle: string): string => {
   const categories = [
-    "Software", "Data", "Cloud", "DevOps", "Security", "Networking",
+    "Software", "Engineering", "Software Engineer", "Frontend Developer", "Backend Developer", "Data", "Cloud", "DevOps", "Security", "Networking",
     "Support", "Sales", "Marketing", "Product", "Design", "HR", 
     "Finance", "Legal", "Other"
   ];
@@ -108,9 +108,10 @@ const parseExperiences = (text: string) => {
     }
     
     if (jobTitle) {
-        const jobCategory = extractJobCategory(jobTitle);
+        const cleanedJobTitle = jobTitle.split(/ at | \| /)[0].trim();
+        const jobCategory = extractJobCategory(cleanedJobTitle);
         experienceList.push({
-            jobTitle,
+            jobTitle: cleanedJobTitle,
             startDate,
             endDate,
             jobCategory,
@@ -178,6 +179,7 @@ export default async function handler(
     const skills = getSectionText(text, ["Skills", "Technical Skills"]);
     const experienceText = getSectionText(text, ["Experience", "Work Experience"]);
     const experiences = parseExperiences(experienceText);
+    const jobTitle = experiences.length > 0 ? experiences[0].jobTitle : "";
 
     const extractedData = {
       name: nameMatch ? nameMatch[0].trim() : "",
@@ -185,6 +187,7 @@ export default async function handler(
       skills,
       professionalSummary,
       experiences,
+      jobTitle,
     };
 
     return res.status(200).json(extractedData);

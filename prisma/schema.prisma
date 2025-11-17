@@ -37,6 +37,7 @@ model PracticeProfile {
   employmentHistory String?
   skills            String?
   additionalDetails String?
+  jobDescription    String?
 }
 
 model PracticeResult {

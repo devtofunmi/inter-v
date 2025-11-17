@@ -67,9 +67,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     res.status(200).json({ message: 'Onboarding complete' });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (e) {
+  } catch (e: unknown) {
     console.error('Onboarding API error:', e);
-    res.status(500).json({ message: 'Something went wrong', error: e.message });
+    res.status(500).json({ message: 'Something went wrong', error: (e as Error).message });
   }
 }

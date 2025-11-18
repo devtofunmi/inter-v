@@ -24,108 +24,99 @@ const parseForm = (req: NextApiRequest) => {
 
 // ---------- Helper: extract sections ----------
 const getSectionText = (text: string, sectionTitles: string[]): string => {
-  const allSectionHeaders = [
-    "Skills", "Technical Skills", "Experience", "Work Experience",
-    "Education", "Projects", "Summary", "Objective", "Profile",
-    "Contact", "Awards",
-  ];
+    const allSectionHeaders = [
+        "Skills", "Technical Skills", "Experience", "Work Experience", "Education",
+        "Projects", "Summary", "Objective", "Profile", "Contact", "Awards",
+        "Publications", "Certifications", "Languages", "Interests", "References"
+    ];
 
-  let startMatch: RegExpMatchArray | null = null;
-  let foundTitle = "";
+    const sections: {title: string, index: number, match: string}[] = [];
+    allSectionHeaders.forEach(header => {
+        const regex = new RegExp(`^\\s*${header}\\s*[:]?\\s*$`, "igm");
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            sections.push({ title: header, index: match.index, match: match[0] });
+        }
+    });
 
-  for (const title of sectionTitles) {
-    const startRegex = new RegExp(`^\\s*${title}\\s*$`, "im");
-    startMatch = text.match(startRegex);
-    if (startMatch) {
-      foundTitle = title;
-      break;
+    sections.sort((a, b) => a.index - b.index);
+
+    let targetSectionIndex = -1;
+    let targetSectionWithTitle;
+
+    for (const title of sectionTitles) {
+        const foundSection = sections.find(s => s.title.toLowerCase() === title.toLowerCase());
+        if (foundSection) {
+            targetSectionIndex = sections.indexOf(foundSection);
+            targetSectionWithTitle = foundSection;
+            break;
+        }
     }
-  }
 
-  if (!startMatch || startMatch.index === undefined) return "";
+    if (targetSectionIndex === -1 || !targetSectionWithTitle) return "";
 
-  const startIndex = startMatch.index + startMatch[0].length;
-  
-  let endIndex = text.length;
+    const contentStartIndex = targetSectionWithTitle.index + targetSectionWithTitle.match.length;
 
-  for (const header of allSectionHeaders) {
-    if (sectionTitles.some(s => s.toLowerCase() === header.toLowerCase())) continue;
+    const nextSection = sections[targetSectionIndex + 1];
+    const contentEndIndex = nextSection ? nextSection.index : text.length;
 
-    const regex = new RegExp(`^\\s*${header}\\s*$`, "im");
-    const match = text.slice(startIndex).match(regex);
-    
-    if (match && match.index !== undefined) {
-      const absoluteIndex = startIndex + match.index;
-      if (absoluteIndex < endIndex) {
-        endIndex = absoluteIndex;
-      }
-    }
-  }
-
-  return text.slice(startIndex, endIndex).trim();
+    return text.substring(contentStartIndex, contentEndIndex).trim();
 };
 
 // ---------- Helper: extract job category ----------
 const extractJobCategory = (jobTitle: string): string => {
   const categories = [
-    "Software", "Engineering", "Software Engineer", "Frontend Developer",
-    "Backend Developer", "Data", "Cloud", "DevOps", "Security", "Networking",
-    "Support", "Sales", "Marketing", "Product", "Design", "HR",
+    "Software", "Engineering", "Software Engineer", "Frontend Developer", "Backend Developer", "Data", "Cloud", "DevOps", "Security", "Networking",
+    "Support", "Sales", "Marketing", "Product", "Design", "HR", 
     "Finance", "Legal", "Other"
   ];
-
-  const lower = jobTitle.toLowerCase();
+  const lowerCaseJobTitle = jobTitle.toLowerCase();
   for (const category of categories) {
-    if (lower.includes(category.toLowerCase())) return category;
+    if (lowerCaseJobTitle.includes(category.toLowerCase())) {
+      return category;
+    }
   }
   return "Other";
 };
 
 // ---------- Helper: parse experiences ----------
-interface Experience {
-  jobTitle: string;
-  startDate: string;
-  endDate: string;
-  jobCategory: string;
-}
-
-const parseExperiences = (text: string): Experience[] => {
+const parseExperiences = (text: string) => {
   if (!text) return [];
 
-  const lines = text.trim().split("\n");
-  const results: Experience[] = [];
-  let currentExperience: Partial<Experience> = {};
+  const entries = text.split(/\n\s*\n/).filter(p => p.trim() !== '');
+  const experienceList: { jobTitle: string; startDate: string; endDate: string; jobCategory: string }[] = [];
+  const dateRegex = /(\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})\s*[-–—to]\s*(\bPresent\b|\bCurrent\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})/i;
 
-  const dateRegex =
-    /(\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})\s*[-–—to]\s*(\bPresent\b|\bCurrent\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})/i;
+  for (const entry of entries) {
+    const lines = entry.trim().split('\n').map(line => line.trim());
+    if (lines.length === 0) continue;
 
-  for (const line of lines) {
-    const trimmedLine = line.trim();
-    if (!trimmedLine) continue;
+    let jobTitle = lines[0];
+    let startDate = '';
+    let endDate = '';
 
-    const dateMatch = trimmedLine.match(dateRegex);
-
+    const dateMatch = entry.match(dateRegex);
     if (dateMatch) {
-      if (currentExperience.jobTitle) {
-        results.push(currentExperience as Experience);
-        currentExperience = {};
-      }
-      currentExperience.startDate = dateMatch[1].trim();
-      currentExperience.endDate = dateMatch[2].trim();
-    } else if (trimmedLine.length > 2) {
-      if (!currentExperience.jobTitle) {
-        currentExperience.jobTitle = trimmedLine;
-        currentExperience.jobCategory = extractJobCategory(trimmedLine);
+      startDate = dateMatch[1].trim();
+      endDate = dateMatch[2].trim();
+      if (lines[0].includes(dateMatch[0])) {
+        jobTitle = lines[0].replace(dateMatch[0], '').trim();
       }
     }
+    
+    if (jobTitle) {
+        const cleanedJobTitle = jobTitle.split(/ at | \| /)[0].trim();
+        const jobCategory = extractJobCategory(cleanedJobTitle);
+        experienceList.push({
+            jobTitle: cleanedJobTitle,
+            startDate,
+            endDate,
+            jobCategory,
+        });
+    }
   }
-
-  if (currentExperience.jobTitle) {
-    results.push(currentExperience as Experience);
-  }
-
-  return results;
-};
+  return experienceList;
+}
 
 // ---------- Helper: extract text from PDF ----------
 const extractTextFromPDF = async (fileBuffer: Buffer): Promise<string> => {
@@ -139,8 +130,32 @@ const extractTextFromPDF = async (fileBuffer: Buffer): Promise<string> => {
   for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
     const page: PDFPageProxy = await pdf.getPage(pageNum);
     const content: PDFTextContent = await page.getTextContent();
-    const pageText = content.items.map(item => item.str).join(" ");
-    fullText += pageText + "\n";
+    
+    // Filter for items that are actual text and have transform data
+    const textItems = content.items.filter(
+      (item): item is { str: string; transform: number[] } => 'str' in item && 'transform' in item
+    );
+
+    // The items are not guaranteed to be in order, sort them by their transform
+    textItems.sort((a, b) => {
+        if (a.transform[5] > b.transform[5]) return -1; // Higher y-coordinate first (top of page)
+        if (a.transform[5] < b.transform[5]) return 1;
+        if (a.transform[4] < b.transform[4]) return -1; // Lower x-coordinate first (left to right)
+        if (a.transform[4] > b.transform[4]) return 1;
+        return 0;
+    });
+
+    let lastY = -1;
+    let line = '';
+    for (const item of textItems) {
+        if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) { // New line
+            fullText += line.trim() + '\n';
+            line = '';
+        }
+        line += item.str + ' ';
+        lastY = item.transform[5];
+    }
+    fullText += line.trim() + '\n';
   }
   return fullText;
 };
@@ -156,85 +171,83 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let uploadedFilePath: string | null = null;
 
   try {
+    // Parse file upload
     const { files } = await parseForm(req);
     const cvFiles = files.cv;
 
     if (!cvFiles) {
-      return res.status(400).json({ message: "No file uploaded. Please upload a CV." });
+      return res.status(400).json({
+        message: "No file uploaded. Please upload a CV.",
+      });
     }
 
-    const file = (Array.isArray(cvFiles) ? cvFiles[0] : cvFiles) as File;
+    const fileArray = Array.isArray(cvFiles) ? cvFiles : [cvFiles];
+    const file = fileArray[0] as File;
+
     uploadedFilePath = file.filepath;
 
+    // Validate file type
     if (file.mimetype !== "application/pdf") {
-      return res.status(400).json({ message: "Only PDFs are allowed." });
+      return res
+        .status(400)
+        .json({ message: "Unsupported file type. Only PDFs are allowed." });
     }
 
+    // Read and parse PDF
     const fileBuffer = fs.readFileSync(uploadedFilePath);
-
-    // ✅ Extract text using pdfjs-dist
     const text = await extractTextFromPDF(fileBuffer);
-    console.log("Extracted Text:", text);
+    
+    console.log("--- Extracted Text from PDF ---");
+    console.log(text);
+    console.log("-----------------------------");
 
-    const emailMatch = text.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/);
-    const email = emailMatch?.[0].trim() || "";
+    // Extract name + email
+    const nameMatch = text.match(
+      /^\s*([A-Z][a-zA-Z'-]+(?:\s[A-Z][a-zA-Z'-]+)+)/m
+    );
+    const emailMatch = text.match(
+      /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/
+    );
 
-    let name = "";
-    if (email) {
-      const lines = text.split("\n");
-      const lineIndex = lines.findIndex(line => line.includes(email));
-
-      if (lineIndex !== -1) {
-        const nameLine = lines[lineIndex];
-        const nameMatch = nameLine.match(/([A-Z][a-zA-Z'-]+(?:\s[A-Z][a-zA-Z'-]+)+)/);
-        if (nameMatch) {
-          name = nameMatch[0].trim();
-        } else if (lineIndex > 0) {
-          const prevLine = lines[lineIndex - 1];
-          const prevNameMatch = prevLine.match(/([A-Z][a-zA-Z'-]+(?:\s[A-Z][a-zA-Z'-]+)+)/);
-          if (prevNameMatch) {
-            name = prevNameMatch[0].trim();
-          }
-        }
-      }
-    }
-
-    if (!name) {
-      const nameMatch = text.match(/^\s*([A-Z][a-zA-Z'-]+(?:\s[A-Z][a-zA-Z'-]+)+)/m);
-      if (nameMatch) {
-        name = nameMatch[0].trim();
-      }
-    }
-
-    const summary = getSectionText(text, ["Summary", "Profile", "Objective"]);
+    // Extract sections
+    const professionalSummary = getSectionText(text, [
+      "Summary",
+      "Profile",
+      "Objective",
+    ]);
     const skills = getSectionText(text, ["Skills", "Technical Skills"]);
     const experienceText = getSectionText(text, ["Experience", "Work Experience"]);
     const experiences = parseExperiences(experienceText);
+    const jobTitle = experiences.length > 0 ? experiences[0].jobTitle : "";
 
-    const jobTitle = experiences[0]?.jobTitle || "";
-
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Skills:", skills);
-    console.log("Professional Summary:", summary);
-    console.log("Experiences:", experiences);
-
-    return res.status(200).json({
-      name,
-      email,
+    const extractedData = {
+      name: nameMatch ? nameMatch[0].trim() : "",
+      email: emailMatch ? emailMatch[0].trim() : "",
       skills,
-      professionalSummary: summary,
+      professionalSummary,
       experiences,
       jobTitle,
-    });
+    };
+
+    console.log("--- Extracted Sections ---");
+    console.log("Name:", extractedData.name);
+    console.log("Email:", extractedData.email);
+    console.log("Skills:", extractedData.skills);
+    console.log("Professional Summary:", extractedData.professionalSummary);
+    console.log("Parsed Experiences:", extractedData.experiences);
+    console.log("--------------------------");
+
+    return res.status(200).json(extractedData);
   } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : "Unknown error";
     console.error("CV parsing error:", err);
+
     return res.status(500).json({
-      message: "Failed to extract data from CV.",
-      error: errorMessage,
+      message: "Error parsing the CV",
+      error: err instanceof Error ? err.message : "Unknown error",
     });
   } finally {
-    if (uploadedFilePath) fs.unlink(uploadedFilePath, () => {});
+    if (uploadedFilePath) {
+      fs.unlink(uploadedFilePath, () => {});
+    }
   }
 }

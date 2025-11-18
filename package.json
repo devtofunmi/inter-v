@@ -12,6 +12,7 @@
   "dependencies": {
     "@google/genai": "^1.19.0",
     "@google/generative-ai": "^0.24.1",
+    "@napi-rs/canvas": "^0.1.82",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@types/aos": "^3.0.7",
     "@types/formidable": "^3.4.6",

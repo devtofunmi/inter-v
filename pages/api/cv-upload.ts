@@ -1,13 +1,31 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import formidable, { File } from "formidable";
 import fs from "fs";
-import { getDocument, PDFDocumentProxy, PDFPageProxy, PDFTextContent } from "pdfjs-dist/legacy/build/pdf.mjs";
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
 export const config = {
   api: { bodyParser: false },
 };
 
 export const runtime = "nodejs";
+
+const API_KEY = process.env.GEMINI_API_KEY;
+
+if (!API_KEY) {
+  console.error('GEMINI_API_KEY is not set in the environment variables.');
+}
+
+const genAI = new GoogleGenerativeAI(API_KEY as string);
+
+// Helper to convert file to generative part
+function fileToGenerativePart(buffer: Buffer, mimeType: string) {
+  return {
+    inlineData: {
+      data: buffer.toString("base64"),
+      mimeType,
+    },
+  };
+}
 
 // ---------- Helper: parse form ----------
 const parseForm = (req: NextApiRequest) => {
@@ -22,147 +40,35 @@ const parseForm = (req: NextApiRequest) => {
   );
 };
 
-// ---------- Helper: extract sections ----------
-const getSectionText = (text: string, sectionTitles: string[]): string => {
-    const allSectionHeaders = [
-        "Skills", "Technical Skills", "Experience", "Work Experience", "Education",
-        "Projects", "Summary", "Objective", "Profile", "Contact", "Awards",
-        "Publications", "Certifications", "Languages", "Interests", "References"
-    ];
+const uploadToCloudinary = async (filePath: string, mimeType: string | null) => {
+    const fileBuffer = fs.readFileSync(filePath);
+    const formData = new FormData();
+    const blob = new Blob([fileBuffer], { type: mimeType ?? undefined });
+    formData.append("file", blob, 'cv.pdf');
+    formData.append("upload_preset", "users_avater");
 
-    const sections: {title: string, index: number, match: string}[] = [];
-    allSectionHeaders.forEach(header => {
-        const regex = new RegExp(`^\\s*${header}\\s*[:]?\\s*$`, "igm");
-        let match;
-        while ((match = regex.exec(text)) !== null) {
-            sections.push({ title: header, index: match.index, match: match[0] });
+    const response = await fetch(
+        "https://api.cloudinary.com/v1_1/drirsnp0c/image/upload",
+        {
+            method: "POST",
+            body: formData,
         }
-    });
-
-    sections.sort((a, b) => a.index - b.index);
-
-    let targetSectionIndex = -1;
-    let targetSectionWithTitle;
-
-    for (const title of sectionTitles) {
-        const foundSection = sections.find(s => s.title.toLowerCase() === title.toLowerCase());
-        if (foundSection) {
-            targetSectionIndex = sections.indexOf(foundSection);
-            targetSectionWithTitle = foundSection;
-            break;
-        }
-    }
-
-    if (targetSectionIndex === -1 || !targetSectionWithTitle) return "";
-
-    const contentStartIndex = targetSectionWithTitle.index + targetSectionWithTitle.match.length;
-
-    const nextSection = sections[targetSectionIndex + 1];
-    const contentEndIndex = nextSection ? nextSection.index : text.length;
-
-    return text.substring(contentStartIndex, contentEndIndex).trim();
-};
-
-// ---------- Helper: extract job category ----------
-const extractJobCategory = (jobTitle: string): string => {
-  const categories = [
-    "Software", "Engineering", "Software Engineer", "Frontend Developer", "Backend Developer", "Data", "Cloud", "DevOps", "Security", "Networking",
-    "Support", "Sales", "Marketing", "Product", "Design", "HR", 
-    "Finance", "Legal", "Other"
-  ];
-  const lowerCaseJobTitle = jobTitle.toLowerCase();
-  for (const category of categories) {
-    if (lowerCaseJobTitle.includes(category.toLowerCase())) {
-      return category;
-    }
-  }
-  return "Other";
-};
-
-// ---------- Helper: parse experiences ----------
-const parseExperiences = (text: string) => {
-  if (!text) return [];
-
-  const entries = text.split(/\n\s*\n/).filter(p => p.trim() !== '');
-  const experienceList: { jobTitle: string; startDate: string; endDate: string; jobCategory: string }[] = [];
-  const dateRegex = /(\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})\s*[-–—to]\s*(\bPresent\b|\bCurrent\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\s.]*\d{4})/i;
-
-  for (const entry of entries) {
-    const lines = entry.trim().split('\n').map(line => line.trim());
-    if (lines.length === 0) continue;
-
-    let jobTitle = lines[0];
-    let startDate = '';
-    let endDate = '';
-
-    const dateMatch = entry.match(dateRegex);
-    if (dateMatch) {
-      startDate = dateMatch[1].trim();
-      endDate = dateMatch[2].trim();
-      if (lines[0].includes(dateMatch[0])) {
-        jobTitle = lines[0].replace(dateMatch[0], '').trim();
-      }
-    }
-    
-    if (jobTitle) {
-        const cleanedJobTitle = jobTitle.split(/ at | \| /)[0].trim();
-        const jobCategory = extractJobCategory(cleanedJobTitle);
-        experienceList.push({
-            jobTitle: cleanedJobTitle,
-            startDate,
-            endDate,
-            jobCategory,
-        });
-    }
-  }
-  return experienceList;
-}
-
-// ---------- Helper: extract text from PDF ----------
-const extractTextFromPDF = async (fileBuffer: Buffer): Promise<string> => {
-  // ✅ Convert Node.js Buffer to Uint8Array
-  const uint8Array = new Uint8Array(fileBuffer);
-
-  const loadingTask = getDocument({ data: uint8Array });
-  const pdf: PDFDocumentProxy = await loadingTask.promise;
-
-  let fullText = "";
-  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-    const page: PDFPageProxy = await pdf.getPage(pageNum);
-    const content: PDFTextContent = await page.getTextContent();
-    
-    // Filter for items that are actual text and have transform data
-    const textItems = content.items.filter(
-      (item): item is { str: string; transform: number[] } => 'str' in item && 'transform' in item
     );
 
-    // The items are not guaranteed to be in order, sort them by their transform
-    textItems.sort((a, b) => {
-        if (a.transform[5] > b.transform[5]) return -1; // Higher y-coordinate first (top of page)
-        if (a.transform[5] < b.transform[5]) return 1;
-        if (a.transform[4] < b.transform[4]) return -1; // Lower x-coordinate first (left to right)
-        if (a.transform[4] > b.transform[4]) return 1;
-        return 0;
-    });
+    const data = await response.json();
 
-    let lastY = -1;
-    let line = '';
-    for (const item of textItems) {
-        if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) { // New line
-            fullText += line.trim() + '\n';
-            line = '';
-        }
-        line += item.str + ' ';
-        lastY = item.transform[5];
+    if (!response.ok) {
+        throw new Error(data.error?.message || "Cloudinary upload failed");
     }
-    fullText += line.trim() + '\n';
-  }
-  return fullText;
+    console.log("File uploaded to Cloudinary:", data.secure_url);
+    return data.secure_url;
 };
 
-
 // ---------- API Handler ----------
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ message: "Method not allowed" });
@@ -171,13 +77,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let uploadedFilePath: string | null = null;
 
   try {
-    // Parse file upload
     const { files } = await parseForm(req);
     const cvFiles = files.cv;
 
     if (!cvFiles) {
       return res.status(400).json({
-        message: "No file uploaded. Please upload a CV.",
+        message: "No file uploaded. Please upload a CV."
       });
     }
 
@@ -185,70 +90,69 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const file = fileArray[0] as File;
 
     uploadedFilePath = file.filepath;
+    const mimeType = file.mimetype;
 
-    // Validate file type
-    if (file.mimetype !== "application/pdf") {
-      return res
-        .status(400)
-        .json({ message: "Unsupported file type. Only PDFs are allowed." });
+    if (!mimeType || !mimeType.startsWith("application/pdf")) {
+        return res.status(400).json({
+            message: "Unsupported file type. Only PDFs are allowed."
+        });
     }
 
-    // Read and parse PDF
+    await uploadToCloudinary(uploadedFilePath, mimeType);
+
     const fileBuffer = fs.readFileSync(uploadedFilePath);
-    const text = await extractTextFromPDF(fileBuffer);
-    
-    console.log("--- Extracted Text from PDF ---");
-    console.log(text);
-    console.log("-----------------------------");
 
-    // Extract name + email
-    const nameMatch = text.match(
-      /^\s*([A-Z][a-zA-Z'-]+(?:\s[A-Z][a-zA-Z'-]+)+)/m
-    );
-    const emailMatch = text.match(
-      /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/
-    );
+    const model = genAI.getGenerativeModel({
+        model: "gemini-2.0-flash",
+        safetySettings: [
+            {
+                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            },
+        ],
+    });
 
-    // Extract sections
-    const professionalSummary = getSectionText(text, [
-      "Summary",
-      "Profile",
-      "Objective",
-    ]);
-    const skills = getSectionText(text, ["Skills", "Technical Skills"]);
-    const experienceText = getSectionText(text, ["Experience", "Work Experience"]);
-    const experiences = parseExperiences(experienceText);
-    const jobTitle = experiences.length > 0 ? experiences[0].jobTitle : "";
+    const filePart = fileToGenerativePart(fileBuffer, mimeType);
 
-    const extractedData = {
-      name: nameMatch ? nameMatch[0].trim() : "",
-      email: emailMatch ? emailMatch[0].trim() : "",
-      skills,
-      professionalSummary,
-      experiences,
-      jobTitle,
-    };
+    const prompt = `
+      You are an expert CV parser. Extract the following information from the attached CV and return it as a structured JSON object.
+      The JSON object must have these keys: "name", "email", "skills", "professionalSummary", "experiences", "jobTitle".
 
-    console.log("--- Extracted Sections ---");
-    console.log("Name:", extractedData.name);
-    console.log("Email:", extractedData.email);
-    console.log("Skills:", extractedData.skills);
-    console.log("Professional Summary:", extractedData.professionalSummary);
-    console.log("Parsed Experiences:", extractedData.experiences);
-    console.log("--------------------------");
+      - "name": The full name of the person.
+      - "email": The email address.
+      - "skills": A string containing a comma-separated list of skills.
+      - "professionalSummary": A string containing the professional summary, objective, or profile section.
+      - "experiences": An array of objects. Each object represents a work experience and must have the keys "jobTitle", "startDate", "endDate", and "jobCategory".
+        - If dates are not available, use empty strings.
+        - "jobCategory" should be a general category like "Software Engineering", "Data Science", "Product Management", etc.
+      - "jobTitle": The most recent job title.
+
+      If any piece of information is not found, return an empty string for string fields or an empty array for the "experiences" field.
+      Your response must be only the JSON object, with no other text or markdown formatting before or after it.
+    `;
+
+    const result = await model.generateContent([prompt, filePart]);
+    const responseText = result.response.text();
+
+    // Clean the response to ensure it's valid JSON
+    const jsonString = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
+
+    const extractedData = JSON.parse(jsonString);
 
     return res.status(200).json(extractedData);
   } catch (err: unknown) {
     console.error("CV parsing error:", err);
-
     return res.status(500).json({
       message: "Error parsing the CV",
-      error: err instanceof Error ? err.message : "Unknown error",
+      error: err instanceof Error ? err.message : "Unknown error"
     });
   } finally {
     if (uploadedFilePath) {
-      fs.unlink(uploadedFilePath, () => {});
+      fs.unlink(uploadedFilePath, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error("Error deleting temporary file:", unlinkErr);
+        }
+      });
     }
   }
 }
-  

@@ -26,6 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onOpenPricing, isMobile }) => {
   const navItems = [
     { name: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
     { name: "Practice", icon: Mic, href: "/practice" },
+    { name: "CV", icon: User, href: "/cv" },
   ];
 
   return (

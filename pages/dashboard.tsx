@@ -103,13 +103,6 @@ export default function Dashboard() {
               >
                 Start Practice
               </Link>
-              {/* <a
-                href="/api/generate-cv"
-                download="cv.pdf"
-                className="w-full max-w-[150px] p-3 rounded-full bg-gray-200 hover:bg-gray-300 font-semibold text-gray-800 transition-colors duration-200 flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-100"
-              >
-                Download CV
-              </a> */}
             </div>
           </div>
 

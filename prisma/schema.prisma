@@ -38,6 +38,10 @@ model PracticeProfile {
   skills            String?
   additionalDetails String?
   jobDescription    String?
+  portfolioLink     String?
+  gmailLink         String?
+  githubLink        String?
+  projects          String?
 }
 
 model PracticeResult {

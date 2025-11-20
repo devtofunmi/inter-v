@@ -31,7 +31,11 @@ type CVTemplateProps = {
   onDataChange?: (newData: CVData) => void;
 };
 
-export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false, onDataChange = () => {} }) => {
+export const CVTemplate: React.FC<CVTemplateProps> = ({
+  data,
+  isEditing = false,
+  onDataChange = () => {}
+}) => {
   const handleInputChange = (field: keyof CVData, value: CVData[keyof CVData]) => {
     onDataChange({ ...data, [field]: value });
   };
@@ -39,78 +43,146 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false,
   const handleHistoryChange = (index: number, field: string, value: string) => {
     const newHistory = [...(data.employmentHistory || [])];
     newHistory[index] = { ...newHistory[index], [field]: value };
-    handleInputChange('employmentHistory', newHistory);
+    handleInputChange("employmentHistory", newHistory);
   };
 
   const addHistoryEntry = () => {
-    const newHistory = [...(data.employmentHistory || []), { jobTitle: '', company: '', location: '', startDate: '', endDate: '', description: '' }];
-    handleInputChange('employmentHistory', newHistory);
+    const newHistory = [
+      ...(data.employmentHistory || []),
+      { jobTitle: "", company: "", location: "", startDate: "", endDate: "", description: "" }
+    ];
+    handleInputChange("employmentHistory", newHistory);
   };
 
   const removeHistoryEntry = (index: number) => {
     const newHistory = (data.employmentHistory || []).filter((_, i) => i !== index);
-    handleInputChange('employmentHistory', newHistory);
+    handleInputChange("employmentHistory", newHistory);
   };
 
   const handleProjectChange = (index: number, field: string, value: string) => {
     const newProjects = [...(data.projects || [])];
     newProjects[index] = { ...newProjects[index], [field]: value };
-    handleInputChange('projects', newProjects);
+    handleInputChange("projects", newProjects);
   };
 
   const addProjectEntry = () => {
-    const newProjects = [...(data.projects || []), { projectName: '', description: '', stacks: '', link: '' }];
-    handleInputChange('projects', newProjects);
+    const newProjects = [
+      ...(data.projects || []),
+      { projectName: "", description: "", stacks: "", link: "" }
+    ];
+    handleInputChange("projects", newProjects);
   };
 
   const removeProjectEntry = (index: number) => {
     const newProjects = (data.projects || []).filter((_, i) => i !== index);
-    handleInputChange('projects', newProjects);
+    handleInputChange("projects", newProjects);
   };
 
   return (
-    <div className="bg-white p-8 text-black rounded-xl border border-gray-200 max-w-4xl mx-auto font-sans">
+    <div
+      className="p-8 rounded-xl max-w-4xl mx-auto font-sans"
+      style={{
+        backgroundColor: "#ffffff",
+        color: "#000000",
+        border: "1px solid #e5e7eb"
+      }}
+    >
+      {/* NAME */}
       {isEditing ? (
         <input
           type="text"
           value={data.name}
-          onChange={(e) => handleInputChange('name', e.target.value)}
-          className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400  text-2xl font-bold"
+          onChange={(e) => handleInputChange("name", e.target.value)}
+          className="w-full px-3 py-2 rounded-full text-2xl font-bold"
+          style={{
+            background: "#f3f4f6",
+            border: "1px solid #d1d5db",
+            outline: "none"
+          }}
         />
       ) : (
-        <h1 className="text-2xl font-bold  mb-2">{data.name}</h1>
+        <h1 className="text-2xl font-bold mb-2">{data.name}</h1>
       )}
+
+      {/* JOB TITLE */}
       {isEditing ? (
         <input
           type="text"
           value={data.jobTitle}
-          onChange={(e) => handleInputChange('jobTitle', e.target.value)}
-          className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2 text-lg"
+          onChange={(e) => handleInputChange("jobTitle", e.target.value)}
+          className="w-full px-3 py-2 rounded-full mt-2 text-lg"
+          style={{
+            background: "#f3f4f6",
+            border: "1px solid #d1d5db",
+            outline: "none"
+          }}
         />
       ) : (
-        <p className="text-lg font-bold text-black mb-2">{data.jobTitle}</p>
+        <p className="text-lg font-bold mb-2" style={{ color: "#000000" }}>
+          {data.jobTitle}
+        </p>
       )}
 
+      {/* LINKS */}
       {isEditing ? (
         <div className="grid grid-cols-3 mt-2 gap-4 mb-8">
-          <input type="text" placeholder="Portfolio Link" value={data.portfolioLink || ''} onChange={(e) => handleInputChange('portfolioLink', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-          <input type="text" placeholder="Gmail Link" value={data.gmailLink || ''} onChange={(e) => handleInputChange('gmailLink', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-          <input type="text" placeholder="Github Link" value={data.githubLink || ''} onChange={(e) => handleInputChange('githubLink', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
+          {["portfolioLink", "gmailLink", "githubLink"].map((field) => (
+            <input
+              key={field}
+              type="text"
+              placeholder={field.replace("Link", " Link")}
+              value={(data[field as keyof CVData] as string) ?? ""}
+              onChange={(e) => handleInputChange(field as keyof CVData, e.target.value)}
+              className="w-full px-3 py-2 rounded-full text-center"
+              style={{
+                background: "#f3f4f6",
+                border: "1px solid #d1d5db",
+                outline: "none"
+              }}
+            />
+          ))}
         </div>
       ) : (
         <div className="flex space-x-4 mb-8">
-          {data.portfolioLink && <a href={data.portfolioLink.startsWith('http') ? data.portfolioLink : `https://${data.portfolioLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Portfolio</a>}
-          {data.gmailLink && <a href={`mailto:${data.gmailLink}`} className="text-blue-500 hover:underline">Email</a>}
-          {data.githubLink && <a href={data.githubLink.startsWith('http') ? data.githubLink : `https://${data.githubLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">GitHub</a>}
+          {data.portfolioLink && (
+            <a
+              href={data.portfolioLink.startsWith("http") ? data.portfolioLink : `https://${data.portfolioLink}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#3b82f6" }}
+            >
+              Portfolio
+            </a>
+          )}
+          {data.gmailLink && (
+            <a href={`mailto:${data.gmailLink}`} style={{ color: "#3b82f6" }}>
+              Email
+            </a>
+          )}
+          {data.githubLink && (
+            <a
+              href={data.githubLink.startsWith("http") ? data.githubLink : `https://${data.githubLink}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#3b82f6" }}
+            >
+              GitHub
+            </a>
+          )}
         </div>
       )}
 
+      {/* SUMMARY */}
       <Section title="Summary">
         {isEditing ? (
           <textarea
             value={data.professionalSummary}
-            onChange={(e) => handleInputChange('professionalSummary', e.target.value)}
-            className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+            onChange={(e) => handleInputChange("professionalSummary", e.target.value)}
+            className="w-full px-3 py-2 rounded-2xl text-center"
+            style={{
+              background: "#f3f4f6",
+              border: "1px solid #d1d5db"
+            }}
             rows={4}
           />
         ) : (
@@ -118,101 +190,197 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false,
         )}
       </Section>
 
+      {/* EXPERIENCE */}
       <Section title="Experience">
         {(data.employmentHistory || []).map((job, index) => (
           <div key={index} className="mb-6 relative">
             {isEditing ? (
               <>
                 <div className="grid grid-cols-2 gap-4 mb-2">
-                  <input type="text" placeholder="Job Title" value={job.jobTitle} onChange={(e) => handleHistoryChange(index, 'jobTitle', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-                  <input type="text" placeholder="Company" value={job.company} onChange={(e) => handleHistoryChange(index, 'company', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
+                  <input
+                    type="text"
+                    placeholder="Job Title"
+                    value={job.jobTitle}
+                    onChange={(e) => handleHistoryChange(index, "jobTitle", e.target.value)}
+                    className="w-full px-3 py-2 rounded-full text-center"
+                    style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Company"
+                    value={job.company}
+                    onChange={(e) => handleHistoryChange(index, "company", e.target.value)}
+                    className="w-full px-3 py-2 rounded-full text-center"
+                    style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                  />
+
                   <div className="flex items-center gap-2">
-                    <input className="w-1/2 px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" type="date" placeholder="Start Date" value={job.startDate} onChange={(e) => handleHistoryChange(index, 'startDate', e.target.value)} />
+                    <input
+                      className="w-1/2 px-3 py-2 rounded-full text-center"
+                      style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                      type="date"
+                      value={job.startDate}
+                      onChange={(e) => handleHistoryChange(index, "startDate", e.target.value)}
+                    />
                     <span>-</span>
-                    <input className="w-1/2 px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"  type="date" placeholder="End Date" value={job.endDate} onChange={(e) => handleHistoryChange(index, 'endDate', e.target.value)} />
+                    <input
+                      className="w-1/2 px-3 py-2 rounded-full text-center"
+                      style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                      type="date"
+                      value={job.endDate}
+                      onChange={(e) => handleHistoryChange(index, "endDate", e.target.value)}
+                    />
                   </div>
                 </div>
-                <textarea className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" placeholder="Description" value={job.description} onChange={(e) => handleHistoryChange(index, 'description', e.target.value)} rows={3} />
-                
+
+                <textarea
+                  className="w-full px-3 py-2 rounded-2xl text-center"
+                  style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                  placeholder="Description"
+                  value={job.description}
+                  onChange={(e) => handleHistoryChange(index, "description", e.target.value)}
+                  rows={3}
+                />
+
                 <div className="text-right">
-                          <button
-                            type="button"
-                            onClick={() => removeHistoryEntry(index)}
-                            className="text-red-500 hover:text-red-700 cursor-pointer text-sm font-medium"
-                          >
-                            Remove
-                          </button>
-                        </div>
+                  <button
+                    type="button"
+                    onClick={() => removeHistoryEntry(index)}
+                    style={{ color: "red" }}
+                    className="text-sm font-medium"
+                  >
+                    Remove
+                  </button>
+                </div>
               </>
             ) : (
               <>
                 <h3 className="text-lg font-semibold">{job.company}</h3>
-                <p className="font-medium"> {job.jobTitle}</p>
-                <p className="text-sm text-gray-500">{job.startDate} - {job.endDate}</p>
+                <p className="font-medium">{job.jobTitle}</p>
+                <p style={{ color: "#6b7280" }} className="text-sm">
+                  {job.startDate} - {job.endDate}
+                </p>
                 <p className="mt-2">{job.description}</p>
               </>
             )}
           </div>
         ))}
-        {isEditing && <button onClick={addHistoryEntry} className="text-blue-500 hover:underline mt-2">+ Add Employment</button>}
+
+        {isEditing && (
+          <button style={{ color: "#3b82f6" }} onClick={addHistoryEntry}>
+            + Add Employment
+          </button>
+        )}
       </Section>
 
-      {((data.projects && data.projects.length > 0) || isEditing) && (
+      {/* PROJECTS */}
+      {(data.projects?.length || isEditing) && (
         <Section title="Projects">
           {(data.projects || []).map((project, index) => (
             <div key={index} className="mb-6 relative">
               {isEditing ? (
                 <>
                   <div className="grid grid-cols-2 gap-4 mb-2">
-                    <input type="text" placeholder="Project Name" value={project.projectName} onChange={(e) => handleProjectChange(index, 'projectName', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-                    <input type="text" placeholder="Link" value={project.link} onChange={(e) => handleProjectChange(index, 'link', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
+                    <input
+                      type="text"
+                      placeholder="Project Name"
+                      value={project.projectName}
+                      onChange={(e) => handleProjectChange(index, "projectName", e.target.value)}
+                      className="w-full px-3 py-2 rounded-full text-center"
+                      style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="Link"
+                      value={project.link}
+                      onChange={(e) => handleProjectChange(index, "link", e.target.value)}
+                      className="w-full px-3 py-2 rounded-full text-center"
+                      style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                    />
                   </div>
-                  <input type="text" placeholder="Stacks (comma-separated)" value={project.stacks} onChange={(e) => handleProjectChange(index, 'stacks', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-                  <textarea className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center mt-2" placeholder="Description" value={project.description} onChange={(e) => handleProjectChange(index, 'description', e.target.value)} rows={3} />
+
+                  <input
+                    type="text"
+                    placeholder="Stacks"
+                    value={project.stacks}
+                    onChange={(e) => handleProjectChange(index, "stacks", e.target.value)}
+                    className="w-full px-3 py-2 rounded-full text-center"
+                    style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                  />
+
+                  <textarea
+                    placeholder="Description"
+                    value={project.description}
+                    onChange={(e) => handleProjectChange(index, "description", e.target.value)}
+                    className="w-full px-3 py-2 rounded-2xl text-center mt-2"
+                    style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
+                    rows={3}
+                  />
+
                   <div className="text-right">
-                            <button
-                              type="button"
-                              onClick={() => removeProjectEntry(index)}
-                              className="text-red-500 hover:text-red-700 cursor-pointer text-sm font-medium"
-                            >
-                              Remove
-                            </button>
-                          </div>
+                    <button
+                      type="button"
+                      onClick={() => removeProjectEntry(index)}
+                      className="text-sm font-medium"
+                      style={{ color: "red" }}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
                   <h3 className="text-lg font-semibold">{project.projectName}</h3>
                   <p className="mt-2">{project.description}</p>
                   <p className="font-medium">{project.stacks}</p>
-                  {project.link && <a href={project.link.startsWith('http') ? project.link : `https://${project.link}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Project</a>}
+                  {project.link && (
+                    <a
+                      href={project.link.startsWith("http") ? project.link : `https://${project.link}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "#3b82f6" }}
+                    >
+                      View Project
+                    </a>
+                  )}
                 </>
               )}
             </div>
           ))}
-          {isEditing && <button onClick={addProjectEntry} className="text-blue-500 hover:underline mt-2">+ Add Project</button>}
+
+          {isEditing && (
+            <button style={{ color: "#3b82f6" }} onClick={addProjectEntry}>
+              + Add Project
+            </button>
+          )}
         </Section>
       )}
 
+      {/* SKILLS */}
       <Section title="Skills">
         {isEditing ? (
           <textarea
             value={data.skills}
-            onChange={(e) => handleInputChange('skills', e.target.value)}
-            className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+            onChange={(e) => handleInputChange("skills", e.target.value)}
+            className="w-full px-3 py-2 rounded-2xl text-center"
+            style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
             rows={3}
-            placeholder="Comma-separated skills..."
           />
         ) : (
           <p>{data.skills}</p>
         )}
       </Section>
 
+      {/* ADDITIONAL DETAILS */}
       <Section title="Additional Details">
         {isEditing ? (
           <textarea
             value={data.additionalDetails}
-            onChange={(e) => handleInputChange('additionalDetails', e.target.value)}
-            className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+            onChange={(e) => handleInputChange("additionalDetails", e.target.value)}
+            className="w-full px-3 py-2 rounded-2xl text-center"
+            style={{ background: "#f3f4f6", border: "1px solid #d1d5db" }}
             rows={3}
           />
         ) : (
@@ -223,9 +391,17 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false,
   );
 };
 
-const Section: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
+const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
+  title,
+  children
+}) => (
   <section className="mb-8">
-    <h2 className="text-lg font-bold border-b-2 border-gray-200 pb-2 mb-4">{title}</h2>
+    <h2
+      className="text-lg font-bold pb-2 mb-4"
+      style={{ borderBottom: "2px solid #e5e7eb" }}
+    >
+      {title}
+    </h2>
     {children}
   </section>
 );

@@ -149,13 +149,13 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
               href={data.portfolioLink.startsWith("http") ? data.portfolioLink : `https://${data.portfolioLink}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "#3b82f6" }}
+              style={{ color: "#3b82f6",  textDecoration: "underline",cursor: "pointer" }}
             >
               Portfolio
             </a>
           )}
           {data.gmailLink && (
-            <a href={`mailto:${data.gmailLink}`} style={{ color: "#3b82f6" }}>
+            <a href={`mailto:${data.gmailLink}`} style={{ color: "#3b82f6",  textDecoration: "underline", cursor: "pointer" }}>
               Email
             </a>
           )}
@@ -164,7 +164,7 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
               href={data.githubLink.startsWith("http") ? data.githubLink : `https://${data.githubLink}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "#3b82f6" }}
+              style={{ color: "#3b82f6",  textDecoration: "underline",  cursor: "pointer" }}
             >
               GitHub
             </a>
@@ -324,7 +324,7 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
                       type="button"
                       onClick={() => removeProjectEntry(index)}
                       className="text-sm font-medium"
-                      style={{ color: "red" }}
+                      style={{ color: "red", }}
                     >
                       Remove
                     </button>
@@ -340,7 +340,11 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
                       href={project.link.startsWith("http") ? project.link : `https://${project.link}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: "#3b82f6" }}
+                      style={{
+                        color: "#3b82f6",
+                        textDecoration: "underline",
+                        cursor: "pointer"
+                      }}
                     >
                       View Project
                     </a>

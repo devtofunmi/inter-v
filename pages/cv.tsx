@@ -6,7 +6,8 @@ import Layout from '../components/dashboard/Layout';
 import { CVTemplate } from '../components/dashboard/CVTemplate';
 import { Loader2, Download, Edit, PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { usePDF } from 'react-to-pdf';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 type CVData = {
   name: string;
@@ -42,18 +43,55 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const router = useRouter();
-  const { toPDF, targetRef: cvRef } = usePDF({ filename: `${cv?.name}_CV.pdf` });
+  const cvRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = () => {
-    setIsDownloading(true);
-    // toPDF is synchronous and triggers a download.
-    // There's no reliable callback to know when the download is complete with this library version.
-    // We'll reset the downloading state after a short delay.
-    toPDF();
-    setTimeout(() => {
-      setIsDownloading(false);
-    }, 2000);
-  };
+
+  const handlePrint = async () => {
+  if (!cvRef.current) return;
+  setIsDownloading(true);
+
+  try {
+    const element = cvRef.current;
+
+    const canvas = await html2canvas(element, {
+      scale: 3,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+    });
+
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+
+    // 🔗 CLICKABLE LINKS
+    // Gmail
+    if (cv.gmailLink) {
+      pdf.link(15, 40, 100, 5, { url: `mailto:${cv.gmailLink}` });
+    }
+
+    // Portfolio
+    if (cv.portfolioLink) {
+      pdf.link(15, 48, 100, 5, { url: cv.portfolioLink });
+    }
+
+    // GitHub
+    if (cv.githubLink) {
+      pdf.link(15, 56, 100, 5, { url: cv.githubLink });
+    }
+
+    pdf.save(`${cv.name}_CV.pdf`);
+  } catch (error) {
+    console.error("PDF ERROR:", error);
+  } finally {
+    setIsDownloading(false);
+  }
+};
+
 
   useEffect(() => {
     if (!initialCv) {
@@ -163,7 +201,7 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
               ) : (
                 <Download size={20} className="mr-2" />
               )}
-              {isDownloading ? 'Downloading...' : 'Download CV'}
+              {isDownloading ? '' : 'Download CV'}
             </button>
           </div>
         </div>

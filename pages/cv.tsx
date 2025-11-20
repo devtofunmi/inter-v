@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Layout from '../components/dashboard/Layout';
 import { CVTemplate } from '../components/dashboard/CVTemplate';
-import { Loader2, Download, Edit, Save, PlusCircle } from 'lucide-react';
+import { Loader2, Download, Edit, PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/router';
 
 type CVData = {
@@ -21,11 +21,18 @@ type CVData = {
   }>;
   skills: string;
   additionalDetails: string;
+  portfolioLink?: string;
+  gmailLink?: string;
+  githubLink?: string;
+  projects?: Array<{
+    projectName: string;
+    description: string;
+    stacks: string;
+    link: string;
+  }>;
 };
 
-type CVPageProps = {
-  cv: ({ id: string } & CVData) | null;
-};
+
 
 export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [cv, setCv] = useState(initialCv);
@@ -70,18 +77,20 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
         body: JSON.stringify({ content }),
       });
       if (!response.ok) {
-        throw new Error('Failed to save CV');
+        const errorData = await response.json().catch(() => ({ message: 'Failed to parse error response' }));
+        console.error('Failed to save CV. Status:', response.status, 'Response:', errorData);
+        throw new Error(`Failed to save CV. Status: ${response.status}`);
       }
       setIsEditing(false);
     } catch (error) {
-      console.error(error);
+      console.error('Error in handleSave:', error);
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleDataChange = (newData: CVData) => {
-    setCv(prev => (prev ? { ...prev, ...newData } : null));
+    setCv((prev: (CVData & { id: string }) | null) => (prev ? { ...prev, ...newData } : null));
   };
 
   if (!cv) {
@@ -89,7 +98,7 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
       <Layout>
         <div className="p-6 text-center">
           <h1 className="text-3xl font-bold mb-4 text-black">Your CV</h1>
-          <p className="mb-4 text-black">You don't have a CV yet. Generate one from your profile to get started.</p>
+          <p className="mb-4 text-black">You don&apos;t have a CV yet. Generate one from your profile to get started.</p>
           <button
             onClick={handleGenerateNewCV}
             className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded-2xl flex items-center mx-auto"
@@ -115,8 +124,11 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
                 className="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-full cursor-pointer flex items-center"
                 disabled={isSaving}
               >
-                {isSaving ? <Loader2 className="animate-spin mr-2" /> : <Save className="mr-2" />}
-                Save
+                 {isSaving ? (
+                              <Loader2 className="animate-spin mx-auto text-white" />
+                            ) : (
+                              'Save'
+                            )}
               </button>
             ) : (
               <button
@@ -168,8 +180,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   }
   
   const { name } = userWithProfile;
-  const { jobTitle, professionalSummary, employmentHistory, skills, additionalDetails } = userWithProfile.practiceProfile;
+  const { jobTitle, professionalSummary, employmentHistory, skills, additionalDetails, portfolioLink, gmailLink, githubLink, projects } = userWithProfile.practiceProfile;
   const parsedEmploymentHistory = employmentHistory ? JSON.parse(employmentHistory as string) : [];
+  const parsedProjects = projects ? JSON.parse(projects as string) : [];
 
   const cvData = {
     id: userWithProfile.id, // Using user id as a stand-in for a real CV id
@@ -179,6 +192,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     employmentHistory: parsedEmploymentHistory,
     skills: skills || '',
     additionalDetails: additionalDetails || '',
+    portfolioLink: portfolioLink || '',
+    gmailLink: gmailLink || '',
+    githubLink: githubLink || '',
+    projects: parsedProjects,
   };
 
   return {

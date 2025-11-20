@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { prisma } from '@/lib/prisma';
 
@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
   if (!session || !session.user) {
     return res.status(401).json({ message: 'You must be logged in.' });
@@ -35,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: {
           ...practiceProfileData,
           employmentHistory: JSON.stringify(practiceProfileData.employmentHistory || []),
+          projects: JSON.stringify(practiceProfileData.projects || []),
         },
       });
     });

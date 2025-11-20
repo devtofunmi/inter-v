@@ -32,7 +32,7 @@ type CVTemplateProps = {
 };
 
 export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false, onDataChange = () => {} }) => {
-  const handleInputChange = (field: keyof CVData, value: any) => {
+  const handleInputChange = (field: keyof CVData, value: CVData[keyof CVData]) => {
     onDataChange({ ...data, [field]: value });
   };
 
@@ -95,13 +95,13 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false,
         <div className="grid grid-cols-3 mt-2 gap-4 mb-8">
           <input type="text" placeholder="Portfolio Link" value={data.portfolioLink || ''} onChange={(e) => handleInputChange('portfolioLink', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
           <input type="text" placeholder="Gmail Link" value={data.gmailLink || ''} onChange={(e) => handleInputChange('gmailLink', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-          <input type="text" placeholder="Github Link" className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
+          <input type="text" placeholder="Github Link" value={data.githubLink || ''} onChange={(e) => handleInputChange('githubLink', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
         </div>
       ) : (
         <div className="flex space-x-4 mb-8">
-          {data.portfolioLink && <a href={data.portfolioLink} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Portfolio</a>}
+          {data.portfolioLink && <a href={data.portfolioLink.startsWith('http') ? data.portfolioLink : `https://${data.portfolioLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Portfolio</a>}
           {data.gmailLink && <a href={`mailto:${data.gmailLink}`} className="text-blue-500 hover:underline">Email</a>}
-          {data.githubLink && <a href={data.githubLink} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">GitHub</a>}
+          {data.githubLink && <a href={data.githubLink.startsWith('http') ? data.githubLink : `https://${data.githubLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">GitHub</a>}
         </div>
       )}
 
@@ -126,7 +126,6 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false,
                 <div className="grid grid-cols-2 gap-4 mb-2">
                   <input type="text" placeholder="Job Title" value={job.jobTitle} onChange={(e) => handleHistoryChange(index, 'jobTitle', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
                   <input type="text" placeholder="Company" value={job.company} onChange={(e) => handleHistoryChange(index, 'company', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-                  <input type="text" placeholder="Location" className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
                   <div className="flex items-center gap-2">
                     <input className="w-1/2 px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" type="date" placeholder="Start Date" value={job.startDate} onChange={(e) => handleHistoryChange(index, 'startDate', e.target.value)} />
                     <span>-</span>
@@ -134,11 +133,20 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false,
                   </div>
                 </div>
                 <textarea className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" placeholder="Description" value={job.description} onChange={(e) => handleHistoryChange(index, 'description', e.target.value)} rows={3} />
-                <button onClick={() => removeHistoryEntry(index)} className="absolute top-0 right-0 text-red-500 hover:text-red-700">&times;</button>
+                
+                <div className="text-right">
+                          <button
+                            type="button"
+                            onClick={() => removeHistoryEntry(index)}
+                            className="text-red-500 hover:text-red-700 cursor-pointer text-sm font-medium"
+                          >
+                            Remove
+                          </button>
+                        </div>
               </>
             ) : (
               <>
-                <h3 className="text-lg font-semibold">{job.company} | {job.location}</h3>
+                <h3 className="text-lg font-semibold">{job.company}</h3>
                 <p className="font-medium"> {job.jobTitle}</p>
                 <p className="text-sm text-gray-500">{job.startDate} - {job.endDate}</p>
                 <p className="mt-2">{job.description}</p>
@@ -149,31 +157,41 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({ data, isEditing = false,
         {isEditing && <button onClick={addHistoryEntry} className="text-blue-500 hover:underline mt-2">+ Add Employment</button>}
       </Section>
 
-      <Section title="Projects">
-        {(data.projects || []).map((project, index) => (
-          <div key={index} className="mb-6 relative">
-            {isEditing ? (
-              <>
-                <div className="grid grid-cols-2 gap-4 mb-2">
-                  <input type="text" placeholder="Project Name" value={project.projectName} onChange={(e) => handleProjectChange(index, 'projectName', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-                  <input type="text" placeholder="Link" value={project.link} onChange={(e) => handleProjectChange(index, 'link', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-                </div>
-                <input type="text" placeholder="Stacks (comma-separated)" value={project.stacks} onChange={(e) => handleProjectChange(index, 'stacks', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
-                <textarea className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center mt-2" placeholder="Description" value={project.description} onChange={(e) => handleProjectChange(index, 'description', e.target.value)} rows={3} />
-                <button onClick={() => removeProjectEntry(index)} className="absolute top-0 right-0 text-red-500 hover:text-red-700">&times;</button>
-              </>
-            ) : (
-              <>
-                <h3 className="text-lg font-semibold">{project.projectName}</h3>
-                <p className="font-medium">{project.stacks}</p>
-                <p className="mt-2">{project.description}</p>
-                {project.link && <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Project</a>}
-              </>
-            )}
-          </div>
-        ))}
-        {isEditing && <button onClick={addProjectEntry} className="text-blue-500 hover:underline mt-2">+ Add Project</button>}
-      </Section>
+      {((data.projects && data.projects.length > 0) || isEditing) && (
+        <Section title="Projects">
+          {(data.projects || []).map((project, index) => (
+            <div key={index} className="mb-6 relative">
+              {isEditing ? (
+                <>
+                  <div className="grid grid-cols-2 gap-4 mb-2">
+                    <input type="text" placeholder="Project Name" value={project.projectName} onChange={(e) => handleProjectChange(index, 'projectName', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
+                    <input type="text" placeholder="Link" value={project.link} onChange={(e) => handleProjectChange(index, 'link', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
+                  </div>
+                  <input type="text" placeholder="Stacks (comma-separated)" value={project.stacks} onChange={(e) => handleProjectChange(index, 'stacks', e.target.value)} className="w-full px-3 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center" />
+                  <textarea className="w-full px-3 py-2 rounded-2xl bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center mt-2" placeholder="Description" value={project.description} onChange={(e) => handleProjectChange(index, 'description', e.target.value)} rows={3} />
+                  <div className="text-right">
+                            <button
+                              type="button"
+                              onClick={() => removeProjectEntry(index)}
+                              className="text-red-500 hover:text-red-700 cursor-pointer text-sm font-medium"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-lg font-semibold">{project.projectName}</h3>
+                  <p className="mt-2">{project.description}</p>
+                  <p className="font-medium">{project.stacks}</p>
+                  {project.link && <a href={project.link.startsWith('http') ? project.link : `https://${project.link}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Project</a>}
+                </>
+              )}
+            </div>
+          ))}
+          {isEditing && <button onClick={addProjectEntry} className="text-blue-500 hover:underline mt-2">+ Add Project</button>}
+        </Section>
+      )}
 
       <Section title="Skills">
         {isEditing ? (

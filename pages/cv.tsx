@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getSession } from 'next-auth/react';
 import { prisma } from '@/lib/prisma';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
@@ -6,6 +6,7 @@ import Layout from '../components/dashboard/Layout';
 import { CVTemplate } from '../components/dashboard/CVTemplate';
 import { Loader2, Download, Edit, PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { usePDF } from 'react-to-pdf';
 
 type CVData = {
   name: string;
@@ -39,7 +40,20 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const router = useRouter();
+  const { toPDF, targetRef: cvRef } = usePDF({ filename: `${cv?.name}_CV.pdf` });
+
+  const handlePrint = () => {
+    setIsDownloading(true);
+    // toPDF is synchronous and triggers a download.
+    // There's no reliable callback to know when the download is complete with this library version.
+    // We'll reset the downloading state after a short delay.
+    toPDF();
+    setTimeout(() => {
+      setIsDownloading(false);
+    }, 2000);
+  };
 
   useEffect(() => {
     if (!initialCv) {
@@ -62,9 +76,7 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
     }
   };
 
-  const handleDownload = () => {
-    window.location.href = '/api/generate-cv';
-  };
+
 
   const handleSave = async () => {
     if (!cv) return;
@@ -115,7 +127,9 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
   return (
     <Layout>
       <div className="p-6">
-        <CVTemplate data={cv} isEditing={isEditing} onDataChange={handleDataChange} />
+        <div ref={cvRef}>
+          <CVTemplate data={cv} isEditing={isEditing} onDataChange={handleDataChange} />
+        </div>
         <div className="flex justify-center items-center mt-4">
           <div className="flex gap-2">
             {isEditing ? (
@@ -140,11 +154,16 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
               </button>
             )}
             <button
-              onClick={handleDownload}
+              onClick={handlePrint}
               className="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-full cursor-pointer flex items-center"
+              disabled={isDownloading}
             >
-              <Download size={20} className="mr-2" />
-              Download CV
+              {isDownloading ? (
+                <Loader2 className="animate-spin mr-2" />
+              ) : (
+                <Download size={20} className="mr-2" />
+              )}
+              {isDownloading ? 'Downloading...' : 'Download CV'}
             </button>
           </div>
         </div>

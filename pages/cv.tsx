@@ -47,50 +47,70 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
 
 
   const handlePrint = async () => {
-  if (!cvRef.current) return;
-  setIsDownloading(true);
+    if (!cvRef.current) return;
+    setIsDownloading(true);
 
-  try {
-    const element = cvRef.current;
+    try {
+      window.scrollTo(0, 0);
+      const element = cvRef.current;
+      const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      });
 
-    const canvas = await html2canvas(element, {
-      scale: 3,
-      useCORS: true,
-      backgroundColor: "#ffffff",
-    });
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF("p", "mm", "a4");
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const cvRect = element.getBoundingClientRect();
 
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+      const ensureHttps = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('mailto:')) {
+          return url;
+        }
+        return `https://${url}`;
+      }
 
-    // 🔗 CLICKABLE LINKS
-    // Gmail
-    if (cv.gmailLink) {
-      pdf.link(15, 40, 100, 5, { url: `mailto:${cv.gmailLink}` });
+      const addLink = (elementId: string, url: string) => {
+        const linkElement = document.getElementById(elementId);
+        if (linkElement) {
+          const rect = linkElement.getBoundingClientRect();
+          const x = ((rect.left - cvRect.left) / cvRect.width) * pdfWidth;
+          const y = ((rect.top - cvRect.top) / cvRect.height) * pdfHeight;
+          const w = (rect.width / cvRect.width) * pdfWidth;
+          const h = (rect.height / cvRect.height) * pdfHeight;
+          pdf.link(x, y, w, h, { url: ensureHttps(url) });
+        }
+      };
+
+      if (cv.portfolioLink) {
+        addLink('portfolio-link', cv.portfolioLink);
+      }
+      if (cv.gmailLink) {
+        addLink('gmail-link', `mailto:${cv.gmailLink}`);
+      }
+      if (cv.githubLink) {
+        addLink('github-link', cv.githubLink);
+      }
+      cv.projects?.forEach((project, index) => {
+        if (project.link) {
+          addLink(`project-link-${index}`, project.link);
+        }
+      });
+
+      pdf.save(`${cv.name}_CV.pdf`);
+    } catch (error) {
+      console.error('PDF ERROR:', error);
+    } finally {
+      setIsDownloading(false);
     }
-
-    // Portfolio
-    if (cv.portfolioLink) {
-      pdf.link(15, 48, 100, 5, { url: cv.portfolioLink });
-    }
-
-    // GitHub
-    if (cv.githubLink) {
-      pdf.link(15, 56, 100, 5, { url: cv.githubLink });
-    }
-
-    pdf.save(`${cv.name}_CV.pdf`);
-  } catch (error) {
-    console.error("PDF ERROR:", error);
-  } finally {
-    setIsDownloading(false);
-  }
-};
+  };
 
 
   useEffect(() => {

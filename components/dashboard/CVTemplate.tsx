@@ -146,25 +146,27 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
         <div className="flex space-x-4 mb-8">
           {data.portfolioLink && (
             <a
+              id="portfolio-link"
               href={data.portfolioLink.startsWith("http") ? data.portfolioLink : `https://${data.portfolioLink}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "#3b82f6",  textDecoration: "underline",cursor: "pointer" }}
+              style={{ display: 'inline-block', color: "#3b82f6",  textDecoration: "underline",cursor: "pointer" }}
             >
               Portfolio
             </a>
           )}
           {data.gmailLink && (
-            <a href={`mailto:${data.gmailLink}`} style={{ color: "#3b82f6",  textDecoration: "underline", cursor: "pointer" }}>
+            <a  id="gmail-link" href={`mailto:${data.gmailLink}`}  style={{ display: 'inline-block', color: "#3b82f6",  textDecoration: "underline", cursor: "pointer" }}>
               Email
             </a>
           )}
           {data.githubLink && (
             <a
+              id="github-link"
               href={data.githubLink.startsWith("http") ? data.githubLink : `https://${data.githubLink}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "#3b82f6",  textDecoration: "underline",  cursor: "pointer" }}
+              style={{ display: 'inline-block', color: "#3b82f6",  textDecoration: "underline",  cursor: "pointer" }}
             >
               GitHub
             </a>
@@ -337,10 +339,12 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
                   <p className="font-medium">{project.stacks}</p>
                   {project.link && (
                     <a
+                      id={`project-link-${index}`}
                       href={project.link.startsWith("http") ? project.link : `https://${project.link}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
+                        display: 'inline-block',
                         color: "#3b82f6",
                         textDecoration: "underline",
                         cursor: "pointer"

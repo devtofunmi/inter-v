@@ -43,7 +43,7 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const router = useRouter();
-  const cvRef = useRef<HTMLDivElement>(null);
+  const cvRef = useRef<HTMLDivElement>(null); 
 
 
   const handlePrint = async () => {
@@ -98,7 +98,7 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
       if (cv.githubLink) {
         addLink('github-link', cv.githubLink);
       }
-      cv.projects?.forEach((project, index) => {
+      cv.projects?.forEach((project: { link: string }, index: number) => {
         if (project.link) {
           addLink(`project-link-${index}`, project.link);
         }

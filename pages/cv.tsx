@@ -235,8 +235,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   if (!session?.user?.id) {
     return {
-      props: {
-        cv: null,
+      redirect: {
+        destination: '/login',
+        permanent: false,
       },
     };
   }

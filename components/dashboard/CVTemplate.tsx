@@ -336,22 +336,26 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
                 <>
                   <h3 className="text-lg font-semibold">{project.projectName}</h3>
                   <p className="mt-2">{project.description}</p>
-                  <p className="font-medium">{project.stacks}</p>
+                  <p className="font-medium" style={{ marginTop: '8px' }}> 
+                    <span style={{ fontWeight: 'bold' }}>Stacks:</span> {project.stacks}
+                  </p>
                   {project.link && (
-                    <a
-                      id={`project-link-${index}`}
-                      href={project.link.startsWith("http") ? project.link : `https://${project.link}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-block',
-                        color: "#3b82f6",
-                        textDecoration: "underline",
-                        cursor: "pointer"
-                      }}
-                    >
-                      View Project
-                    </a>
+                    <div style={{ marginTop: '8px' }}>
+                      <a
+                        id={`project-link-${index}`}
+                        href={project.link.startsWith("http") ? project.link : `https://${project.link}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-block',
+                          color: "#3b82f6",
+                          textDecoration: "underline",
+                          cursor: "pointer"
+                        }}
+                      >
+                        View Project
+                      </a>
+                    </div>
                   )}
                 </>
               )}

@@ -13,7 +13,7 @@ export const Hero = () => {
                   <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-gray-900">
                     Ace Your Next Interview and Land Your Dream Job in <span className="text-blue-400">Nigeria.</span>
                   </h1>        <p className="max-w-xl text-gray-600 mb-8 md:text-xl text-lg mx-auto md:mx-0 font-normal">
-          PrepKitty helps you practice for job interviews in Nigeria's top industries. Get instant feedback and improve your skills.
+          PrepKitty helps you practice for job interviews in Nigeria&apos;s top industries. Get instant feedback and improve your skills.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10">
           <Link href="/signup">
@@ -23,9 +23,9 @@ export const Hero = () => {
           </Link>
         </div>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-gray-500 text-base justify-center md:justify-start">
-          <span className="flex items-center justify-center md:justify-start font-medium">
+          {/* <span className="flex items-center justify-center md:justify-start font-medium">
             <CheckCircle size={16} className="text-blue-400 mr-2"/> Trusted by Professionals in Lagos, Abuja, and Port Harcourt.
-          </span>
+          </span> */}
           <span className="flex items-center justify-center md:justify-start font-medium">
             <CheckCircle size={16} className="text-blue-400 mr-2"/> Advanced Model
           </span>

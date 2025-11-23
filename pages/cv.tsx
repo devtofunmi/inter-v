@@ -166,12 +166,12 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
   if (!cv) {
     return (
       <Layout>
-        <div className="p-6 text-center">
-          <h1 className="text-3xl font-bold mb-4 text-black">Your CV</h1>
-          <p className="mb-4 text-black">You don&apos;t have a CV yet. Generate one from your profile to get started.</p>
+        <div className="p-6 flex justify-center flex-col items-center text-center">
+          <h1 className="text-3xl font-bold mb-4 text-gray-900">Your CV</h1>
+          <p className="mb-4 text-gray-900">You don&apos;t have a CV yet. Generate one from your profile to get started.</p>
           <button
             onClick={handleGenerateNewCV}
-            className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded-2xl flex items-center mx-auto"
+            className="bg-blue-400 hover:bg-blue-500 cursor-pointer text-white font-bold py-2 px-4 rounded-full flex items-center mx-auto"
             disabled={isGenerating}
           >
             {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <PlusCircle className="mr-2" />}

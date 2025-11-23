@@ -124,7 +124,7 @@ export default function Dashboard() {
             ) : !scoresData ? (
               <Loader2 className="animate-spin text-blue-400" size={24} />
             ) : interviewsCompleted === 0 ? (
-              <p className="text-gray-500">
+              <p className="text-gray-500 pb-10">
                 No recent sessions. Start practicing to see your results!
               </p>
             ) : (

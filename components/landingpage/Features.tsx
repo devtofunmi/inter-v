@@ -91,19 +91,28 @@ export const Features = () => {
               <h4 className="text-lg font-semibold mb-3">Sample interview prompts</h4>
               <ul className="text-sm text-gray-700 space-y-2">
                 <li>
-                  <strong>Banks:</strong> &quot;Explain how KYC processes work and how you&apos;d handle a difficult client dispute.&quot;
+                  <strong>Banks:</strong> &quot;Explain how KYC and BVN processes work in line with CBN policies.&quot;
                 </li>
                 <li>
-                  <strong>Telecoms:</strong> &quot;Describe a GSM network handover and steps to troubleshoot frequent dropped calls.&quot;
+                  <strong>Telecoms:</strong> &quot;Describe a GSM network handover and steps to troubleshoot frequent dropped calls on the MTN network.&quot;
                 </li>
                 <li>
-                  <strong>Fintech/Payments:</strong> &quot;How would you design a secure payment flow for mobile money?&quot;
+                  <strong>Fintech/Payments:</strong> &quot;How would you design a secure payment flow for inter-bank transfers and USSD payments in Nigeria?&quot;
                 </li>
                 <li>
                   <strong>Oil &amp; Gas / Energy:</strong> &quot;Explain basic HSE (Health, Safety & Environment) considerations on site.&quot;
                 </li>
                 <li>
                   <strong>Product / PM roles:</strong> &quot;How would you prioritize features for a payment app used across multiple regions?&quot;
+                </li>
+                <li>
+                  <strong>Agriculture:</strong> &quot;Discuss the major challenges and opportunities in the Nigerian agricultural sector.&quot;
+                </li>
+                <li>
+                  <strong>Nollywood:</strong> &quot;As a production manager, how would you handle the logistics of a film shoot in Lagos?&quot;
+                </li>
+                <li>
+                  <strong>E-commerce:</strong> &quot;What strategies would you use to increase customer trust in online shopping in Nigeria?&quot;
                 </li>
               </ul>
             </div>

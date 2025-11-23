@@ -5,40 +5,40 @@ import { ChevronLeft, ChevronRight, User } from "lucide-react";
 
 const testimonials = [
   {
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    name: "Sarah Lee",
-    title: "Software Engineer",
-    quote: "Prepkitty helped me land my dream job! The practice interviews felt real and the feedback was spot on.",
+    image: "https://randomuser.me/api/portraits/men/44.jpg",
+    name: "Adewale Adebayo",
+    title: "Graduate Trainee, Access Bank",
+    quote: "Prepkitty was a lifesaver during my job search. The AI mock interviews felt so real, and the feedback helped me correct my mistakes. I finally landed my dream job!",
   },
   {
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    name: "Michael Chen",
-    title: "Marketing Specialist",
-    quote: "I felt so much more confident after using Prepkitty. The voice chat feature is a game changer!",
+    image: "https://randomuser.me/api/portraits/women/32.jpg",
+    name: "Ngozi Okafor",
+    title: "Customer Service Rep, MTN",
+    quote: "I used to be so nervous about interviews, but Prepkitty helped me build my confidence. The voice chat feature is amazing for practicing your communication skills.",
   },
   {
     image: "https://randomuser.me/api/portraits/men/65.jpg",
-    name: "James Patel",
-    title: "Data Analyst",
-    quote: "The AI interviewer asked tough questions and gave me honest feedback. Highly recommend Prepkitty!",
+    name: "Chinedu Okonkwo",
+    title: "Project Manager, Dangote Group",
+    quote: "The AI interviewer is very sharp. It asked me some tough questions that really made me think. This is a fantastic tool for anyone serious about their career.",
   },
   {
     image: "https://randomuser.me/api/portraits/women/68.jpg",
-    name: "Emily Carter",
-    title: "Accountant",
-    quote: "Prepkitty made interview prep easy and effective. I got the job I wanted thanks to their platform.",
+    name: "Aisha Bello",
+    title: "NYSC Corper",
+    quote: "As a fresh graduate, I was worried about my first real interview. Prepkitty made it so easy to practice and get ready. I feel much more prepared for the job market.",
   },
   {
     image: "https://randomuser.me/api/portraits/women/55.jpg",
-    name: "Jessica Miller",
-    title: "UX Designer",
-    quote: "The user interface is so intuitive and the AI is surprisingly smart. It's like having a personal interview coach.",
+    name: "Funke Adekunle",
+    title: "Digital Marketer, Jumia",
+    quote: "The UI is clean and easy to use. I love that I can practice anytime, anywhere. Prepkitty is a must-have for any young professional in Nigeria.",
   },
   {
     image: "https://randomuser.me/api/portraits/men/20.jpg",
-    name: "David Rodriguez",
-    title: "Product Manager",
-    quote: "A must-have for any professional looking to sharpen their interview skills. The progress tracking is a great feature.",
+    name: "Emeka Nwosu",
+    title: "Software Developer, Andela",
+    quote: "This is the best interview prep tool I've used. The progress tracking is very useful, and the AI is surprisingly good at asking relevant technical questions.",
   }
 ];
 

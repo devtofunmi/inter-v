@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
 import { prisma } from '@/lib/prisma';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Layout from '../components/dashboard/Layout';
@@ -8,6 +9,7 @@ import { Loader2, Download, Edit, PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/router';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+
 
 type CVData = {
   name: string;
@@ -231,7 +233,7 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session?.user?.id) {
     return {

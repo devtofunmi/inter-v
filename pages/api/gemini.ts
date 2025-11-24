@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     **Instructions:**
     - Use the candidate's profile to create a quiz question that tests their knowledge and skills in the context of the job.
     - The quiz will consist of 10 questions.
-    - Do not repeat any question that has already been asked in this session. The user will provide the full conversation history; use the AI (role: AI) messages in that history as the list of previously asked questions and avoid repeating them.
+    - Do not repeat any question that has already been asked in this session, either verbatim or by rephrasing the same concept. The user will provide the full conversation history; use the AI (role: AI) messages in that history as the list of previously asked questions and avoid repeating them or asking about the same topic.
     `;
 
     if (conversationHistory && conversationHistory.length > 0) {
@@ -86,12 +86,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         prompt += `\nPreviously asked questions in this session:\n${previousAIQuestions}\n`;
       }
 
-      prompt += `\nGenerate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
+      prompt += `\nGenerate the next multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions or concepts.`;
     } else {
-      prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions. Do not repeat any previous questions.`;
+      prompt += `Generate the first multiple-choice quiz question. Do not refer to the candidate in your questions.`;
     }
 
-  prompt += `\n\nIMPORTANT: Do not use asterisks, bold, or markdown formatting for section headers. Just use plain text.\nFormat your response as follows:\n    Question: [Your question here]\n    A) [Option A]\n    B) [Option B]\n    C) [Option C]\n    D) [Option D]\n    Answer: [Correct Option Letter (e.g., A)]\n    Next Question: [Your next question here]`;
+  prompt += `\n\nIMPORTANT: Do not use asterisks, bold, or markdown formatting for section headers. Just use plain text.\nFormat your response as follows:\n    Question: [Your question here]\n    A) [Option A]\n    B) [Option B]\n    C) [Option C]\n    D) [Option D]\n    Answer: [Correct Option Letter (e.g., A)]`;
 
   } else if (mode === 'summarize_chat') {
     prompt = `You are an expert career coach. Based on the following interview conversation, provide a detailed and personalized performance review.\n\nYour response must not contain any markdown formatting, such as asterisks for bolding.\n\nThe review should be structured with the following sections. Use the exact titles provided below, and make them stand

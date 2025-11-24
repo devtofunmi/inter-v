@@ -31,7 +31,7 @@ model User {
 model PracticeProfile {
   id                String  @id @default(cuid())
   userId            String  @unique
-  user              User    @relation(fields: [userId], references: [id])
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   jobTitle          String?
   professionalSummary String?
   employmentHistory String?
@@ -44,18 +44,19 @@ model PracticeProfile {
   projects          String?
 }
 
+
 model PracticeResult {
   id              String    @id @default(cuid())
   userId          String
-  user            User      @relation(fields: [userId], references: [id])
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   mode            String
-  // difficulty field removed
   score           Int
   totalQuestions  Int
   jobTitle        String?
   jobDescription  String?
   createdAt       DateTime  @default(now())
 }
+
 
 model Account {
   id                String  @id @default(cuid())

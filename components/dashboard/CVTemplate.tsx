@@ -34,7 +34,7 @@ type CVTemplateProps = {
 export const CVTemplate: React.FC<CVTemplateProps> = ({
   data,
   isEditing = false,
-  onDataChange = () => {}
+  onDataChange = () => {},
 }) => {
   const handleInputChange = (field: keyof CVData, value: CVData[keyof CVData]) => {
     onDataChange({ ...data, [field]: value });
@@ -84,7 +84,7 @@ export const CVTemplate: React.FC<CVTemplateProps> = ({
       style={{
         backgroundColor: "#ffffff",
         color: "#000000",
-        border: "1px solid #e5e7eb"
+        border: "1px solid #e5e7eb",
       }}
     >
       {/* NAME */}

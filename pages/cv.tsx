@@ -51,14 +51,20 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
   const handlePrint = async () => {
     if (!cvRef.current) return;
     setIsDownloading(true);
+    const element = cvRef.current;
+    const originalHeight = element.style.height;
+    element.style.height = `${element.scrollHeight}px`;
 
     try {
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       window.scrollTo(0, 0);
-      const element = cvRef.current;
       const canvas = await html2canvas(element, {
         scale: 3,
         useCORS: true,
         backgroundColor: '#ffffff',
+        height: element.scrollHeight,
+        windowHeight: element.scrollHeight
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 1.0);
@@ -66,8 +72,19 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const imgProps = pdf.getImageProperties(imgData);
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      let heightLeft = pdfHeight;
+      let position = 0;
+      const pageHeight = pdf.internal.pageSize.getHeight();
 
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+      }
 
       const cvRect = element.getBoundingClientRect();
 
@@ -110,6 +127,7 @@ export default function CVPage({ cv: initialCv }: InferGetServerSidePropsType<ty
     } catch (error) {
       console.error('PDF ERROR:', error);
     } finally {
+      element.style.height = originalHeight;
       setIsDownloading(false);
     }
   };
